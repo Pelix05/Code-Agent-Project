@@ -1,0 +1,10 @@
+diff --git a/bmp/bmp.cpp b/bmp/bmp.cpp
+--- a/bmp/bmp.cpp
++++ b/bmp/bmp.cpp
+@@ -12,7 +12,7 @@ Bmp::Bmp(BmpFileHeader& newBf, BmpInfoHeader& newBi, std::vector<uint8_t> img)
+     bi = newBi;
+     imgData = img;
+ }
+-void Bmp::setImgData(const std::vector<uint8_t>& newImgData)  // Change 'const' to 'std::ref'
++void Bmp::setImgData(std::reference_wrapper<std::vector<uint8_t>> newImgData)  // Add this line
+    // Rest of the function unchanged

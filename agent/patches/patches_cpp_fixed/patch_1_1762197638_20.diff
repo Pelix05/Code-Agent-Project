@@ -1,0 +1,14 @@
+diff --git a/bmp/bmpinfoheader.cpp b/bmp/bmpinfoheader.cpp
+--- a/bmp/bmpinfoheader.cpp
++++ b/bmp/bmpinfoheader.cpp
+@@ -2,11 +2,11 @@
+-BmpInfoHeader::BmpInfoHeader() {
+-    // Uninitialized member variables
++BmpInfoHeader::BmpInfoHeader(const BmpFileHeader& newBf, int NZwidth, int height) {
+       biSize = newBf.biSize;  // Initialize biSize
+       biWidth = newBf.biWidth;
+       biHeight = newBf.biHeight;
+       biPlanes = newBf.biPlanes;
+       biBitCount = newBf.biBitCount;
+       // Rest of the members can be initialized here
+   }

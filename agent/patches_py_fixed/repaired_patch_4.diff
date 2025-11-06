@@ -1,0 +1,7 @@
+diff --git a/puzzle-challenge/labels.py b/puzzle-challenge/labels.py
+--- a/puzzle-challenge/labels.py
++++ b/puzzle-challenge/labels.py
+@@ -1,2 +1,2 @@
+ from itertools import cycle
+-import pygame as pg
++import pygame

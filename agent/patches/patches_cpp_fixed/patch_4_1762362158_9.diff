@@ -1,0 +1,15 @@
+diff --git a/bmp/bmpfileheader.cpp b/bmp/bmpfileheader.cpp
+--- a/bmp/bmpfileheader.cpp
++++ b/bmp/bmpfileheader.cpp
+@@ -1,10 +1,12 @@
+-BmpFileHeader::BmpFileHeader() {
++BmpFileHeader::BmpFileHeader(int NZwidth, int height) : bfType(0), bfSize(0), bfReserved1(0), bfReserved2(0), bfOffBits(0) {
+   // Initialize member variables in the constructor
+   // (remove the commented lines for uninitMemberVars warnings)
+   // bfType = newBf->bfType;
+   // bfSize = newBi->bfSize;
+   // bfReserved1 = newBi->bfReserved1;
+   // bfReserved2 = newBi->bfReserved2;
+   // bfOffBits = newBi->bfOffBits;
++   // Initialize remaining members with provided arguments
+ }

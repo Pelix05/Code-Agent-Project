@@ -1,0 +1,11 @@
+diff --git a/bmpfileheader.cpp b/bmpfileheader.cpp
+--- a/bmpfileheader.cpp
++++ b/bmpfileheader.cpp
+@@ -2,7 +2,7 @@
+-BmpFileHeader::BmpFileHeader() {
++BmpFileHeader::BmpFileHeader(int NZwidth, int height) : bfType(0), bfSize(0), bfReserved1(0), bfReserved2(0), bfOffBits(0) {
+   // Initialize member variables in the initialization list
+   bfSize = newBf.bfSize;  // Initialize bfSize from newBf
+   bfWidth = NZwidth;  // Assign NZwidth directly, no need for copy
+   bfHeight = height;  // Assign height directly
+   // Rest of the constructor body...

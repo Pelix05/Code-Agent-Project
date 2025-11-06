@@ -1,0 +1,25 @@
+diff --git a/bmpfileheader.cpp b/bmpfileheader.cpp
+--- a/bmpfileheader.cpp
++++ b/bmpfileheader.cpp
+@@ -1,7 +1,7 @@
+-BmpFileHeader::BmpFileHeader() {
++BmpFileHeader::BmpFileHeader(int NZwidth, int height) : bfType(0), bfSize(0), bfReserved1(0), bfReserved2(0), bfOffBits(0) {
+     // Initialize member variables in the constructor
+     if (NZwidth && height) {
+         bfSize = sizeof(BmpFileHeader) + NZwidth * height * 3; // Assuming 3 bytes per pixel
+     }
+ }
+diff --git a/bmp.cpp b/bmp.cpp
+--- a/bmp.cpp
++++ b/bmp.cpp
+@@ -13,7 +13,7 @@
+     BmpFileHeader newBf;
+     BmpInfoHeader newBi;
+     std::vector<uint8_t> img;
+-    bf = newBf; // Use initialization list
+-    bi = newBi; // Use initialization list
+-    imgData = img; // Use initialization list
++    BmpFileHeader::BmpFileHeader(newBf, newBi, img); // Initialize in constructor
+    this->bf = newBf;
+    this->bi = newBi;
+    this->imgData = img;

@@ -1,0 +1,32 @@
+diff --git a/bmp/bmpinfoheader.cpp b/bmp/bmpinfoheader.cpp
+--- a/bmp/bmpinfoheader.cpp
++++ b/bmp/bmpinfoheader.cpp
+@@ -3,7 +3,7 @@
+-BmpInfoHeader::BmpInfoHeader() {
++BmpInfoHeader::BmpInfoHeader(int NZwidth, int height) : biWidth(NZwidth), biHeight(height) {}
+diff --git a/database.cpp b/database.cpp
+--- a/database.cpp
++++ b/database.cpp
+@@ -5,5 +5,5 @@
+    m_db = QSqlDatabase::addDatabase("QSQLITE");
+diff --git a/defaultpuzzlemenuwindow.h b/defaultpuzzlemenuwindow.h
+diff --git a/generatepuzzlemenuwindow.h b/generatepuzzlemenuwindow.h
+diff --git a/mainwindowpuzzle.h b/mainwindowpuzzle.h
+--- a/mainwindowpuzzle.h
++++ b/mainwindowpuzzlemenuwindow.h
+@@ -60,9 +60,9 @@
+    // ... (rest of the code unchanged)
+diff --git a/puzzle.cpp b/puzzle.cpp
+--- a/puzzle.cpp
++++ b/puzzle.cpp
+@@ -6,5 +6,5 @@
+    m_db = QSqlDatabase::addDatabase("QSQLITE");
+diff --git a/puzzlemanager.h b/puzzlemanager.h
+--- a/puzzlemanager.h
++++ b/puzzlemanager.h
+@@ -19,1 +19,1 @@
++    : public DatabaseManager {
+diff --git a/puzzlemenuwindow.h b/puzzlemenuwindow.h
+diff --git a/leaderboard.h b/leaderboard.h
+@@ -9,1 +9,1 @@
++    : public DatabaseManager {

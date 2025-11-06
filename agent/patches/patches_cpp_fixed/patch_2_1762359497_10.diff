@@ -1,0 +1,14 @@
+diff --git a/bmp/bmpinfoheader.cpp b/bmp/bmpinfoheader.cpp
+--- a/bmp/bmpinfoheader.cpp
++++ b/bmp/bmpinfoheader.cpp
+@@ -1,11 +1,11 @@
+-BmpInfoHeader::BmpInfoHeader() {
++BmpInfoHeader::BmpInfoHeader(int NZwidth, int height) : biWidth(NZwidth), biHeight(height) {
+   // Initialize member variables in the constructor
+   // (omitting the warnings about uninitialized members)
+ }
+-BmpInfoHeader::BmpInfoHeader(BmpFileHeader &newBf, std::vector<uint8_t> img) : biSize(newBf.biSize), // Use const reference for img
++BmpInfoHeader(BmpFileHeader &newBf, const std::vector<uint8_t>& img) : biSize(newBf.biSize), // Pass img by const reference
+     biWidth(newBf.bfWidth), biHeight(newBf.bfHeight),
+     // ... initialize remaining members
+ }

@@ -1,0 +1,17 @@
+diff --git a/bmp/bmpinfoheader.cpp b/bmp/bmpinfoheader.cpp
+--- a/bmp/bmpinfoheader.cpp
++++ b/bmp/bmpinfoheader.cpp
+@@ -2,7 +2,7 @@
+ #include "bmpinfoheader.h"
+-BmpInfoHeader::BmpInfoHeader() {
++BmpInfoHeader::BmpInfoHeader(int NZwidth, int height) : biWidth(NZwidth), biHeight(height) {
+   // Rest of the constructor body (remove assignments in the constructor)
+ }
+diff --git a/database.cpp b/database.cpp
+--- a/database.cpp
++++ b/database.cpp
+@@ -6,5 +6,5 @@
+     m_db = QSqlDatabase::addDatabase("QSQLITE");
+ }
+-// Original assignment in constructor
++m_db = QSqlDatabase::addDatabase("QSQLITE"); // Initialization list instead

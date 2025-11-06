@@ -1,0 +1,12 @@
+diff --git a/bmp/bmp.cpp b/bmp/bmp.cpp
+--- a/bmp/bmp.cpp
++++ b/bmp/bmp.cpp
+@@ -13,7 +13,7 @@ Bmp::Bmp(BmpFileHeader &newBf, BmpInfoHeader &newBi, std::vector<uint8_t> img)
+     // Initialize variables in initialization lists to improve performance
+     bf = newBf;
+     bi = newBi;
+-    imgData = img; // Change this to pass 'img' by const reference
++    imgData = std::move(img); // Use std::move() to pass 'img' by const reference
+ }
+ void Bmp::setImgData(const std::vector<uint8_t>& newImgData) {
+     // Rest of the function remains unchanged

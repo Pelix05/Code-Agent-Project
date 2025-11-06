@@ -1,0 +1,13 @@
+diff --git a/bmp/bmpinfoheader.cpp b/bmp/bmpinfoheader.cpp
+--- a/bmp/bmpinfoheader.cpp
++++ b/bmp/bmpinfoheader.cpp
+@@ -3,10 +3,10 @@
+-BmpInfoHeader::BmpInfoHeader() {
++BmpInfoHeader::BmpInfoHeader(int NZwidth, int height) : biWidth(NZwidth), biHeight(height) {
+   // Initialize member variables with the provided parameters
+   biSize = sizeof(BmpInfoHeader);
+   biPlanes = 1; // Assuming grayscale for now
+   biBitCount = 24; // 24-bit color depth
+-   // Uninitialized member variables remain unchanged
++   // ... (rest of the uninitialization list as per the report)
+ }

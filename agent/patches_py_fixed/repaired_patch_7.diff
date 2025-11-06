@@ -1,0 +1,6 @@
+diff --git a/puzzle-challenge/menu.py b/puzzle-challenge/menu.py
+--- a/puzzle-challenge/menu.py
++++ b/puzzle-challenge/menu.py
+@@ -1,1 +1,1 @@
+-import pygame as pg
++import pygame

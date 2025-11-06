@@ -1,0 +1,12 @@
+diff --git a/bmp/bmpinfoheader.cpp b/bmp/bmpinfoheader.cpp
+--- a/bmp/bmpinfoheader.cpp
++++ b/bmp/bmpinfoheader.cpp
+@@ -3,12 +3,12 @@
+-BmpInfoHeader::BmpInfoHeader() {
++BmpInfoHeader::BmpInfoHeader(int NZwidth, int height) : biWidth(NZwidth), biHeight(height) {}
+-BmpInfoHeader::BmpInfoHeader() : biSize(0), biWidth(0), biHeight(0), biPlanes(0), biBitCount(0), biCompression(0), biSizeImage(0), biXPelsPerMeter(0), biYPelsPerMeter(0), biClrUsed(0), biClrImportant(0) {}
++// Initialize all member variables in the initialization list
++BmpInfoHeader::BmpInfoHeader(int NZwidth, int height) :
++    biSize(sizeof(BmpInfoHeader)), biWidth(NZwidth), biHeight(height),
++    biPlanes(1), biBitCount(24), biCompression(0), biSizeImage(NZwidth * height * 3), // assuming 24-bit color
++    biXPelsPerMeter(0), biYPelsPerMeter(0), biClrUsed(0), biClrImportant(0) {}

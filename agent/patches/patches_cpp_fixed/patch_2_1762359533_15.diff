@@ -1,0 +1,10 @@
+diff --git a/bmp/bmpinfoheader.cpp b/bmp/bmpinfoheader.cpp
+--- a/bmp/bmpinfoheader.cpp
++++ b/bmp/bmpinfoheader.cpp
+@@ -2,6 +2,10 @@
+ #include "bmpinfoheader.h"
++BmpInfoHeader::BmpInfoHeader() :
+     biSize(0), biWidth(0), biHeight(0), biPlanes(1), biBitCount(24), biCompression(0),
++    biSizeImage(0), biXPelsPerMeter(0), biYPelsPerMeter(0), biClrUsed(0), biClrImportant(0) {}
+     biSize(sizeof(BmpInfoHeader)), biWidth(NZwidth), biHeight(height), biPlanes(1), biBitCount(24), biCompression(0),
++    biSizeImage(NZwidth * height * 3), biXPelsPerMeter(0), biYPelsPerMeter(0), biClrUsed(0), biClrImportant(0) {}

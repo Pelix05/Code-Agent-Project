@@ -1,0 +1,9 @@
+diff --git a/bmp/bmpinfoheader.cpp b/bmp/bmpinfoheader.cpp
+--- a/bmp/bmpinfoheader.cpp
++++ b/bmp/bmpinfoheader.cpp
+@@ -1,10 +1,11 @@
+-BmpInfoHeader::BmpInfoHeader()
++BmpInfoHeader::BmpInfoHeader(int NZwidth, int height) : biWidth(NZwidth), biHeight(height) {}
+-BmpInfoHeader::BmpInfoHeader() : biWidth(0), biHeight(0) {} // Removed this line as it's now in the constructor
+- Changed the constructor for BmpInfoHeader to accept parameters and initialize `biWidth` and `biHeight` directly, removing the unused constructor that was suggested for improvement.
+- Kept the warning about uninitialized member variables in the constructor, but since they're being initialized within the constructor now, they won't cause issues.

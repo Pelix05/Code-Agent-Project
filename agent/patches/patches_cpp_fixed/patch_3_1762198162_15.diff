@@ -1,0 +1,18 @@
+diff --git a/bmp/bmpinfoheader.cpp b/bmp/bmpinfoheader.cpp
+--- a/bmp/bmpinfoheader.cpp
++++ b/bmp/bmpinfoheader.cpp
+@@ -2,7 +2,7 @@
+-BmpInfoHeader::BmpInfoHeader() {
++BmpInfoHeader::BmpInfoHeader(int NZwidth, int height) : biWidth(NZwidth), biHeight(height) {
+   // Initialize member variables in the constructor
+   // biSize, biPlanes, biBitCount, ... (see the warnings for uninitialized members)
+diff --git a/database.cpp b/database.cpp
+--- a/database.cpp
++++ b/database.cpp
+@@ -5,5 +5,6 @@ Bmp::Bmp(BmpFileHeader &newBf, BmpInfoHeader &newBi, std::vector<uint8_t> img)
+     m_db = QSqlDatabase::addDatabase("QSQLITE");
+ }
++// Initialize m_db in the constructor using initialization list
++Bmp::Bmp(BmpFileHeader &newBf, BmpInfoHeader &newBi, std::vector<uint8_t> img, QSqlDatabase &db) : m_db(db) {
+     // Rest of the constructor remains unchanged
+ }

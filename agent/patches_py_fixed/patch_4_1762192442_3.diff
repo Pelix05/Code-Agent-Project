@@ -1,0 +1,15 @@
+diff --git a/puzzle-challenge/puzzle_piece.py b/puzzle-challenge/puzzle_piece.py
+--- a/puzzle-challenge/puzzle_piece.py
++++ b/puzzle_piece.py
+@@ -135,10 +135,12 @@ class PuzzlePiece:
+         elif side == "bottom":
+             y_diff = p1.bottom - p2.top
+             x_diff = p1.left - p2.left
+         for piece_ in other_section.pieces:
+-            piece_.rect.move_ip(x_diff, y_diff)
++            x_diff = p1.left - piece_.left  # Assign x_diff before using it
++            y_diff = p1.bottom - piece_.top  # Assign y_diff before using it
+             self.pieces.append(piece_)
+         self.grabbed = False
+         return
+     def get_event(self, event):

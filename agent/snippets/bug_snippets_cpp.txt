@@ -1,0 +1,226 @@
+--- puzzle-2\bmp\bmp.cpp:15 ---
+Bmp::Bmp(BmpFileHeader &newBf, BmpInfoHeader &newBi, std::vector<uint8_t> img)
+{
+    //BmpFileHeader bf(NZwidth, height);
+    //BmpInfoHeader bi(NZwidth, height);
+    bf = newBf;
+    bi = newBi;
+    imgData = img;
+}
+
+void Bmp::setImgData(std::vector<uint8_t> newImgData)
+
+
+--- puzzle-2\bmp\bmp.cpp:16 ---
+{
+    //BmpFileHeader bf(NZwidth, height);
+    //BmpInfoHeader bi(NZwidth, height);
+    bf = newBf;
+    bi = newBi;
+    imgData = img;
+}
+
+void Bmp::setImgData(std::vector<uint8_t> newImgData)
+{
+
+
+--- puzzle-2\bmp\bmp.cpp:17 ---
+    //BmpFileHeader bf(NZwidth, height);
+    //BmpInfoHeader bi(NZwidth, height);
+    bf = newBf;
+    bi = newBi;
+    imgData = img;
+}
+
+void Bmp::setImgData(std::vector<uint8_t> newImgData)
+{
+    imgData.assign(newImgData.begin(), newImgData.end());
+
+
+--- puzzle-2\bmp\bmp.cpp:11 ---
+{
+
+}
+
+Bmp::Bmp(BmpFileHeader &newBf, BmpInfoHeader &newBi, std::vector<uint8_t> img)
+{
+    //BmpFileHeader bf(NZwidth, height);
+    //BmpInfoHeader bi(NZwidth, height);
+    bf = newBf;
+    bi = newBi;
+
+
+--- puzzle-2\bmp\bmpfileheader.cpp:3 ---
+#include "bmpfileheader.h"
+
+BmpFileHeader::BmpFileHeader()
+{
+
+}
+
+BmpFileHeader::BmpFileHeader(int NZwidth, int height)
+
+
+--- puzzle-2\bmp\bmpfileheader.cpp:3 ---
+#include "bmpfileheader.h"
+
+BmpFileHeader::BmpFileHeader()
+{
+
+}
+
+BmpFileHeader::BmpFileHeader(int NZwidth, int height)
+
+
+--- puzzle-2\bmp\bmpfileheader.cpp:3 ---
+#include "bmpfileheader.h"
+
+BmpFileHeader::BmpFileHeader()
+{
+
+}
+
+BmpFileHeader::BmpFileHeader(int NZwidth, int height)
+
+
+--- puzzle-2\bmp\bmpfileheader.cpp:3 ---
+#include "bmpfileheader.h"
+
+BmpFileHeader::BmpFileHeader()
+{
+
+}
+
+BmpFileHeader::BmpFileHeader(int NZwidth, int height)
+
+
+--- puzzle-2\bmp\bmpfileheader.cpp:3 ---
+#include "bmpfileheader.h"
+
+BmpFileHeader::BmpFileHeader()
+{
+
+}
+
+BmpFileHeader::BmpFileHeader(int NZwidth, int height)
+
+
+--- puzzle-2\bmp\bmpinfoheader.cpp:3 ---
+#include "bmpinfoheader.h"
+
+BmpInfoHeader::BmpInfoHeader()
+{
+
+}
+
+BmpInfoHeader::BmpInfoHeader(int NZwidth, int height)
+
+
+--- puzzle-2\bmp\bmpinfoheader.cpp:3 ---
+#include "bmpinfoheader.h"
+
+BmpInfoHeader::BmpInfoHeader()
+{
+
+}
+
+BmpInfoHeader::BmpInfoHeader(int NZwidth, int height)
+
+
+--- puzzle-2\bmp\bmpinfoheader.cpp:3 ---
+#include "bmpinfoheader.h"
+
+BmpInfoHeader::BmpInfoHeader()
+{
+
+}
+
+BmpInfoHeader::BmpInfoHeader(int NZwidth, int height)
+
+
+--- puzzle-2\bmp\bmpinfoheader.cpp:3 ---
+#include "bmpinfoheader.h"
+
+BmpInfoHeader::BmpInfoHeader()
+{
+
+}
+
+BmpInfoHeader::BmpInfoHeader(int NZwidth, int height)
+
+
+--- puzzle-2\bmp\bmpinfoheader.cpp:3 ---
+#include "bmpinfoheader.h"
+
+BmpInfoHeader::BmpInfoHeader()
+{
+
+}
+
+BmpInfoHeader::BmpInfoHeader(int NZwidth, int height)
+
+
+--- puzzle-2\bmp\bmpinfoheader.cpp:3 ---
+#include "bmpinfoheader.h"
+
+BmpInfoHeader::BmpInfoHeader()
+{
+
+}
+
+BmpInfoHeader::BmpInfoHeader(int NZwidth, int height)
+
+
+--- puzzle-2\bmp\bmpinfoheader.cpp:3 ---
+#include "bmpinfoheader.h"
+
+BmpInfoHeader::BmpInfoHeader()
+{
+
+}
+
+BmpInfoHeader::BmpInfoHeader(int NZwidth, int height)
+
+
+--- puzzle-2\bmp\bmpinfoheader.cpp:3 ---
+#include "bmpinfoheader.h"
+
+BmpInfoHeader::BmpInfoHeader()
+{
+
+}
+
+BmpInfoHeader::BmpInfoHeader(int NZwidth, int height)
+
+
+--- puzzle-2\bmp\bmpinfoheader.cpp:3 ---
+#include "bmpinfoheader.h"
+
+BmpInfoHeader::BmpInfoHeader()
+{
+
+}
+
+BmpInfoHeader::BmpInfoHeader(int NZwidth, int height)
+
+
+--- puzzle-2\bmp\bmpinfoheader.cpp:3 ---
+#include "bmpinfoheader.h"
+
+BmpInfoHeader::BmpInfoHeader()
+{
+
+}
+
+BmpInfoHeader::BmpInfoHeader(int NZwidth, int height)
+
+
+--- puzzle-2\bmp\bmpinfoheader.cpp:3 ---
+#include "bmpinfoheader.h"
+
+BmpInfoHeader::BmpInfoHeader()
+{
+
+}
+
+BmpInfoHeader::BmpInfoHeader(int NZwidth, int height)

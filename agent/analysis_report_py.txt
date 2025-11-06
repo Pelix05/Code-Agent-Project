@@ -1,0 +1,34 @@
+************* Module labels
+puzzle-challenge\labels.py:133:21: E0203: Access to member 'font' before its definition line 136 (access-member-before-definition)
+************* Module puzzle_piece
+puzzle-challenge\puzzle_piece.py:137:48: E0606: Possibly using variable 'x_diff' before assignment (possibly-used-before-assignment)
+puzzle-challenge\puzzle_piece.py:137:56: E0606: Possibly using variable 'y_diff' before assignment (possibly-used-before-assignment)
+
+
+Run started:2025-11-06 03:34:43.385296
+
+Test results:
+	No issues identified.
+
+Code scanned:
+	Total lines of code: 753
+	Total lines skipped (#nosec): 0
+	Total potential issues skipped due to specifically being disabled (e.g., #nosec BXXX): 0
+
+Run metrics:
+	Total issues (by severity):
+		Undefined: 0
+		Low: 0
+		Medium: 0
+		High: 0
+	Total issues (by confidence):
+		Undefined: 0
+		Low: 0
+		Medium: 0
+		High: 0
+Files skipped (0):
+[main]	INFO	profile include tests: None
+[main]	INFO	profile exclude tests: None
+[main]	INFO	cli include tests: None
+[main]	INFO	cli exclude tests: None
+[main]	INFO	running on Python 3.13.7

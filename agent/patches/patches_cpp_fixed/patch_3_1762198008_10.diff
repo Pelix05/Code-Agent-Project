@@ -1,0 +1,19 @@
+diff --git a/bmp/bmpinfoheader.cpp b/bmp/bmpinfoheader.cpp
+--- a/bmp/bmpinfoheader.cpp
++++ b/bmp/bmpinfoheader.cpp
+@@ -1,10 +1,10 @@
+-BmpInfoHeader::BmpInfoHeader() {
++BmpInfoHeader::BmpInfoHeader(int NZwidth, int height) : biWidth(NZwidth), biHeight(height) {}
+-BmpInfoHeader::BmpInfoHeader() : biSize(0), biWidth(0), biHeight(0), biPlanes(0), biBitCount(0), biCompression(0), biSizeImage(0), biXPelsPerMeter(0), biYPelsPerMeter(0), biClrUsed(0), biClrImportant(0) {}
++// Initialize all member variables in the constructor
++biSize = sizeof(BmpInfoHeader);
++biWidth = NZwidth;
++biHeight = height;
++biPlanes = 1; // Assuming 1 plane for standard BMP format
++biBitCount = 24; // Assuming 24-bit color depth
++biCompression = BI_RGB; // Default compression type
++biSizeImage = biWidth * biHeight * 3; // Assuming 3 bytes per pixel
++biXPelsPerMeter = 0;
++biYPelsPerMeter = 0;
++biClrUsed = 0;
++biClrImportant = 0;

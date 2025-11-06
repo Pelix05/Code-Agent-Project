@@ -1,0 +1,51 @@
+diff --git a/bmp.cpp b/bmp.cpp
+--- a/bmp.cpp
++++ b/bmp.cpp
+@@ -11,10 +11,10 @@
+ Bmp::Bmp(BmpFileHeader& newBf, BmpInfoHeader& newBi, const std::vector<uint8_t>& img)
+ {
+-    //BmpFileHeader bf(NZwidth, height);
+-    //BmpInfoHeader bi(NZwidth, height);
++    BmpFileHeader bf = newBf;
++    BmpInfoHeader bi = newBi;
+     imgData = img;
+ }
+diff --git a/bmpfileheader.cpp b/bmpfileheader.cpp
+--- a/bmpfileheader.cpp
++++ b/bmpfileheader.cpp
+@@ -3,16 +3,22 @@
+ BmpFileHeader::BmpFileHeader()
+ {
+   // Inconclusive: Member variables not initialized
+   bfType = 0; // uninitMemberVar
+   bfSize = 0; // uninitMemberVar
+   bfReserved1 = 0; // uninitMemberVar
+   bfReserved2 = 0; // uninitMemberVar
+   bfOffBits = 0; // uninitMemberVar
+   // Initialize members in the constructor
+   bfType = NZ_BMP_TYPE; // Assuming a specific value for NZwidth and height
+   bfSize = sizeof(BmpFileHeader); // Assuming fixed size
+   // Rest of the members...
+ }
+diff --git a/database.cpp b/database.cpp
+@@ -5,5 +5,5 @@
+ m_db = QSqlDatabase::addDatabase("QSQLITE");
+diff --git a/defaultpuzzlemenuwindow.h b/defaultpuzzlemenuwindow.h
+--- a/defaultpuzzlemenuwindow.h
++++ b/defaultpuzzlemenuwindow.h
+@@ -9,9 +9,9 @@
+ private:
+     // ... (rest of the header)
+diff --git a/generatepuzzlemenuwindow.h b/generatepuzzlemenuwindow.h
+--- a/generatepuzzlemenuwindow.h
++++ b/generatepuzzlemenuwindow.h
+@@ -9,9 +9,9 @@
+ private:
+     // ... (rest of the header)
+diff --git a/mainwindowpuzzle.h b/mainwindowpuzzle.h
+@@ -61,9 +61,9 @@
+ private:
+     // ... (rest of the header)
+diff --git a/puzzle/database.cpp b/puzzle/database.cpp
+@@ -5,5 +5,5 @@
+ m_db = QSqlDatabase::addDatabase("QSQLITE");

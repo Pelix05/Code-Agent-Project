@@ -1,0 +1,12 @@
+diff --git a/bmp/bmpinfoheader.cpp b/bmp/bmpinfoheader.cpp
+--- a/bmp/bmpinfoheader.cpp
++++ b/bmp/bmpinfoheader.cpp
+@@ -3,10 +3,14 @@
+ #include "bmpinfoheader.h"
+-BmpInfoHeader::BmpInfoHeader() {
++BmpInfoHeader::BmpInfoHeader(int NZwidth, int height) : biWidth(NZwidth), biHeight(height) {
+   // Rest of the constructor body (omitted for brevity)
+ }
+-BmpInfoHeader::BmpInfoHeader() : biWidth(0), biHeight(0) {
++// Initialize member variables in the initialization list
++biWidth(NZwidth), biHeight(height);

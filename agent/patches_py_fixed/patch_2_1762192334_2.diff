@@ -1,0 +1,21 @@
+diff --git a/puzzle_piece.py b/puzzle_piece.py
+--- a/puzzle_piece.py
++++ b/puzzle_piece.py
+@@ -135,7 +135,10 @@ class PuzzlePiece:
+         elif side == "top":
+             y_diff = p2.bottom - p1.top
+             x_diff = p2.left - p1.left
+         else:
+-            raise ValueError("Invalid side: {}".format(side))
++            x_diff = p1.left - p2.left
++            y_diff = p1.bottom - p2.top
+         for piece_ in other_section.pieces:
+             piece_.rect.move_ip(x_diff, y_diff)
+             self.pieces.append(piece_)
+         self.grabbed = False
+         return
+diff --git a/labels.py b/labels.py
+--- a/labels.py
++++ b/labels.py
+@@ -0,0 +1 @@
++# No changes needed in labels.py as it's not mentioned in the report

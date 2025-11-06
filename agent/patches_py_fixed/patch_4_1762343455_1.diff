@@ -1,0 +1,25 @@
+diff --git a/labels.py b/labels.py
+--- a/labels.py
++++ b/labels.py
+@@ -132,7 +132,10 @@ class Label:
+         self.enable_image = rendered.get("enable")
+     def disable_image(self):
+         # Fix E0203: Access to member 'font' before its definition
+         if self.font is not None:
+             self.rendered["disable"] = not self.rendered.get("disable", False)
++            self.font = None
++            LOADED_FONTS.pop((self.font, self.font_size), None)
+         self.image = self.idle_image
+         self.clicked = False
+         self.hover = False
+diff --git a/puzzle_piece.py b/puzzle_piece.py
+--- a/puzzle_piece.py
++++ b/puzzle_piece.py
+@@ -136,5 +136,8 @@ class PuzzlePiece:
+         x_diff, y_diff = self.position - (x, y)
+     def render(self, screen, x, y):
++        # Fix E0606: Possibly using variables 'x_diff', 'y_diff' before assignment
++        x_diff, y_diff = self.calculate_position(x, y)
+         self.x, self.y = x, y
+         self.screen = screen
+         self.draw()

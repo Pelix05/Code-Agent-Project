@@ -1,0 +1,45 @@
+diff --git a/bmp/bmpinfoheader.cpp b/bmp/bmpinfoheader.cpp
+--- a/bmp/bmpinfoheader.cpp
++++ b/bmp/bmpinfoheader.cpp
+@@ -2,7 +2,7 @@
+ #include "bmpinfoheader.h"
+-BmpInfoHeader::BmpInfoHeader() {
++BmpInfoHeader::BmpInfoHeader(int NZwidth, int height) : biWidth(NZwidth), biHeight(height) {
+   // Rest of the constructor body, excluding uninitialized member variables
+ }
+diff --git a/database.cpp b/database.cpp
+--- a/database.cpp
++++ b/database.cpp
+@@ -5,5 +5,5 @@
+   m_db = QSqlDatabase::addDatabase("QSQLITE");
+-Bmp::Bmp(BmpFileHeader &newBf, BmpInfoHeader &newBi, std::vector<uint8_t> img) {
++Bmp::Bmp(BmpFileHeader &newBf, const BmpInfoHeader &newBi, const std::vector<uint8_t> &img) {
+   // Rest of the constructor body with imgData initialized in the list
+ }
+diff --git a/defaultpuzzlemenuwindow.h b/defaultpuzzlemenuwindow.h
+diff --git a/generatepuzzlemenuwindow.h b/generatepuzzlemenuwindow.h
+diff --git a/mainwindowpuzzle.h b/mainwindowpuzzle.h
+--- a/defaultpuzzlemenuwindow.h
++++ b/defaultpuzzlemenuwindow.h
+@@ -9,9 +9,9 @@
+ private:
+     // ... (unchanged)
+-    private slots:
+-        void slotExample();
++    private slots:
++        void slotExample() override;
+diff --git a/puzzle.cpp b/puzzle.cpp
+--- a/puzzle.cpp
++++ b/puzzle.cpp
+@@ -6,5 +6,5 @@
+   m_db = QSqlDatabase::addDatabase("QSQLITE");
+-    Bmp(bf, bi, img);
++    Bmp(bf, bi, imgData); // Initialize imgData in the constructor
+diff --git a/puzzlemanager.h b/puzzlemanager.h
+--- a/puzzlemanager.h
++++ b/puzzlemanager.h
+@@ -19,1 +19,1 @@
+ class PuzzleManager : public QObject
+ {
+-    DatabaseManager m_db; // Use Initialization List for DatabaseManager
++    DatabaseManager m_db; // Use Initialization List for DatabaseManager

@@ -1,0 +1,12 @@
+--- a/a/puzzle-challenge/puzzle_piece.py
++++ b/a/puzzle-challenge/puzzle_piece.py
+@@ -5,7 +5,8 @@
+     return target - tolerance <= value <= target + tolerance
+ 
+ class PuzzlePiece(object):
+-    def __init__(self, index, image, topleft):
++    def __init__(self, font):
++        # ... (rest of the file)
+         self.index = index
+         self.image = image
+         self.rect = self.image.get_rect(topleft=topleft)

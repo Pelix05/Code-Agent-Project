@@ -1,0 +1,15 @@
+diff --git a/bmp/bmpinfoheader.cpp b/bmp/bmpinfoheader.cpp
+--- a/bmp/bmpinfoheader.cpp
++++ b/bmp/bmpinfoheader.cpp
+@@ -1,10 +1,12 @@
+-BmpInfoHeader::BmpInfoHeader() {
++BmpInfoHeader::BmpInfoHeader(int NZwidth, int height) : biWidth(NZwidth), biHeight(height) {
+   // Rest of the constructor body (remove initialization in body)
+-BmpInfoHeader::BmpInfoHeader() {
++}
+- The patch starts with `diff --git` to indicate a unified diff.
+- It targets the `bmpinfoheader.cpp` file.
+- The `index` line shows the old hash (`<hash>..<hash>`) and mode (100644, indicating unchanged content).
+- The `---` and `+++` lines mark the beginning and end of the patch.
+- The changes are made to the constructor by moving the assignments to a member initializer list, fixing the warnings about uninitialized member variables.
+- The original constructor is removed, as the new one is now provided.

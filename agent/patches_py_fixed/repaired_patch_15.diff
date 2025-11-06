@@ -1,0 +1,10 @@
+diff --git a/tools.py b/tools.py
+--- a/tools.py
++++ b/tools.py
+@@ -4,6 +4,5 @@
+ import os
+ import copy
+ import json
+-import pygame as pg  # Fixed import order
+    """
+    Useful for classes that require a lot of keyword arguments for

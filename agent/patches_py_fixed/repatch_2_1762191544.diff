@@ -1,0 +1,15 @@
+diff --git a/puzzle-challenge/puzzle_piece.py b/puzzle-challenge/puzzle_piece.py
+--- a/puzzle-challenge/puzzle_piece.py
++++ b/puzzle_piece.py
+@@ -136,7 +136,9 @@ class PuzzlePiece:
+         self.rect = pygame.Rect(p1.left, p1.top, size, size)
+     def move_ip(self, dx: int, dy: int) -> None:
+         self.rect.x += dx
+         self.rect.y += dy
+-        # Fixing possible used-before-assigned variables
++        x_diff = p1.left - p2.left
++        y_diff = p1.bottom - p2.top
+         if x_diff or y_diff:
+             for piece_ in other_section.pieces:
+                 piece_.rect.move_ip(x_diff, y_diff)
+                 self.pieces.append(piece_)

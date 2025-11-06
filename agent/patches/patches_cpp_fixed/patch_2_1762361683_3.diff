@@ -1,0 +1,10 @@
+diff --git a/bmp.cpp b/bmp.cpp
+--- a/bmp.cpp
++++ b/bmp.cpp
+@@ -14,12 +14,12 @@ Bmp::Bmp(BmpFileHeader& newBf, BmpInfoHeader& newBi, std::vector<uint8_t> img)
+     imgData = img;
+ }
+ void Bmp::setImgData(const std::vector<uint8_t>& newImgData) {
+-    imgData = newImgData; // Change to assign in initialization list
++    imgData = std::move(newImgData); // Move assignment to fix warning about passed by value
+ }

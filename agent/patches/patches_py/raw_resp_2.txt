@@ -1,0 +1,26 @@
+diff --git a/puzzle_piece.py b/puzzle_piece.py
+index fdf8b44..4d080a0 100644
+--- a/puzzle_piece.py
++++ b/puzzle_piece.py
+@@ -135,7 +135,9 @@ class PuzzlePiece:
+         if side == "top":
+             y_diff = p2.top - p1.top
+         elif side == "bottom":
+-            y_diff = p1.bottom - p2.top
++            x_diff = p1.left - p2.left
+             y_diff = 0  # Fix E0606: Possibly using variable 'y_diff' before assignment
+         elif side == "right":
+             x_diff = p2.right - p1.right
+         elif side == "left":
+             x_diff = p1.left - p2.left
+@@ -143,7 +145,9 @@ class PuzzlePiece:
+             self.pieces.append(piece_)
+         self.grabbed = False
+         return
+
++        # Fix E0203: Access to member 'font' before its definition
+        if self.font is not None:
+            self.rect.set_font(self.font)
+
+     def get_event(self, event):
+         pass

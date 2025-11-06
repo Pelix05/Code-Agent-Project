@@ -1,0 +1,23 @@
+diff --git a/bmp/bmpfileheader.cpp b/bmp/bmpfileheader.cpp
+--- a/bmp/bmpfileheader.cpp
++++ b/bmp/bmpfileheader.cpp
+@@ -3,7 +3,7 @@
+-BmpFileHeader::BmpFileHeader() {
++BmpFileHeader::BmpFileHeader(int NZwidth, int height) {
+   // Initialize member variables in the initialization list
+   bfType = 0; // Add initialization for bfType
+   bfSize = 0; // Add initialization for bfSize
+   bfReserved1 = 0; // Add initialization for bfReserved1
+   bfReserved2 = 0; // Add initialization for bfReserved2
+   bfOffBits = 0; // Add initialization for bfOffBits
+   biSize = 0; // Add initialization for biSize
+   biWidth = 0; // Add initialization for biWidth
+   biHeight = 0; // Add initialization for biHeight
+   biPlanes = 0; // Add initialization for biPlanes
+   biBitCount = 0; // Add initialization for biBitCount
+   biCompression = 0; // Add initialization for biCompression
+   biSizeImage = 0; // Add initialization for biSizeImage
+   biXPelsPerMeter = 0; // Add initialization for biXPelsPerMeter
+   biYPelsPerMeter = 0; // Add initialization for biYPelsPerMeter
+   biClrUsed = 0; // Add initialization for biClrUsed
+   biClrImportant = 0; // Add initialization for biClrImportant

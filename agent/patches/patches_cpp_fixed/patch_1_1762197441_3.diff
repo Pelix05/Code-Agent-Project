@@ -1,0 +1,14 @@
+diff --git a/bmp.cpp b/bmp.cpp
+--- a/bmp.cpp
++++ b/bmp.cpp
+@@ -13,10 +13,10 @@
+     BmpFileHeader newBf(NZwidth, height);
+     BmpInfoHeader newBi(NZwidth, height);
+-    bf = newBf;
+-    bi = newBi;
+-    imgData = img;
++    // Initialize variables in initialization lists
++    bf = BmpFileHeader(newBf.bfType, newBf.bfSize, newBf.bfReserved1, newBf.bfReserved2, newBf.bfOffBits);
++    bi = BmpInfoHeader(newBi.biSize, newBi.biWidth, newBi.biHeight, newBi.biPlanes, newBi.biBitCount, newBi.biCompression, newBi.biSizeImage, newBi.biXPelsPerMeter, newBi.biYPelsPerMeter, newBi.biClrUsed, newBi.biClrImportant);
++    imgData = std::vector<uint8_t>(newImgData.begin(), newImgData.end());
+    imgData = newImgData;

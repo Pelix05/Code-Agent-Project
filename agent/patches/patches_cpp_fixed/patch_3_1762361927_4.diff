@@ -1,0 +1,13 @@
+diff --git a/bmp/bmp.cpp b/bmp/bmp.cpp
+--- a/bmp/bmp.cpp
++++ b/bmp/bmp.cpp
+@@ -11,7 +11,7 @@ namespace bmp {
+ Bmp::Bmp(BmpFileHeader& newBf, BmpInfoHeader& newBi, std::vector<uint8_t> img)
+ {
+     // Initialize variables in initialization lists
+-    bf = newBf;       // Change to: bf = newBf; /* Use Initialization List */
++    bf = newBf;       // Change to: bf = newBf; // Use Initialization List
+     bi = newBi;
+     imgData = img;
+     // Rest of the function remains unchanged
+ }

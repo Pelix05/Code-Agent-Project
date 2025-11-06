@@ -1,0 +1,14 @@
+diff --git a/bmp/bmp.cpp b/bmp/bmp.cpp
+--- a/bmp/bmp.cpp
++++ b/bmp/bmp.cpp
+@@ -13,11 +13,11 @@
+     BmpFileHeader newBf(NZwidth, height);
+     BmpInfoHeader newBi(NZwidth, height);
+     // Initialize variables in initialization lists
+-    bf = newBf;       // Change to: bf = newBf({NZwidth, height});
+-    bi = newBi;       // Change to: bi = newBi({NZwidth, height});
++    bf = std::make_pair(newBf, NZwidth, height);  // Add this line
++    bi = std::make_pair(newBi, NZwidth, height);  // Add this line
+     imgData = img;                // Change to: imgData = std::move(img);
+ void Bmp::setImgData(const std::vector<uint8_t>& newImgData) {
+     imgData = newImgData;

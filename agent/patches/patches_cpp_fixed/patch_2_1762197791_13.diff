@@ -1,0 +1,18 @@
+diff --git a/bmp/bmpinfoheader.cpp b/bmp/bmpinfoheader.cpp
+--- a/bmp/bmpinfoheader.cpp
++++ b/bmp/bmpinfoheader.cpp
+@@ -1,9 +1,10 @@
+-BmpInfoHeader::BmpInfoHeader() {
+-    // Uninitialized member variables
++BmpInfoHeader::BmpInfoHeader(int NZwidth, int height) {
++    biSize = sizeof(BmpInfoHeader);
++    biWidth = NZwidth;
++    biHeight = height;
++    // Initialize uninitMemberVars using the constructor arguments
++    for (auto var : {"biSize", "biWidth", "biHeight"}) {
++        if (var == "biSize") {
++            this->biSize = biSize;
++        } else if (var == "biWidth" || var == "biHeight") {
++            this->member[var] = value; // Assuming 'value' is the provided argument
++        }
++    }

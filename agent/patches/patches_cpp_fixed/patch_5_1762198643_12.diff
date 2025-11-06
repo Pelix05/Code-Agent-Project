@@ -1,0 +1,60 @@
+diff --git a/bmp/bmpinfoheader.cpp b/bmp/bmpinfoheader.cpp
+--- a/bmp/bmpinfoheader.cpp
++++ b/bmp/bmpinfoheader.cpp
+@@ -1,10 +1,11 @@
+-BmpInfoHeader::BmpInfoHeader() {
++BmpInfoHeader::BmpInfoHeader(int NZwidth, int height) : biWidth(NZwidth), biHeight(height) {
+   // Initialize member variables in the constructor
+   biSize = sizeof(BmpInfoHeader);
+   biPlanes = 1;
+   biBitCount = 24; // Assuming 24-bit color
+   // Rest of the members can be initialized here
+ }
+diff --git a/database.cpp b/database.cpp
+--- a/database.cpp
++++ b/database.cpp
+@@ -5,5 +5,6 @@ BmpInfoHeader::BmpInfoHeader() {
+   m_db = QSqlDatabase::addDatabase("QSQLITE");
++BmpDatabaseManager::BmpDatabaseManager() : DatabaseManager() {
+   m_db = QSqlDatabase::addDatabase("QSQLITE");
+diff --git a/defaultpuzzlemenuwindow.h b/defaultpuzzlemenuwindow.h
+--- a/defaultpuzzlemenuwindow.h
++++ b/defaultpuzzlemenuwindow.h
+@@ -9,9 +9,10 @@ private:
+     private slots:
+         void loadPuzzle();
+-        // Unknown macro, remove or configure it
++};
+diff --git a/generatepuzzlemenuwindow.h b/generatepuzzlemenuwindow.h
++++ b/generatepuzzlemenuwindow.h
+@@ -9,9 +9,10 @@ private:
+     private slots:
+         void generatePuzzle();
+-        // Unknown macro, remove or configure it
++};
+diff --git a/mainwindowpuzzle.h b/mainwindowpuzzle.h
++++ b/mainwindowpuzzle.h
+@@ -61,9 +61,10 @@ private:
+     private slots:
+         void savePuzzle();
+-        // Unknown macro, remove or configure it
++};
+diff --git a/puzzle/databasemanager.h b/puzzle/databasemanager.h
+@@ -1,20 +1,22 @@
+-class DatabaseManager {
++class DatabaseManager : public QObject {
+   Q_OBJECT
+  -QSqlDatabase m_db;
++   DatabaseManager() : QObject() {
++     m_db = QSqlDatabase::addDatabase("QSQLITE");
++   }
+   // Rest of the class methods...
+diff --git a/leaderboard.h b/leaderboard.h
++++ b/leaderboard.h
+@@ -1,9 +1,10 @@ class Leaderboard : public QWidget {
+   public:
+     Leaderboard();
+-    private:
++    private:
+     // Remove or configure the unknown macro
+   };

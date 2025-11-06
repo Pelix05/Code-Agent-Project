@@ -1,0 +1,21 @@
+diff --git a/labels.py b/labels.py
+--- a/labels.py
++++ b/labels.py
+@@ -133,7 +133,9 @@ class Label:
+         self.image = self.idle_image
+         self.clicked = False
+         self.hover = False
++        # Fix E0203: Access to member 'font' before definition
++        self.font = self.font or DEFAULT_FONT
+     def render_text(self):
+         font, size = self.font, self.font_size
+         if (font, size) not in LOADED_FONTS:
+             LOADED_FONTS[font, size] = pg.font.Font(font, size)
+@@ -137,5 +139,8 @@ class PuzzlePiece(Piece):
+             x_diff, y_diff = calculate_diff(self.position, target_position)
+         self.move(x_diff, y_diff)
++        # Fix E0606: Possibly using variable 'x_diff' before assignment
++        x_diff = 0
++        # Fix E0606: Possibly using variable 'y_diff' before assignment
++        y_diff = 0
+         self.update_image()

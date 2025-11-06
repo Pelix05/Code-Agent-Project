@@ -1,0 +1,10 @@
+diff --git a/bmp/bmpfileheader.cpp b/bmp/bmpfileheader.cpp
+--- a/bmp/bmpfileheader.cpp
++++ b/bmp/bmpfileheader.cpp
+@@ -3,7 +3,7 @@
+ #include "bmpfileheader.h"
+-BmpFileHeader::BmpFileHeader() {
++BmpFileHeader::BmpFileHeader(const BmpFileHeader& newBf) : bfType(newBf.bfType), bfSize(newBf.bfSize),
+                                                       bfReserved1(newBf.bfReserved1), bfReserved2(newBf.bfReserved2),
+                                                       bfOffBits(newBf.bfOffBits) {}
+ // Rest of the class implementation...

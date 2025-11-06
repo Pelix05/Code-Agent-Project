@@ -1,0 +1,18 @@
+diff --git a/puzzle-challenge/puzzle_piece.py b/puzzle-challenge/puzzle_piece.py
+--- a/puzzle-challenge/puzzle_piece.py
++++ b/puzzle_piece.py
+@@ -134,7 +134,10 @@ class PuzzlePiece:
+         elif side == "bottom":
+             y_diff = p1.bottom - p2.top
+             x_diff = p1.left - p2.left
+         else:
+-            raise ValueError("Invalid side: {}".format(side))
++            x_diff = p1.left - p2.left  # Move this line up to fix the possibly used before assignment error
++            if not x_diff:
++                x_diff = 0  # Assign a default value if x_diff is not defined yet
+         for piece_ in other_section.pieces:
+             piece_.rect.move_ip(x_diff, y_diff)
+             self.pieces.append(piece_)
+     def get_event(self, event):
+         self.grabbed = False
+         return

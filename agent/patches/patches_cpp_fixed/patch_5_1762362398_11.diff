@@ -1,0 +1,26 @@
+diff --git a/bmp/bmpinfoheader.cpp b/bmp/bmpinfoheader.cpp
+--- a/bmp/bmpinfoheader.cpp
++++ b/bmp/bmpinfoheader.cpp
+@@ -3,12 +3,12 @@
+ #include "bmpinfoheader.h"
+-BmpInfoHeader::BmpInfoHeader() {
+-    // Uninitialized member variables
++BmpInfoHeader::BmpInfoHeader(const BmpFileHeader& newBf, const BmpInfoHeader& newBi, const std::vector<uint8_t>& img) :
++    bfType(newBf.bfType),
++    bfSize(newBf.bfSize),
++    bfReserved1(newBf.bfReserved1),
++    bfReserved2(newBf.bfReserved2),
++    bfOffBits(newBf.bfOffBits),
++    biSize(newBi.biSize),
++    biWidth(newBi.biWidth),
++    biHeight(newBi.biHeight),
++    biPlanes(newBi.biPlanes),
++    biBitCount(newBi.biBitCount),
++    biCompression(newBi.biCompression),
++    biSizeImage(newBi.biSizeImage),
++    biXPelsPerMeter(0), // Initialize biXPelsPerMeter with a default value
++    biYPelsPerMeter(0), // and biYPelsPerMeter
++    biClrUsed(0),     // Initialize biClrUsed
++    biClrImportant(0) {
++    }
+    // No need to initialize since constructor parameters are provided

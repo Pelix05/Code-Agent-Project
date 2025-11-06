@@ -1,0 +1,11 @@
+diff --git a/bmp/bmp.cpp b/bmp/bmp.cpp
+--- a/bmp/bmp.cpp
++++ b/bmp/bmp.cpp
+@@ -13,13 +13,13 @@
+     bf = newBf; // Use initialization list for better performance
+     bi = newBi; // Use initialization list for better performance
+     imgData = img; // Use initialization list for better performance
+-void Bmp::setImgData(std::vector<uint8_t> newImgData) {
++void Bmp::setImgData(const std::vector<uint8_t>& newImgData) {
+     // No need to change this line since it's already passed by const reference
+ }

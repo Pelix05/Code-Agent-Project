@@ -1,0 +1,18 @@
+diff --git a/labels.py b/labels.py
+--- a/labels.py
++++ b/labels.py
+@@ -132,7 +132,9 @@ class Label:
+         self.clicked = False
+         self.hover = False
+     def render_text(self):
+-        font, size = self.font, self.font_size
++        font, size = self.font, self.font_size
+         if (font, size) not in LOADED_FONTS:
+             LOADED_FONTS[font, size] = pg.font.Font(font, size)
+         self.font = LOADED_FONTS[font, size]
++        x_diff, y_diff = None, None  # Assign initial values for 'x_diff' and 'y_diff'
+         text = self.text and self.font.render(self.text, 1, self.text_color)
+         hover = self.hover_text and self.font.render(self.hover_text, 1,
+             x_diff=self.hover.get('x', 0),  # Use 'hover' dictionary for 'x_diff' assignment
+             y_diff=self.hover.get('y', 0)  # and 'y_diff' assignment
+         )

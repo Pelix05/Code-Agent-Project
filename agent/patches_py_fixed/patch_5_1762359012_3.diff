@@ -1,0 +1,22 @@
+diff --git a/puzzle-challenge/puzzle_piece.py b/puzzle-challenge/puzzle_piece.py
+--- a/puzzle-challenge/puzzle_piece.py
++++ b/puzzle_piece.py
+@@ -135,22 +135,20 @@ class PuzzlePiece:
+         elif side == "top":
+             y_diff = p1.top - p2.bottom
+             x_diff = p1.left - p2.left
+         elif side == "bottom":
+             y_diff = p1.bottom - p2.top
+-            x_diff = p1.left - p2.left  # Removed unused 'x_diff' assignment
+         else:
+             raise ValueError("Invalid side")
+     def move_to(self, x, y):
+         self.rect.move_ip(x, y)
+         self.position = (x, y)
+-    def grab(self, other_section):
++    def grab(self, other_section, x_diff=None, y_diff=None):
+         if not self.grabbed:
+             self.rect.move_ip(x_diff or 0, y_diff or 0)  # Update 'x_diff' and 'y_diff' if provided
+             self.pieces.append(other_section.pieces.pop(0))
+             self.grabbed = True
+         self.rect.center = self.position

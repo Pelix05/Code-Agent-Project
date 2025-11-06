@@ -1,0 +1,24 @@
+diff --git a/bmp/bmpfileheader.cpp b/bmp/bmpfileheader.cpp
+--- a/bmp/bmpfileheader.cpp
++++ b/bmp/bmpfileheader.cpp
+@@ -3,7 +3,7 @@
+ #include "bmpfileheader.h"
+-BmpFileHeader::BmpFileHeader() {
++BmpFileHeader::BmpFileHeader(int NZwidth, int height) {
+   // Initialize member variables using initialization lists
+   bfType = 0; // Assuming newBf.bfType is set in the constructor
+   bfSize = sizeof(BmpFileHeader); // No need for newBf.bfSize
+   bfReserved1 = 0;
+   bfReserved2 = 0;
+   bfOffBits = 0;
+   biSize = sizeof(BmpInfoHeader); // Initialize biSize with newBi.biSize
+   biWidth = NZwidth;
+   biHeight = height;
+   biPlanes = 1;
+   biBitCount = 24; // Assuming newBi.biBitCount is 24
+   biCompression = BI_RGB; // Assuming newBi.biCompression is BI_RGB
+   biSizeImage = biWidth * biHeight * 3; // Calculate biSizeImage
+   biXPelsPerMeter = 0;
+   biYPelsPerMeter = 0;
+   biClrUsed = 0;
+   biClrImportant = 0;

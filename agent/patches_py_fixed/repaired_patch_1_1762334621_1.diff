@@ -1,0 +1,13 @@
+diff --git a/labels.py b/labels.py
+--- a/labels.py
++++ b/labels.py
+@@ -133,6 +133,7 @@ class Label:
+         self.disable_image, rendered["disable"]):
+         self.image = self.idle_image
+         self.clicked = False
+         self.hover = False
++        # Fixing possible used variables before assignment
+         x_diff, y_diff = self.get_diff()
+         self.position = (self.x + x_diff, self.y + y_diff)
+     def render_text(self):
+         font, size = self.font, self.font_size

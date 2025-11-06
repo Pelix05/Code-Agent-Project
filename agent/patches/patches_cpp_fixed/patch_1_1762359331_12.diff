@@ -1,0 +1,11 @@
+diff --git a/bmp/bmpinfoheader.cpp b/bmp/bmpinfoheader.cpp
+--- a/bmp/bmpinfoheader.cpp
++++ b/bmp/bmpinfoheader.cpp
+@@ -2,7 +2,7 @@
+ #include "bmpinfoheader.h"
+-BmpInfoHeader::BmpInfoHeader() {
++BmpInfoHeader::BmpInfoHeader(const int& NZwidth, const int& height) : biWidth(NZwidth), biHeight(height) {}
+ BmpInfoHeader::BmpInfoHeader(int NZwidth, int height) :
+     biSize(0), biWidth(NZwidth), biHeight(height) {}
+- Changed the constructor for `BmpInfoHeader` to take `NZwidth` and `height` as parameters and initialized their respective member variables directly, following the performance suggestion to initialize in the initialization list.
+- Removed the unused constructor that takes no arguments (since it's now a private constructor).

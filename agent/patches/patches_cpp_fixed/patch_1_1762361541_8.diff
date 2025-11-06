@@ -1,0 +1,20 @@
+diff --git a/bmp/bmpfileheader.cpp b/bmp/bmpfileheader.cpp
+--- a/bmp/bmpfileheader.cpp
++++ b/bmp/bmpfileheader.cpp
+@@ -2,7 +2,7 @@
+-BmpFileHeader::BmpFileHeader() {
++BmpFileHeader::BmpFileHeader(int NZwidth, int height) : bfType(0), bfSize(0), bfReserved1(0), bfReserved2(0), bfOffBits(0) {
+   // Initialize uninit member variables
+   this->bfType = newBf.bfType;
+   this->bfSize = newBi.bfSize;
+@@ -13,12 +13,12 @@
+ }
+-BmpFileHeader::~BmpFileHeader() {
+   delete[] bfType;
+   delete[] bfSize;
+   delete[] bfReserved1;
+   delete[] bfReserved2;
+   delete[] bfOffBits;
++// Remove the deleted statements since bfType, etc. are now initialized in the constructor
++// This is a fix for the uninitMemberVar warnings
++}

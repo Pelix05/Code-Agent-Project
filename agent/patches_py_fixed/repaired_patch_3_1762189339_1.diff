@@ -1,0 +1,16 @@
+diff --git a/labels.py b/labels.py
+--- a/labels.py
++++ b/labels.py
+@@ -133,7 +133,9 @@ class Label:
+         self.clicked = False
+         self.hover = False
+     def render_text(self):
+-        font, size = self.font, self.font_size
++        font, size = self.font, self.font_size
+         if (font, size) not in LOADED_FONTS:
+             LOADED_FONTS[font, size] = pg.font.Font(font, size)
+         self.font = LOADED_FONTS[font, size]
+         text = self.text and self.font.render(self.text, 1, self.text_color)
++        hover_text = self.hover_text and self.font.render(self.hover_text, 1,
++                                                       self.hover_color)
+         return text, hover_text

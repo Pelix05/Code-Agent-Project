@@ -1,0 +1,27 @@
+diff --git a/puzzle_piece.py b/puzzle_piece.py
+--- a/puzzle_piece.py
++++ b/puzzle_piece.py
+@@ -137,11 +137,12 @@ def move_to(self, target):
+         elif side == "top":
+             y_diff = p2.bottom - p1.top
+             x_diff = p2.left - p1.left
+         else:
+-            x_diff = p1.right - p2.left
+-            y_diff = p1.bottom - p2.top
++            x_diff = p1.right - p2.left
++            if side == "bottom":
++                y_diff = p2.bottom - p1.top
+             for piece_ in other_section.pieces:
+                 piece_.rect.move_ip(x_diff, y_diff)
+                 self.pieces.append(piece_)
+         self.grabbed = False
+         return
+@@ -150,7 +152,8 @@ class PuzzlePiece:
+     def get_event(self, event):
+         if event.type == pygame.QUIT:
+             self.grabbed = False
+         elif event.type == pygame.MOUSEBUTTONDOWN:
++            if not self.grabbed and event.button == 1:
+                 self.grabbed = True
+                 mouse_pos = pygame.mouse.get_pos()
+                 self.target = mouse_pos

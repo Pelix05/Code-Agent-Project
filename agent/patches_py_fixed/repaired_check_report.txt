@@ -1,0 +1,45 @@
+Summary: 13/44 OK
+repaired_patch_1.diff	FAIL	error: corrupt patch at line 17
+repaired_patch_10.diff	OK	
+repaired_patch_11.diff	OK	
+repaired_patch_12.diff	OK	
+repaired_patch_13.diff	OK	
+repaired_patch_14.diff	OK	
+repaired_patch_15.diff	OK	
+repaired_patch_1_1762189250_1.diff	FAIL	error: corrupt patch at line 17
+repaired_patch_1_1762189262_2.diff	FAIL	error: corrupt patch at line 16
+repaired_patch_1_1762189272_3.diff	FAIL	error: corrupt patch at line 17
+repaired_patch_1_1762190489_1.diff	FAIL	error: corrupt patch at line 17
+repaired_patch_1_1762190501_2.diff	FAIL	error: corrupt patch at line 17
+repaired_patch_1_1762190510_3.diff	FAIL	error: corrupt patch at line 18
+repaired_patch_2.diff	FAIL	error: corrupt patch at line 19
+repaired_patch_2_1762189296_1.diff	FAIL	error: corrupt patch at line 17
+repaired_patch_2_1762189304_2.diff	FAIL	error: corrupt patch at line 18
+repaired_patch_2_1762189312_3.diff	FAIL	error: corrupt patch at line 16
+repaired_patch_2_1762190536_1.diff	FAIL	error: corrupt patch at line 16
+repaired_patch_2_1762190544_2.diff	FAIL	error: corrupt patch at line 16
+repaired_patch_2_1762190552_3.diff	FAIL	error: corrupt patch at line 18
+repaired_patch_3.diff	FAIL	error: corrupt patch at line 17
+repaired_patch_3_1762189339_1.diff	FAIL	error: corrupt patch at line 17
+repaired_patch_3_1762189350_2.diff	FAIL	error: corrupt patch at line 17
+repaired_patch_3_1762189359_3.diff	FAIL	error: corrupt patch at line 16
+repaired_patch_3_1762190579_1.diff	FAIL	error: corrupt patch at line 17
+repaired_patch_3_1762190590_2.diff	FAIL	error: corrupt patch at line 18
+repaired_patch_3_1762190597_3.diff	FAIL	error: corrupt patch at line 16
+repaired_patch_4.diff	OK	
+repaired_patch_4_1762189386_1.diff	OK	
+repaired_patch_4_1762189402_3.diff	FAIL	error: corrupt patch at line 18
+repaired_patch_4_1762190622_1.diff	FAIL	error: corrupt patch at line 14
+repaired_patch_4_1762190632_2.diff	FAIL	error: corrupt patch at line 15
+repaired_patch_4_1762190642_3.diff	FAIL	error: corrupt patch at line 22
+repaired_patch_5.diff	OK	
+repaired_patch_5_1762189428_1.diff	FAIL	error: corrupt patch at line 16
+repaired_patch_5_1762189437_2.diff	FAIL	error: corrupt patch at line 20
+repaired_patch_5_1762189448_3.diff	FAIL	error: corrupt patch at line 19
+repaired_patch_5_1762190668_1.diff	FAIL	error: corrupt patch at line 17
+repaired_patch_5_1762190678_2.diff	FAIL	error: corrupt patch at line 20
+repaired_patch_5_1762190688_3.diff	FAIL	error: corrupt patch at line 15
+repaired_patch_6.diff	OK	
+repaired_patch_7.diff	OK	
+repaired_patch_8.diff	OK	
+repaired_patch_9.diff	OK	

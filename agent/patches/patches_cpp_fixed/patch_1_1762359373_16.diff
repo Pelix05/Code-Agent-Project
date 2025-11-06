@@ -1,0 +1,14 @@
+diff --git a/bmp/bmpinfoheader.cpp b/bmp/bmpinfoheader.cpp
+--- a/bmp/bmpinfoheader.cpp
++++ b/bmp/bmpinfoheader.cpp
+@@ -1,7 +1,7 @@
+-BmpInfoHeader::BmpInfoHeader() {
++BmpInfoHeader::BmpInfoHeader(int NZwidth, int height) : biWidth(NZwidth), biHeight(height) {
+   // Rest of the constructor body (omitted for brevity)
+ }
+diff --git a/database.cpp b/database.cpp
+--- a/database.cpp
++++ b/database.cpp
+@@ -1,5 +1,5 @@
+-m_db = QSqlDatabase::addDatabase("QSQLITE");
++m_db = QSqlDatabase::addDatabase("QSQLITE", /* initialization data */);

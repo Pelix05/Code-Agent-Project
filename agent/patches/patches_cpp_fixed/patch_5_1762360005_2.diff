@@ -1,0 +1,12 @@
+diff --git a/bmp/bmp.cpp b/bmp/bmp.cpp
+--- a/bmp/bmp.cpp
++++ b/bmp/bmp.cpp
+@@ -12,7 +12,7 @@ Bmp::Bmp(BmpFileHeader& newBf, BmpInfoHeader& newBi, std::vector<uint8_t> img)
+         bf = newBf;
+         bi = newBi;
+         imgData = img;
+-    }
++    // Initialize variables in the initialization list
+    :BmpFileHeader bf{newBf};
+    :BmpInfoHeader bi{newBi};
+    =img;

@@ -1,0 +1,39 @@
+diff --git a/bmpfileheader.cpp b/bmpfileheader.cpp
+--- a/bmpfileheader.cpp
++++ b/bmpfileheader.cpp
+@@ -1,6 +1,6 @@
+-BmpFileHeader::BmpFileHeader() {
++BmpFileHeader::BmpFileHeader(int NZwidth, int height) : bfType(0), bfSize(0), bfReserved1(0), bfReserved2(0), bfOffBits(0) {
+     // Initialize member variables in the constructor list
+     bfSize = newBf.bfSize; // Use Initialization List for bfSize
+     bfType = newBf.bfType;
+     bfReserved1 = newBf.bfReserved1;
+     bfReserved2 = newBf.bfReserved2;
+     bfOffBits = newBf.bfOffBits;
+ }
+diff --git a/databasemanager.h b/databasemanager.h
+--- a/databasemanager.h
++++ b/databasemanager.h
+@@ -1,15 +1,16 @@
+    DatabaseManager();
+    ~DatabaseManager();
+-private:
+    // Use Initialization List for m_db
+    mutable QSqlDatabase m_db = QSqlDatabase::addDatabase("QSQLITE");
+diff --git a/defaultpuzzlemenuwindow.h b/defaultpuzzlemenuwindow.h
+diff --git a/generatepuzzlemenuwindow.h b/generatepuzzlemenuwindow.h
+diff --git a/mainwindowpuzzle.h b/mainwindowpuzzle.h
+diff --git a/puzzle.cpp b/puzzle.cpp
+--- a/puzzle.cpp
++++ b/puzzle.cpp
+@@ -6,5 +6,5 @@
+    m_db = QSqlDatabase::addDatabase("QSQLITE");
+diff --git a/puzzle.h b/puzzle.h
+--- a/puzzle.h
++++ b/puzzle.h
+@@ -1,9 +1,9 @@
+-class Puzzle : public QWidget {
++class Puzzle : public QWidget {
+    Puzzle(int NZwidth, int height);
+    ~Puzzle();
+    // Rest of the code remains unchanged

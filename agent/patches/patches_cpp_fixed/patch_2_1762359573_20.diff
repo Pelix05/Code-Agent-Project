@@ -1,0 +1,45 @@
+diff --git a/bmp/bmpinfoheader.cpp b/bmp/bmpinfoheader.cpp
+--- a/bmp/bmpinfoheader.cpp
++++ b/bmp/bmpinfoheader.cpp
+@@ -3,7 +3,7 @@
+-BmpInfoHeader::BmpInfoHeader() {
++BmpInfoHeader::BmpInfoHeader(int NZwidth, int height) : biWidth(NZwidth), biHeight(height) {}
+diff --git a/database.cpp b/database.cpp
+--- a/database.cpp
++++ b/database.cpp
+@@ -5,5 +5,5 @@
+    m_db = QSqlDatabase::addDatabase("QSQLITE");
++m_db = QSqlDatabase::addDatabase("QSQLITE"); // Initialization list for m_db
+diff --git a/defaultpuzzlemenuwindow.h b/defaultpuzzlemenuwindow.h
+--- a/defaultpuzzlemenuwindow.h
++++ b/defaultpuzzlemenuwindow.h
+@@ -14,9 +14,9 @@
+    // ... (other declarations)
+-    // Remove the unknown macros
++    // Replace with correct configuration if 'slots' is a macro
++    Q_OBJECT
+diff --git a/generatepuzzlemenuwindow.h b/generatepuzzlemenuwindow.h
+--- a/generatepuzzlemenuwindow.h
++++ b/generatepuzzlemenuwindow.h
+@@ -16,9 +16,9 @@
+    // ... (other declarations)
+-    // Remove the unknown macros
++    // Replace with correct configuration if 'slots' is a macro
++    Q_OBJECT
+diff --git a/mainwindowpuzzle.h b/mainwindowpuzzle.h
+--- a/mainwindowpuzzle.h
++++ b/mainwindowpuzzle.h
+@@ -60,9 +60,9 @@
+    // ... (other declarations)
+-    // Remove the unknown macros
++    // Replace with correct configuration if 'slots' is a macro
++    Q_OBJECT
+diff --git a/puzzle/databasemanager.h b/puzzle/databasemanager.h
+--- a/puzzle/databasemanager.h
++++ b/puzzle/databasemanager.h
+@@ -19,1 +19,1 @@
++    : public QObject // Change to use QObject instead of one-definition rule
+diff --git a/puzzle/leaderboard.h b/puzzle/leaderboard.h
++++ b/puzzle/leaderboard.h
+@@ -9,1 +9,1 @@
++    : publicQObject // Change to use QObject instead of one-definition rule

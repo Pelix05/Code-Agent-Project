@@ -1,0 +1,36 @@
+diff --git a/bmp/bmpinfoheader.cpp b/bmp/bmpinfoheader.cpp
+--- a/bmp/bmpinfoheader.cpp
++++ b/bmp/bmpinfoheader.cpp
+@@ -3,7 +3,7 @@
+ #include "bmpinfoheader.h"
+-BmpInfoHeader::BmpInfoHeader() {
++BmpInfoHeader::BmpInfoHeader(const int NZwidth, int height) : biWidth(NZwidth), biHeight(height) {
+   // Rest of the constructor body (remove initialization of uninitialized members)
+ }
+diff --git a/database.cpp b/database.cpp
+--- a/database.cpp
++++ b/database.cpp
+@@ -5,5 +5,6 @@ BmpInfoHeader::BmpInfoHeader() {}
+ m_db = QSqlDatabase::addDatabase("QSQLITE");
++m_db.setDatabaseName("your_database.db"); // Initialize m_db with a specific database name
+diff --git a/defaultpuzzlemenuwindow.h b/defaultpuzzlemenuwindow.h
+--- a/defaultpuzzlemenuwindow.h
++++ b/defaultpuzzlemenuwindow.h
+@@ -9,9 +9,10 @@ private:
+     void generatePuzzle();
+ #error This header requires configuration. Please set the slots macro in your project.
++#define Slots() // Replace this with your actual slots macro configuration
+diff --git a/generatepuzzlemenuwindow.h b/generatepuzzlemenuwindow.h
+--- a/generatepuzzlemenuwindow.h
++++ b/generatepuzzlemenuwindow.h
+@@ -9,9 +9,10 @@ private:
+     void generatePuzzle();
+ #error This header requires configuration. Please set the slots macro in your project.
++#define Slots() // Replace this with your actual slots macro configuration
+diff --git a/mainwindowpuzzle.h b/mainwindowpuzzle.h
+--- a/mainwindowpuzzle.h
++++ b/mainwindowpuzzle.h
+@@ -60,9 +60,10 @@ private:
+     void handlePuzzleGenerated();
+ #error This header requires configuration. Please set the slots macro in your project.
++#define Slots() // Replace this with your actual slots macro configuration

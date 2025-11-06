@@ -1,0 +1,44 @@
+diff --git a/bmp/bmpinfoheader.cpp b/bmp/bmpinfoheader.cpp
+--- a/bmp/bmpinfoheader.cpp
++++ b/bmp/bmpinfoheader.cpp
+@@ -3,7 +3,7 @@
+-BmpInfoHeader::BmpInfoHeader() {
++BmpInfoHeader::BmpInfoHeader(int NZwidth, int height) : biWidth(NZwidth), biHeight(height) {}
+diff --git a/database.cpp b/database.cpp
+--- a/database.cpp
++++ b/database.cpp
+@@ -5,7 +5,7 @@
+    m_db = QSqlDatabase::addDatabase("QSQLITE");
+-BmpDatabaseManager::BmpDatabaseManager() {
++BmpDatabaseManager::BmpDatabaseManager(int NZwidth, int height) : DatabaseManager(), m_db(QSqlDatabase::addDatabase("QSQLITE"), NZwidth, height) {}
+diff --git a/defaultpuzzlemenuwindow.h b/defaultpuzzlemenuwindow.h
+--- a/defaultpuzzlemenuwindow.h
++++ b/defaultpuzzlemenuwindow.h
+@@ -13,9 +13,9 @@
+ private:
+     void generatePuzzle();
+-    private slots:
++    private slots: // Add missing configuration for slots
+diff --git a/generatepuzzlemenuwindow.h b/generatepuzzlemenuwindow.h
+--- a/generatepuzzlemenuwindow.h
++++ b/generatepuzzlemenuwindow.h
+@@ -16,9 +16,9 @@
+ private:
+     void generatePuzzle();
+-    private slots:
++    private slots: // Add missing configuration for slots
+diff --git a/mainwindowpuzzle.h b/mainwindowpuzzle.h
+--- a/mainwindowpuzzle.h
++++ b/mainwindowpuzzle.h
+@@ -63,9 +63,9 @@
+ private:
+     void savePuzzle();
+-    private slots:
++    private slots: // Add missing configuration for slots
+diff --git a/puzzle.cpp b/puzzle.cpp
+--- a/puzzle.cpp
++++ b/puzzle.cpp
+@@ -5,7 +5,7 @@
+    m_db = QSqlDatabase::addDatabase("QSQLITE");
+-PuzzleDatabaseManager::PuzzleDatabaseManager() {
++PuzzleDatabaseManager::PuzzleDatabaseManager(int NZwidth, int height) : DatabaseManager(), m_db(QSqlDatabase::addDatabase("QSQLITE"), NZwidth, height) {}

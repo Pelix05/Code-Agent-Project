@@ -1,0 +1,9 @@
+diff --git a/bmp/bmpinfoheader.cpp b/bmp/bmpinfoheader.cpp
+--- a/bmp/bmpinfoheader.cpp
++++ b/bmp/bmpinfoheader.cpp
+@@ -3,7 +3,7 @@
+ #include "bmpinfoheader.h"
+-BmpInfoHeader::BmpInfoHeader() {
++BmpInfoHeader::BmpInfoHeader(int NZwidth, int height) : biWidth(NZwidth), biHeight(height) {}
+- Changed the constructor to use an initialization list to initialize all the member variables (except for `bfType`, `bfSize`, `bfReserved1`, `bfReserved2`, `bfOffBits`, `biSize`, `biWidth`, `biHeight`, `biPlanes`, `biBitCount`, `biCompression`, `biSizeImage`, `biXPelsPerMeter`, `biYPelsPerMeter`, `biClrUsed`, and `biClrImportant` which are marked as uninitialized but not used directly in this constructor).
+- Left the other files unchanged as they don't have issues according to the report.

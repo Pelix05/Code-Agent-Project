@@ -1,0 +1,53 @@
+diff --git a/bmp/bmpfileheader.cpp b/bmp/bmpfileheader.cpp
+--- a/bmp/bmpfileheader.cpp
++++ b/bmp/bmpfileheader.cpp
+@@ -2,7 +2,7 @@
+ #include "bmpfileheader.h"
+-BmpFileHeader::BmpFileHeader() {
++BmpFileHeader::BmpFileHeader(int NZwidth, int height) : bfType(0), bfSize(0), bfReserved1(0), bfReserved2(0), bfOffBits(0) {
+     // Initialize member variables in the constructor
+ }
+diff --git a/database.cpp b/database.cpp
+--- a/database.cpp
++++ b/database.cpp
+@@ -5,5 +5,5 @@
+     m_db = QSqlDatabase::addDatabase("QSQLITE");
+ }
+-BmpDatabaseManager::BmpDatabaseManager() {
++BmpDatabaseManager::BmpDatabaseManager(int NZwidth, int height) : DatabaseManager(), m_db(nullptr) {
+     // Initialize m_db in the constructor
+ }
+diff --git a/defaultpuzzlemenuwindow.h b/defaultpuzzlemenuwindow.h
+diff --git a/generatepuzzlemenuwindow.h b/generatepuzzlemenuwindow.h
+diff --git a/mainwindowpuzzle.h b/mainwindowpuzzle.h
+--- a/defaultpuzzlemenuwindow.h
++++ b/defaultpuzzlemenuwindow.h
+@@ -9,9 +9,9 @@
+     private:
+         Q_SLOT void openDatabase();
+         Q_SLOT void closeDatabase();
+-        // Remove these lines with unknown macros
++        // Replace with appropriate configuration for slots if needed
++        // Assuming slots is a macro, replace with: Q_SLOT void slotMethod();
+     signals:
+         void databaseConnected();
+         void databaseDisconnected();
+diff --git a/puzzle.h b/puzzle.h
+--- a/puzzle.h
++++ b/puzzle.h
+@@ -19,9 +19,9 @@
+     private:
+         BmpInfoHeader info;
+         QSqlDatabase m_db;
+-        // Remove this line with unknown macro
++        // Replace with appropriate configuration for slots if needed
++        // Assuming slots is a macro, replace with: Q_SLOT void solvePuzzle();
+     public:
+         Puzzle(int NZwidth, int height);
+         ~Puzzle();
+diff --git a/puzzle.cpp b/puzzle.cpp
+@@ -6,5 +6,5 @@
+         BmpInfoHeader info;
+         QSqlDatabase m_db;
++        // Initialize m_db in the constructor
++        Puzzle(int NZwidth, int height) : BmpPuzzle(NZwidth, height), m_db(nullptr) {}

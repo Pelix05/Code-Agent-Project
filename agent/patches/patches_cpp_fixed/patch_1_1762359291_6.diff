@@ -1,0 +1,66 @@
+diff --git a/bmpfileheader.cpp b/bmpfileheader.cpp
+--- a/bmpfileheader.cpp
++++ b/bmpfileheader.cpp
+@@ -3,10 +3,10 @@
+-BmpFileHeader::BmpFileHeader() {
+-    bfType = 0; // Add initialization for bfType
+-    bfSize = 0; // Add initialization for bfSize
+-    bfReserved1 = 0; // Add initialization for bfReserved1
+-    bfReserved2 = 0; // Add initialization for bfReserved2
+-    bfOffBits = 0; // Add initialization for bfOffBits
++BmpFileHeader::BmpFileHeader(int NZwidth, int height) :
++    bfType(0), // Initialize bfType
++    bfSize(0), // Initialize bfSize
++    bfReserved1(0), // Initialize bfReserved1
++    bfReserved2(0), // Initialize bfReserved2
++    bfOffBits(0) { // Initialize bfOffBits
+       // Rest of the constructor body
+diff --git a/bmpinfoheader.cpp b/bmpinfoheader.cpp
+--- a/bmpinfoheader.cpp
++++ b/bmpinfoheader.cpp
+@@ -3,19 +3,19 @@
+-BmpInfoHeader::BmpInfoHeader() {
+-    biSize = 0; // Add initialization for biSize
+-    biWidth = 0; // Add initialization for biWidth
+-    biHeight = 0; // Add initialization for biHeight
+-    biPlanes = 0; // Add initialization for biPlanes
+-    biBitCount = 0; // Add initialization for biBitCount
+-    biCompression = 0; // Add initialization for biCompression
+-    biSizeImage = 0; // Add initialization for biSizeImage
+-    biXPelsPerMeter = 0; // Add initialization for biXPelsPerMeter
+-    biYPelsPerMeter = 0; // Add initialization for biYPelsPerMeter
+-    biClrUsed = 0; // Add initialization for biClrUsed
+-    biClrImportant = 0; // Add initialization for biClrImportant
++BmpInfoHeader::BmpInfoHeader(int NZwidth, int height) :
++    biSize(0), // Initialize biSize
++    biWidth(NZwidth), // Initialize biWidth
++    biHeight(height), // Initialize biHeight
++    biPlanes(1), // Assuming 1 plane for now
++    biBitCount(24), // Assuming 24-bit color depth
++    biCompression(0), // No compression by default
++    biSizeImage(0), // Initialize biSizeImage
++    biXPelsPerMeter(0), // Initialize biXPelsPerMeter
++    biYPelsPerMeter(0), // Initialize biYPelsPerMeter
++    biClrUsed(0), // Initialize biClrUsed
++    biClrImportant(0) { // Initialize biClrImportant
+       // Rest of the constructor body
+diff --git a/database.cpp b/database.cpp
+--- a/database.cpp
++++ b/database.cpp
+@@ -5,5 +5,5 @@
+    m_db = QSqlDatabase::addDatabase("QSQLITE");
+diff --git a/defaultpuzzlemenuwindow.h b/defaultpuzzlemenuwindow.h
+diff --git a/generatepuzzlemenuwindow.h b/generatepuzzlemenuwindow.h
+diff --git a/mainwindowpuzzle.h b/mainwindowpuzzle.h
+--- a/defaultpuzzlemenuwindow.h
++++ b/defaultpuzzlemenuwindow.h
+@@ -9,9 +9,9 @@
+ private:
+     // ... (other slots declaration)
+diff --git a/generatepuzzlemenuwindow.h b/generatepuzzlemenuwindow.h
+diff --git a/mainwindowpuzzle.h b/mainwindowpuzzlemenu.h
+--- a/mainwindowpuzzlemenu.h
++++ b/mainwindowpuzzle.h
+@@ -61,9 +61,9 @@
+ private:
+     // ... (other slots declaration)

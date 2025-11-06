@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Python Analyzer</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f7d1ff, #d1e7ff);
+}
+
+.container {
+    background: #b998f2;
+    padding: 50px;
+    border-radius: 24px;
+    width: 95%;
+    max-width: 950px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: max-height 0.5s ease;
+    max-height: 700px;
+    overflow: hidden; /* Keeps the rounded look even when inner content scrolls */
+}
+
+h1 {
+    font-weight: 700;
+    font-size: 34px;
+    color: #33296d;
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.footer {
+    margin-top: 25px;
+    text-align: center;
+    color: #33296d;
+    font-size: 15px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    align-items: center;
+    width: 100%;
+}
+
+.file-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+    max-width: 600px;
+    border: 2px dashed #33296d;
+    border-radius: 12px;
+    padding: 12px;
+    transition: background 0.3s, border-color 0.3s;
+}
+.file-container.dragover {
+    background: rgba(255,255,255,0.05);
+    border-color: #659ee0;
+}
+
+#fileInput { display: none; }
+
+.file-label {
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #f7d1ff, #d1e7ff);
+    color: #33296d;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+    text-align: center;
+    font-size: 14px;
+    min-width: 120px;
+}
+.file-label:hover { transform: scale(1.05); }
+
+#fileName {
+    flex: 1;
+    padding: 10px 15px;
+    background: linear-gradient(135deg, #f7d1ff, #d1e7ff);
+    color: #33296d;
+    border-radius: 12px;
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+button {
+    padding: 14px 25px;
+    background: linear-gradient(135deg, #f7d1ff, #d1e7ff);
+    color: #33296d;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s;
+    font-size: 15px;
+}
+button:hover { transform: scale(1.05); }
+
+#progressContainer {
+    width: 100%;
+    max-width: 600px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 12px;
+    overflow: hidden;
+    height: 16px;
+    display: none;
+    margin-top: 15px;
+    position: relative;
+}
+#progressBar {
+    height: 100%;
+    width: 0;
+    background: linear-gradient(135deg, #d1e7ff, #f7d1ff);
+    transition: width 0.3s;
+}
+#progressPercent {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 12px;
+    font-weight: 600;
+    color: #33296d;
+}
+
+#result {
+    margin-top: 35px;
+    padding: 30px;
+    background: linear-gradient(135deg, #f7d1ff, #d1e7ff);
+    border-radius: 20px;
+    max-height: 250px;
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: auto; /* enable both scroll directions */
+    font-family: monospace;
+    white-space: pre-wrap;
+    box-shadow: inset 0 4px 12px rgba(0,0,0,0.15);
+    color: #33296d;
+    font-size: 15px;
+    transition: max-height 0.5s ease;
+    scrollbar-color: #b998f2 #e8d8ff;
+    scrollbar-width: thin;
+}
+
+/* ==== Custom Scrollbar (Modern Purple Theme) ==== */
+#result::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+#result::-webkit-scrollbar-track {
+    background: #e8d8ff;
+    border-radius: 10px;
+}
+#result::-webkit-scrollbar-thumb {
+    background: #b998f2;
+    border-radius: 10px;
+    transition: background 0.3s;
+}
+#result::-webkit-scrollbar-thumb:hover {
+    background: #9a7de6;
+}
+
+/* Animated "Thinking..." text */
+.thinking {
+    text-align: left;
+    font-weight: 600;
+    font-size: 16px;
+    color: #33296d;
+    display: flex;
+    align-items: center;
+    animation: pulse 1.5s infinite;
+    padding-left: 10px;
+}
+@keyframes pulse {
+    0% { opacity: 0.4; }
+    50% { opacity: 1; }
+    100% { opacity: 0.4; }
+}
+
+.pass { color: #0f7a0f; font-weight: 600; }
+.fail { color: #bf1f1f; font-weight: 600; }
+.warning { color: #b58b1f; font-weight: 600; }
+</style>
+</head>
+<body>
+<div class="container" id="container">
+    <h1>Code Analyzer</h1>
+    <form id="uploadForm">
+        <div class="file-container" id="dropArea">
+            <label class="file-label" for="fileInput">Choose ZIP</label>
+            <input type="file" name="file" id="fileInput" accept=".zip" required>
+            <div id="fileName">No file selected</div>
+        </div>
+        <div id="progressContainer">
+            <div id="progressBar"></div>
+            <div id="progressPercent">0%</div>
+        </div>
+        <button type="submit">Upload & Analyze</button>
+            <!-- Auto-fix is run automatically by Upload & Analyze; manual buttons removed -->
+    </form>
+    <div id="result">Analysis results will appear here...</div>
+    <div class="footer">Powered by BlackHole Group</div>
+</div>
+
+<script>
+const fileInput = document.getElementById('fileInput');
+const fileName = document.getElementById('fileName');
+const dropArea = document.getElementById('dropArea');
+const progressContainer = document.getElementById('progressContainer');
+const progressBar = document.getElementById('progressBar');
+const progressPercent = document.getElementById('progressPercent');
+const resultDiv = document.getElementById('result');
+const container = document.getElementById('container');
+
+fileInput.addEventListener('change', () => {
+    fileName.textContent = fileInput.files.length ? fileInput.files[0].name : "No file selected";
+});
+
+dropArea.addEventListener('dragover', e => {
+    e.preventDefault();
+    dropArea.classList.add('dragover');
+});
+dropArea.addEventListener('dragleave', () => dropArea.classList.remove('dragover'));
+dropArea.addEventListener('drop', e => {
+    e.preventDefault();
+    dropArea.classList.remove('dragover');
+    const files = e.dataTransfer.files;
+    if (files.length) {
+        fileInput.files = files;
+        fileName.textContent = files[0].name;
+    }
+});
+
+// helper rendering functions used by upload and polling
+function escapeHtml(s){
+    if (!s) return '';
+    return String(s)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+}
+function highlight(s){
+    let t = escapeHtml(s || '');
+    t = t.replace(/PASS/g, '<span class="pass">PASS</span>')
+         .replace(/FAIL/g, '<span class="fail">FAIL</span>')
+         .replace(/WARNING/g, '<span class="warning">WARNING</span>');
+    return '<div class="monos">' + t + '</div>';
+}
+
+document.getElementById('uploadForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    if (!fileInput.files.length) return;
+
+    container.style.maxHeight = '900px';
+    resultDiv.style.maxHeight = '500px';
+    resultDiv.innerHTML = '<div class="thinking">Uploading & queuing work<span class="dots"></span></div>';
+
+    const formData = new FormData();
+    formData.append('file', fileInput.files[0]);
+
+    progressContainer.style.display = 'block';
+    progressBar.style.width = '10%';
+    progressPercent.textContent = '10%';
+
+    try {
+        const resp = await fetch('/upload', { method: 'POST', body: formData });
+        const data = await resp.json();
+        if (data.status !== 'Accepted' || !data.workspace) {
+            resultDiv.textContent = '❌ Upload failed: ' + (data.error || JSON.stringify(data));
+            progressContainer.style.display = 'none';
+            return;
+        }
+
+        const ws = data.workspace;
+        resultDiv.innerHTML = `<div>Accepted workspace <strong>${escapeHtml(ws)}</strong>. Processing...</div>`;
+        progressBar.style.width = '20%';
+        progressPercent.textContent = '20%';
+
+        // Poll status
+        const pollInterval = 2000;
+        let pollTimer = setInterval(async () => {
+            try {
+                const s = await fetch('/status?ws=' + encodeURIComponent(ws));
+                const sd = await s.json();
+                if (sd.status === 'Processing') {
+                    resultDiv.innerHTML = `<div>Workspace ${escapeHtml(ws)}: processing...</div>`;
+                    progressBar.style.width = '30%';
+                    progressPercent.textContent = '30%';
+                } else if (sd.status === 'done' || sd.status === 'Done' || sd.status === 'DONE') {
+                    clearInterval(pollTimer);
+                    progressBar.style.width = '100%';
+                    progressPercent.textContent = '100%';
+                    progressContainer.style.display = 'none';
+                    const res = sd.result || sd;
+                    // Render using same structured renderer
+                    if (res && res.result) {
+                        renderResult(res.result);
+                    } else if (res && res.workspace) {
+                        renderResult(res);
+                    } else {
+                        resultDiv.textContent = JSON.stringify(res);
+                    }
+                } else if (sd.status === 'error') {
+                    clearInterval(pollTimer);
+                    progressContainer.style.display = 'none';
+                    resultDiv.textContent = '❌ Processing error';
+                } else if (sd.status && sd.status !== 'Processing') {
+                    // sd may contain {status: 'Done', result: {...}}
+                    if (sd.status === 'Done' && sd.result) {
+                        clearInterval(pollTimer);
+                        progressBar.style.width = '100%';
+                        progressPercent.textContent = '100%';
+                        progressContainer.style.display = 'none';
+                        renderResult(sd.result);
+                    } else {
+                        resultDiv.textContent = 'Status: ' + sd.status;
+                    }
+                }
+            } catch (err) {
+                clearInterval(pollTimer);
+                progressContainer.style.display = 'none';
+                resultDiv.textContent = '❌ Polling failed: ' + err;
+            }
+        }, pollInterval);
+
+    } catch (err) {
+        progressContainer.style.display = 'none';
+        resultDiv.textContent = "❌ Request failed: " + err;
+    }
+});
+
+// renderResult: reuse the same rendering logic but as a function
+function renderResult(res) {
+    if (typeof res === 'string') {
+        resultDiv.innerHTML = highlight(res);
+        return;
+    }
+    let out = '';
+    out += `<div><strong>Workspace:</strong> ${escapeHtml(res.workspace || '')} &nbsp; <strong>Language:</strong> ${escapeHtml(res.language || '')}</div>`;
+    out += '<h3>Static Analysis</h3>' + highlight(res.static);
+    out += '<h3>Dynamic Analysis</h3>' + highlight(res.dynamic);
+
+    const reports = res.auto_fix_reports;
+    if (reports) {
+        out += `<h3>Auto-fix reports (${Array.isArray(reports) ? reports.length : '1+'})</h3>`;
+        if (Array.isArray(reports)) {
+            reports.forEach(r => {
+                const it = r.iteration || r.iter || '?';
+                out += `<div style="margin-bottom:10px"><strong>Iteration ${it}</strong>`;
+          out += '<table style="width:100%;border-collapse:collapse;margin-top:6px">';
+          out += '<tr>' +
+              '<th style="border:1px solid #ddd;padding:6px">Static errors checked</th>' +
+              '<th style="border:1px solid #ddd;padding:6px">Static errors solved</th>' +
+              '<th style="border:1px solid #ddd;padding:6px">Static errors remaining</th>' +
+              '<th style="border:1px solid #ddd;padding:6px">Static warnings</th>' +
+              '<th style="border:1px solid #ddd;padding:6px">Dynamic detected</th>' +
+              '<th style="border:1px solid #ddd;padding:6px">Dynamic solved</th>' +
+              '<th style="border:1px solid #ddd;padding:6px">Dynamic remaining</th>' +
+              '<th style="border:1px solid #ddd;padding:6px">Patches applied</th>' +
+              '</tr>';
+          out += `<tr>` +
+              `<td style="border:1px solid #ddd;padding:6px">${escapeHtml(String(r.static_checked ?? r.static_errors_before ?? 0))}</td>` +
+              `<td style="border:1px solid #ddd;padding:6px">${escapeHtml(String(r.static_solved ?? 0))}</td>` +
+              `<td style="border:1px solid #ddd;padding:6px">${escapeHtml(String(r.static_remaining ?? r.static_issues ?? 0))}</td>` +
+              `<td style="border:1px solid #ddd;padding:6px">${escapeHtml(String((Array.isArray(r.static_warnings_before_list) ? r.static_warnings_before_list.length : (r.static_warnings_before || 0)) || 0))}</td>` +
+              `<td style="border:1px solid #ddd;padding:6px">${escapeHtml(String(r.dynamic_detected ?? r.dynamic_tests_run ?? 0))}</td>` +
+              `<td style="border:1px solid #ddd;padding:6px">${escapeHtml(String(r.dynamic_solved ?? r.dynamic_tests_passed ?? 0))}</td>` +
+              `<td style="border:1px solid #ddd;padding:6px">${escapeHtml(String(r.dynamic_remaining ?? ( (r.dynamic_tests_run || 0) - (r.dynamic_tests_passed || 0) ) ?? 0))}</td>` +
+              `<td style="border:1px solid #ddd;padding:6px">${escapeHtml(String(r.patches_applied ?? 0))}</td>` +
+              `</tr>`;
+                out += '</table>';
+                const detailId = 'det_' + (res.language || 'x') + '_' + it + '_' + Math.random().toString(36).slice(2,8);
+                out += `<div><a href="#" onclick="(function(){var e=document.getElementById('${detailId}'); if(e.style.display==='none'){e.style.display='block'}else{e.style.display='none'}; return false})();">Show/hide details</a></div>`;
+                out += `<div id="${detailId}" style="display:none;margin-top:6px">`;
+                // Static issue lists: show before/solved/after per-iteration so user can see what was attempted
+                var static_before = Array.isArray(r.static_issues_before_list) ? r.static_issues_before_list.join('\n') : (r.static_issues_before_list || '');
+                var static_solved = Array.isArray(r.static_solved_list) ? r.static_solved_list.join('\n') : (r.static_solved_list || '');
+                var static_after = Array.isArray(r.static_issues_after_list) ? r.static_issues_after_list.join('\n') : (r.static_issues_after_list || '');
+                var static_unsolved = Array.isArray(r.static_unsolved_list) ? r.static_unsolved_list.join('\n') : (r.static_unsolved_list || '');
+                out += '<h4>Static issues (before)</h4>' + highlight(static_before || '(none)');
+                out += '<h4>Static solved (this iteration)</h4>' + highlight(static_solved || '(none)');
+                out += '<h4>Static issues (after)</h4>' + highlight(static_after || '(none)');
+                out += '<h4>Static unsolved</h4>' + highlight(static_unsolved || '(none)');
+                out += '<h4>Dynamic report</h4>' + highlight(r.dynamic_report_text);
+                out += '<h4>Dynamic issues (before)</h4>' + highlight(Array.isArray(r.dynamic_issues_before_list) ? r.dynamic_issues_before_list.join('\n') : (r.dynamic_issues_before_list || '(none)'));
+                out += '<h4>Dynamic solved (this iteration)</h4>' + highlight(Array.isArray(r.dynamic_solved_list) ? r.dynamic_solved_list.join('\n') : (r.dynamic_solved_list || '(none)'));
+                out += '<h4>Dynamic issues (after)</h4>' + highlight(Array.isArray(r.dynamic_issues_after_list) ? r.dynamic_issues_after_list.join('\n') : (r.dynamic_issues_after_list || '(none)'));
+                out += '<h4>Dynamic unsolved</h4>' + highlight(Array.isArray(r.dynamic_unsolved_list) ? r.dynamic_unsolved_list.join('\n') : (r.dynamic_unsolved_list || '(none)'));
+                out += '<h4>Stdout</h4>' + highlight(r.dynamic_stdout);
+                out += '<h4>Stderr</h4>' + highlight(r.dynamic_stderr);
+                out += '</div>';
+                out += '</div>';
+            });
+        } else if (typeof reports === 'object') {
+            out += '<pre class="monos">' + escapeHtml(JSON.stringify(reports, null, 2)) + '</pre>';
+        } else {
+            out += highlight(String(reports));
+        }
+    }
+
+    resultDiv.innerHTML = out;
+}
+
+// Manual auto-fix buttons were removed; auto-fix runs on upload/analyze.
+</script>
+</body>
+</html>

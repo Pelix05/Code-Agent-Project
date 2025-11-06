@@ -1,0 +1,40 @@
+diff --git a/bmp/bmpinfoheader.cpp b/bmp/bmpinfoheader.cpp
+--- a/bmp/bmpinfoheader.cpp
++++ b/bmp/bmpinfoheader.cpp
+@@ -3,9 +3,9 @@
+ #include "bmpinfoheader.h"
+-BmpInfoHeader::BmpInfoHeader() {
++BmpInfoHeader::BmpInfoHeader(int NZwidth, int height) : biWidth(NZwidth), biHeight(height) {
+   // Rest of the constructor body (omitted for brevity)
+ }
+diff --git a/database.cpp b/database.cpp
+--- a/database.cpp
++++ b/database.cpp
+@@ -5,5 +5,6 @@
+   m_db = QSqlDatabase::addDatabase("QSQLITE");
+-BmpInfoHeader::BmpInfoHeader()
++BmpInfoHeader::BmpInfoHeader(int NZwidth, int height) : BmpInfoHeader() {
+   // Rest of the constructor body (with initialization list for 'biWidth' and 'biHeight')
+diff --git a/defaultpuzzlemenuwindow.h b/defaultpuzzlemenuwindow.h
+diff --git a/generatepuzzlemenuwindow.h b/generatepuzzlemenuwindow.h
+diff --git a/mainwindowpuzzle.h b/mainwindowpuzzle.h
+--- a/defaultpuzzlemenuwindow.h
++++ b/defaultpuzzlemenuwindow.h
+@@ -9,9 +9,9 @@
+ private:
+     // ... (rest of the file)
+diff --git a/puzzle.cpp b/puzzle.cpp
+--- a/puzzle.cpp
++++ b/puzzle.cpp
+@@ -6,5 +6,6 @@
+   m_db = QSqlDatabase::addDatabase("QSQLITE");
+-BmpInfoHeader info;
++BmpInfoHeader info(NZwidth, height); // Assuming NZwidth and height are available
+diff --git a/puzzlemanager.cpp b/puzzlemanager.cpp
+--- a/puzzlemanager.cpp
++++ b/puzzlemanager.cpp
+@@ -5,5 +5,6 @@
+   m_db = QSqlDatabase::addDatabase("QSQLITE");
+-BmpInfoHeader::BmpInfoHeader()
++BmpInfoHeader::BmpInfoHeader(int NZwidth, int height) : PuzzleManager(NZwidth, height) {
+   // Rest of the constructor body (with initialization list for 'NZwidth' and 'height')

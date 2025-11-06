@@ -1,0 +1,15 @@
+diff --git a/bmpfileheader.cpp b/bmpfileheader.cpp
+--- a/bmpfileheader.cpp
++++ b/bmpfileheader.cpp
+@@ -3,6 +3,12 @@
++BmpFileHeader::BmpFileHeader() :
++    bfType(newBf->getBfType()),
++    bfSize(newBf->getBfSize()),
++    bfReserved1(newBf->getBfReserved1()),
++    bfReserved2(newBf->getBfReserved2()),
++    bfOffBits(newBf->getBfOffBits()),
++    biSize(newBi->getBiSize()),
++    biWidth(newBi->getBiWidth()),
++    biHeight(newBi->getBiHeight())
+    // Initialize member variables in the constructor
+    // No need for separate constructor here since we're updating existing ones

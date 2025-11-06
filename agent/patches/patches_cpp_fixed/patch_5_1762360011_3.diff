@@ -1,0 +1,10 @@
+diff --git a/bmp.cpp b/bmp.cpp
+--- a/bmp.cpp
++++ b/bmp.cpp
+@@ -13,7 +13,7 @@ Bmp::Bmp(BmpFileHeader& newBf, BmpInfoHeader& newBi, std::vector<uint8_t> img)
+     imgData = img;
+ }
+ void Bmp::setImgData(const std::vector<uint8_t>& newImgData) {
+-    imgData = newImgData; // Change to assign by const reference
++    imgData = newImgData; // Remove the assignment, as it's already a const reference
+ }

@@ -1,0 +1,16 @@
+diff --git a/labels.py b/labels.py
+--- a/labels.py
++++ b/labels.py
+@@ -133,7 +133,9 @@ class Label:
+         self.disable_image,
+         rendered["disable"])
+     def render_text(self):
+-        font, size = self.font, self.font_size
++        font, size = self.font, self.font_size
+         if (font, size) not in LOADED_FONTS:
+             LOADED_FONTS[font, size] = pg.font.Font(font, size)
++        # Assign x_diff and y_diff before usage
++        x_diff, y_diff = 0, 0
+         self.image = self.idle_image
+         self.clicked = False
+         self.hover = False

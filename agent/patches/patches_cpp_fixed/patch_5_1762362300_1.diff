@@ -1,0 +1,12 @@
+diff --git a/bmp/bmp.cpp b/bmp/bmp.cpp
+--- a/bmp/bmp.cpp
++++ b/bmp/bmp.cpp
+@@ -13,13 +13,10 @@
+     BmpFileHeader newBf(NZwidth, height);
+     BmpInfoHeader newBi(NZwidth, height);
+-    bf = newBf; // Move initialization to initialization list
+-    bi = newBi; // Move initialization to initialization list
+-    imgData = img; // Move initialization to initialization list
++    Bmp::Bmp(newBf, newBi, img); // Construct with references instead of copying img
+     // No longer need these assignments in the constructor
+    imgData = newImgData;

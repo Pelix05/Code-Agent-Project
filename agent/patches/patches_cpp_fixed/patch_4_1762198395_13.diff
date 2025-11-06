@@ -1,0 +1,13 @@
+diff --git a/bmp/bmpinfoheader.cpp b/bmp/bmpinfoheader.cpp
+--- a/bmp/bmpinfoheader.cpp
++++ b/bmp/bmpinfoheader.cpp
+@@ -1,10 +1,10 @@
+-BmpInfoHeader::BmpInfoHeader() {
+-    // Removed assignments in constructor body
++BmpInfoHeader::BmpInfoHeader(int NZwidth, int height) : biWidth(NZwidth), biHeight(height) {}
+-BmpInfoHeader::BmpInfoHeader(BmpFileHeader& newBf, BmpInfoHeader& newBi, std::vector<uint8_t> img) {
+-    // Fixed parameter 'img' to be passed by const reference
++BmpInfoHeader::BmpInfoHeader(const BmpFileHeader& newBf, const BmpInfoHeader& newBi, const std::vector<uint8_t>& img) : biSize(newBi.biSize), biWidth(newBi.biWidth), biHeight(newBi.biHeight), biPlanes(newBi.biPlanes), biBitCount(newBi.biBitCount), biCompression(newBi.biCompression), biSizeImage(newBi.biSizeImage), biXPelsPerMeter(newBi.biXPelsPerMeter), biYPelsPerMeter(newBi.biYPelsPerMeter), biClrUsed(newBi.biClrUsed), biClrImportant(newBi.biClrImportant) {}
+-BmpFileHeader BmpFileHeader::BmpFileHeader() {
+-    // Removed uninitialized member variable warnings
++// No need to initialize all members since they are default-constructed in C++, but removed warning about uninitialization

@@ -1,0 +1,89 @@
+diff --git a/bmp.cpp b/bmp.cpp
+--- a/bmp.cpp
++++ b/bmp.cpp
+@@ -13,7 +13,7 @@ Bmp::Bmp(BmpFileHeader& newBf, BmpInfoHeader& newBi, std::vector<uint8_t> img)
+     imgData = img;
+ }
+-void Bmp::setImgData(std::vector<uint8_t> newImgData) {
++void Bmp::setImgData(const std::vector<uint8_t>& newImgData) {
+     imgData.assign(newImgData.begin(), newImgData.end());
+ }
+diff --git a/bmpfileheader.cpp b/bmpfileheader.cpp
+--- a/bmpfileheader.cpp
++++ b/bmpfileheader.cpp
+@@ -3,16 +3,16 @@
+-BmpFileHeader::BmpFileHeader() {
+   bfType = 0; // Uninitialized member var warning
+   bfSize = 0; // Uninitialized member var warning
+   bfReserved1 = 0; // Uninitialized member var warning
+   bfReserved2 = 0; // Uninitialized member var warning
+   bfOffBits = 0; // Uninitialized member var warning
++BmpFileHeader::BmpFileHeader(BmpFileHeader& newBf) : bfType(newBf.bfType), bfSize(newBf.bfSize),
++                                             bfReserved1(newBf.bfReserved1), bfReserved2(newBf.bfReserved2),
++                                             bfOffBits(newBf.bfOffBits) {
+ }
+diff --git a/bmpinfoheader.cpp b/bmpinfoheader.cpp
+--- a/bmpinfoheader.cpp
++++ b/bmpinfoheader.cpp
+@@ -3,16 +3,16 @@
+-BmpInfoHeader::BmpInfoHeader() {
+   biSize = 0; // Uninitialized member var warning
+   biWidth = 0; // Uninitialized member var warning
+   biHeight = 0; // Uninitialized member var warning
+   biPlanes = 0; // Uninitialized member var warning
+   biBitCount = 0; // Uninitialized member var warning
+-   biCompression = 0; // Uninitialized member var warning
++   biCompression = 0; // Keep as is, no initialization needed for value 0
+   biSizeImage = 0; // Uninitialized member var warning
+   biXPelsPerMeter = 0; // Uninitialized member var warning
+   biYPelsPerMeter = 0; // Uninitialized member var warning
+   biClrUsed = 0; // Uninitialized member var warning
+   biClrImportant = 0; // Uninitialized member var warning
++BmpInfoHeader::BmpInfoHeader(BmpInfoHeader& newBi) : biSize(newBi.biSize), biWidth(newBi.biWidth),
++                                             biHeight(newBi.biHeight), biPlanes(newBi.biPlanes),
++                                             biBitCount(newBi.biBitCount), biCompression(newBi.biCompression),
++                                             biSizeImage(newBi.biSizeImage),
++                                             biXPelsPerMeter(newBi.biXPelsPerMeter),
++                                             biYPelsPerMeter(newBi.biYPelsPerMeter),
++                                             biClrUsed(newBi.biClrUsed),
++                                             biClrImportant(newBi.biClrImportant) {
+ }
+diff --git a/database.cpp b/database.cpp
+@@ -5,5 +5,5 @@
+     m_db = QSqlDatabase::addDatabase("QSQLITE");
+ }
+-void DatabaseManager::init() {
++void DatabaseManager::init(const std::string& db_name) {
+     m_db = QSqlDatabase::addDatabase("QSQLITE", db_name);
+ }
+diff --git a/defaultpuzzlemenuwindow.h b/defaultpuzzlemenuwindow.h
+diff --git a/generatepuzzlemenuwindow.h b/generatepuzzlemenuwindow.h
+diff --git a/mainwindowpuzzle.h b/mainwindowpuzzlemenu.h
+--- a/defaultpuzzlemenuwindow.h
++++ b/defaultpuzzlemenuwindow.h
+@@ -9,9 +9,9 @@
+ #define SLOTS
+ private slots:
+     void openPuzzle();
+-    void savePuzzle();
++    void savePuzzle(const QString& filename);
+diff --git a/leaderboard.h b/leaderboard.h
+@@ -8,1 +8,1 @@
+ class Leaderboard : public QWidget
+@@ -9,1 +9,1 @@
+diff --git a/puzzle.cpp b/puzzle.cpp
+--- a/puzzle.cpp
++++ b/puzzle.cpp
+@@ -6,7 +6,7 @@ Bmp Bmp::load(std::string path) {
+     BmpFileHeader newBf;
+     BmpInfoHeader newBi;
+     std::vector<uint8_t> imgData;
+-    newBf.NZwidth = width;
+-    newBf.NZheight = height;
++    newBf.width = width;
++    newBf.height = height;
+     newBi.NZwidth = width;
+     newBi.NZheight = height;
+     std::ifstream file(path, std::ios::binary);
+     if (!file) {
+         throw std::runtime_error("Failed to load BMP file.");

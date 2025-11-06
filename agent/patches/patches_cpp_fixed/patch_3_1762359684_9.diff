@@ -1,0 +1,12 @@
+diff --git a/bmp/bmpfileheader.cpp b/bmp/bmpfileheader.cpp
+--- a/bmp/bmpfileheader.cpp
++++ b/bmp/bmpfileheader.cpp
+@@ -3,7 +3,7 @@ #include "bmpfileheader.h"
+    BmpFileHeader() : bfType(0), bfSize(0), bfReserved1(0), bfReserved2(0), bfOffBits(0) {}
+-    // Constructor with NZwidth and height removed, initialization list for member variables
++    BmpFileHeader(int NZwidth, int height) : bfType(NZwidth), bfSize(height * sizeof(uint8_t)), bfReserved1(0), bfReserved2(0), bfOffBits(0) {
+        initMemberVars();
+    }
+    uint16_t bfType;          // Not initialized, kept for backward compatibility
+    uint32_t bfSize;          // Initialize with NZwidth * height * bytesPerPixel
+    uint16_t bfReserved1;     // Initialize to 0

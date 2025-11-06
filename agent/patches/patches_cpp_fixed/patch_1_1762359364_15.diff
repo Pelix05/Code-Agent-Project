@@ -1,0 +1,24 @@
+diff --git a/bmp/bmpinfoheader.cpp b/bmp/bmpinfoheader.cpp
+--- a/bmp/bmpinfoheader.cpp
++++ b/bmp/bmpinfoheader.cpp
+@@ -3,10 +3,10 @@
+ #include "bmpinfoheader.h"
+-BmpInfoHeader::BmpInfoHeader() {
++BmpInfoHeader::BmpInfoHeader(const BmpFileHeader& newBf, const BmpInfoHeader& newBi, std::vector<uint8_t> img) {
+     bfType = newBf.bfType;
+     bfSize = newBf.bfSize;
+     bfReserved1 = newBf.bfReserved1;
+     bfReserved2 = newBf.bfReserved2;
+     bfOffBits = newBf.bfOffBits;
+     biSize = newBi.biSize;
+     biWidth = newBi.biWidth;
+     biHeight = newBi.biHeight;
+     biPlanes = newBi.biPlanes;
+     biBitCount = newBi.biBitCount;
+     biCompression = newBi.biCompression;
+     biSizeImage = newBi.biSizeImage;
+     biXPelsPerMeter = newBi.biXPelsPerMeter;
+     biYPelsPerMeter = newBi.biYPelsPerMeter;
+     biClrUsed = newBi.biClrUsed;
+     biClrImportant = newBi.biClrImportant;
+ }

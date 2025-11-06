@@ -1,0 +1,7 @@
+diff --git a/puzzle-challenge/puzzle_piece.py b/puzzle-challenge/puzzle_piece.py
+--- a/puzzle-challenge/puzzle_piece.py
++++ b/puzzle_piece.py
+@@ -1,2 +1,3 @@
+ import pygame as pg
++import prepare
+    return target - tolerance <= value <= target + tolerance

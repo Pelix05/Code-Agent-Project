@@ -1,0 +1,11 @@
+diff --git a/bmp/bmpfileheader.cpp b/bmp/bmpfileheader.cpp
+--- a/bmp/bmpfileheader.cpp
++++ b/bmp/bmpfileheader.cpp
+@@ -3,7 +3,7 @@ #include "bmpfileheader.h"
+    bfType(newBf->bfType),  // Initialize bfType in the init list
+    bfSize(newBf->bfSize),  // Initialize bfSize in the init list
+    bfReserved1(newBf->bfReserved1),
+    bfReserved2(newBf->bfReserved2),
+    bfOffBits(newBf->bfOffBits) {
+-    // Rest of the constructor body (if any) remains unchanged
++    // Remove assignments in the constructor body

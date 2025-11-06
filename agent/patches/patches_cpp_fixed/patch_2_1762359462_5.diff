@@ -1,0 +1,18 @@
+diff --git a/bmp/bmpfileheader.cpp b/bmp/bmpfileheader.cpp
+--- a/bmp/bmpfileheader.cpp
++++ b/bmp/bmpfileheader.cpp
+@@ -3,10 +3,10 @@
+ #include "bmpfileheader.h"
+-BmpFileHeader::BmpFileHeader() {
+   // Initialization list for performance improvement
+   bfType = 0; // Initialize bfType
+   bfSize = 0; // Initialize bfSize
+   bfReserved1 = 0; // Initialize bfReserved1
+   bfReserved2 = 0; // Initialize bfReserved2
+   bfOffBits = 0; // Initialize bfOffBits
++   // Rest of the constructor body with img parameters passed by const reference
++   bfSize = newBf.bfSize;
++   bfType = newBf.bfType;
++   // ... and other variables as needed
+    bfSize(newBf.bfSize), // Use initialization list for imgData
+    bfType(newBf.bfType),

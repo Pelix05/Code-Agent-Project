@@ -1,0 +1,17 @@
+diff --git a/bmp/bmpfileheader.cpp b/bmp/bmpfileheader.cpp
+--- a/bmp/bmpfileheader.cpp
++++ b/bmp/bmpfileheader.cpp
+@@ -3,6 +3,12 @@
+ #include "bmpfileheader.h"
++BmpFileHeader::BmpFileHeader(int NZwidth, int height) : BmpFileHeader() {
++    bfType = 0; // Initialize bfType
++    bfSize = sizeof(BmpFileHeader); // Initialize bfSize
++    bfReserved1 = 0;
++    bfReserved2 = 0;
++    bfOffBits = sizeof(BmpInfoHeader) + NZwidth * height * 3; // Initialize bfOffBits
++}
+    bfType = 0;
+    bfSize = 0;
+    bfReserved1 = 0;
+    bfReserved2 = 0;
+    bfOffBits = 0;

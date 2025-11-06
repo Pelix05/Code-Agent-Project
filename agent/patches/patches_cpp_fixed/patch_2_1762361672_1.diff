@@ -1,0 +1,12 @@
+diff --git a/bmp/bmp.cpp b/bmp/bmp.cpp
+--- a/bmp/bmp.cpp
++++ b/bmp/bmp.cpp
+@@ -11,7 +11,7 @@ Bmp::Bmp(BmpFileHeader &newBf, BmpInfoHeader &newBi, std::vector<uint8_t> img)
+     // Initialize member variables in the constructor
+     bf = newBf;
+     bi = newBi;
+     imgData = img;
+-    // Remove unused assignment of img in the constructor
++    // Initialize imgData in the constructor using const reference
+     imgData = std::move(img);
+ void Bmp::setImgData(const std::vector<uint8_t>& newImgData)

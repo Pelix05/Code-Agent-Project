@@ -1,0 +1,9 @@
+diff --git a/state_engine.py b/state_engine.py
+--- a/state_engine.py
++++ b/state_engine.py
+@@ -1,4 +1,4 @@
++import pygame as pg
+ import itertools
+ from collections import deque
+-class Game(object):
+     """

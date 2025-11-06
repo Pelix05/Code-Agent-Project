@@ -1,0 +1,97 @@
+@startuml AgentClassDiagramDetailed
+' Detailed horizontal class diagram for Agent project (slide-friendly)
+skinparam classAttributeIconSize 0
+left to right direction
+skinparam dpi 150
+
+package "Agent (core)" {
+  class FlaskApp {
+    +AGENT_DIR
+    +app
+    +upload_file_route()
+    +status_route()
+    +process_command()
+    +handle_file_upload()
+  }
+
+  class LcPipeline {
+    +run_pipeline(report_file, snippet_file, lang)
+    +ask_llm(prompt)
+    +clean_patch_output(patch)
+    +sanitize_patch(raw)
+    +validate_patch(patch)
+    +apply_rule_based_fixes(repo_dir, report)
+    +run_iterative_fix_py(max_iters, repo_dir)
+    +run_iterative_fix_cpp(max_iters, repo_dir)
+  }
+
+  class DynamicTester {
+    +apply_patches_from_dir(target_repo, patch_dir)
+    +apply_with_fallback(patch_text)
+    +run_cpp_tests()
+    +run_py_bug_tests()
+    +run_full_regression_tests()
+    +ensure_mock_resources()
+  }
+
+  class AnalyzerPy {
+    +analyze_python(repo_dir)
+    +extract_snippets(report_content)
+    +run_linters()
+  }
+
+  class AnalyzerCpp {
+    +analyze_cpp(repo_dir)
+    +extract_snippets(report_content)
+    +run_cppcheck()
+  }
+
+  class PatchManager <<utility>> {
+    +clean_patch_output(text)
+    +validate_patch(text)
+    +apply_patch(original, patch_text, out)
+    +save_raw_response(idx, text)
+  }
+
+  class RepairScripts {
+    +repair_text(text)
+    +reconstruct_patches(raw_dir)
+    +aggressive_repair()
+  }
+}
+
+' LLM clients
+package "LLM" {
+  class GeminiClient
+  class QwenClient
+  class OllamaClient
+}
+
+' Relationships (concise)
+FlaskApp --> LcPipeline
+FlaskApp --> AnalyzerPy
+FlaskApp --> AnalyzerCpp
+FlaskApp --> DynamicTester
+LcPipeline --> GeminiClient
+LcPipeline --> QwenClient
+LcPipeline --> OllamaClient
+LcPipeline --> PatchManager
+LcPipeline --> RepairScripts
+LcPipeline --> DynamicTester
+DynamicTester --> PatchManager
+DynamicTester --> "Workspace"
+AnalyzerPy --> LcPipeline
+AnalyzerCpp --> LcPipeline
+ 
+note right of LcPipeline
+  Key actions: generate patches, sanitize, write unique files
+end note
+
+note left of DynamicTester
+  Key actions: git apply (p0/p1), compile (g++), run lightweight checks
+end note
+
+' Horizontal layout for slides
+left to right direction
+scale 1100 width
+@enduml

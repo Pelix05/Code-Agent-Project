@@ -1,0 +1,10 @@
+diff --git a/bmp/bmpinfoheader.cpp b/bmp/bmpinfoheader.cpp
+--- a/bmp/bmpinfoheader.cpp
++++ b/bmp/bmpinfoheader.cpp
+@@ -2,7 +2,7 @@
+ #include "bmpinfoheader.h"
+-BmpInfoHeader::BmpInfoHeader() {
++BmpInfoHeader::BmpInfoHeader(int NZwidth, int height) : biWidth(NZwidth), biHeight(height) {}
+- The patch modifies the `BmpInfoHeader` constructor to initialize the member variables using the provided parameters (`NZwidth` and `height`) instead of having them assigned in the body.
+- This follows the performance recommendation to initialize variables in the initialization list.
+- All other reported issues are not addressed in this diff, as they are related to function parameters, member variables, and class definitions that need separate fixes or configuration.

@@ -1,0 +1,34 @@
+diff --git a/labels.py b/labels.py
+--- a/labels.py
++++ b/labels.py
+@@ -132,7 +132,9 @@ class Label:
+         self.disable_image, rendered["disable"]])
+     def render_text(self):
+         font, size = self.font, self.font_size
+-        if (font, size) not in LOADED_FONTS:
++        if not LOADED_FONTS.get((font, size), None):
+             LOADED_FONTS[font, size] = pg.font.Font(font, size)
+         self.image = self.idle_image
+         self.clicked = False
+         self.hover = False
+diff --git a/puzzle_piece.py b/puzzle_piece.py
+--- a/puzzle_piece.py
++++ b/puzzle_piece.py
+@@ -137,20 +137,22 @@ class PuzzlePiece:
+             x_diff, y_diff = self.get_diff_position()
+         # Handle position update
+         self.position = (
+-            self.x + x_diff,
+-            self.y + y_diff,
++            self.x + x_diff if x_diff is not None else self.x,
++            self.y + y_diff if y_diff is not None else self.y,
+         )
+     def get_diff_position(self):
+         # Ensure variables are assigned before usage
+         -x_diff, y_diff = self.diff
+         if x_diff is not None:
+             return x_diff, y_diff
+         -return None, None
++         x_diff = self.diff[0] if self.diff else None
++         y_diff = self.diff[1] if self.diff else None
+         return x_diff, y_diff

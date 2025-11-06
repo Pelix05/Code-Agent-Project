@@ -1,0 +1,13 @@
+diff --git a/bmp/bmp.cpp b/bmp/bmp.cpp
+--- a/bmp/bmp.cpp
++++ b/bmp/bmp.cpp
+@@ -11,7 +11,7 @@ namespace puzzle {
+     Bmp::Bmp(BmpFileHeader& newBf, BmpInfoHeader& newBi, std::vector<uint8_t> img)
+     {
+         // Initialize variables in initialization lists
+         bf = newBf;
+-        bi = newBi;
++        bi.init(newBi);
+         imgData = img;
+     }
+ }

@@ -1,0 +1,14 @@
+diff --git a/bmp/bmpinfoheader.cpp b/bmp/bmpinfoheader.cpp
+--- a/bmp/bmpinfoheader.cpp
++++ b/bmp/bmpinfoheader.cpp
+@@ -1,12 +1,12 @@
+-BmpInfoHeader::BmpInfoHeader() {
+-    // Removed assignments, initialize members in the constructor
++BmpInfoHeader::BmpInfoHeader(int NZwidth, int height) :
++    biSize(0), biWidth(0), biHeight(0), biPlanes(1), biBitCount(24), biCompression(0),
++    biSizeImage(0), biXPelsPerMeter(0), biYPelsPerMeter(0), biClrUsed(0), biClrImportant(0) {
++    // Initialize member variables here
+ }
+-BmpInfoHeader::BmpInfoHeader(BmpFileHeader &newBf, BmpInfoHeader &newBi, std::vector<uint8_t> img) : // Removed img parameter
++BmpInfoHeader(BmpFileHeader &newBf, BmpInfoHeader &newBi) {
+   // No need for img since we're initializing from other parameters now

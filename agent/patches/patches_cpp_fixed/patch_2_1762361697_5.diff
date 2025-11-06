@@ -1,0 +1,15 @@
+diff --git a/bmp/bmpfileheader.cpp b/bmp/bmpfileheader.cpp
+--- a/bmp/bmpfileheader.cpp
++++ b/bmp/bmpfileheader.cpp
+@@ -1,7 +1,7 @@
+-BmpFileHeader::BmpFileHeader() {
++BmpFileHeader::BmpFileHeader(int NZwidth, int height) : bfType(0), bfSize(0), bfReserved1(0), bfReserved2(0), bfOffBits(0) {
+     // Initialize member variables in the constructor
+     initMemberVars(NZwidth, height);
+ }
+diff --git a/database.cpp b/database.cpp
+--- a/database.cpp
++++ b/database.cpp
+@@ -1,5 +1,5 @@
+-    m_db = QSqlDatabase::addDatabase("QSQLITE");
++    m_db = QSqlDatabase::addDatabase("QSQLITE", NZwidth, height); // Initialize m_db with width and height

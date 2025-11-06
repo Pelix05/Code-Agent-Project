@@ -1,0 +1,34 @@
+diff --git a/bmp/bmpfileheader.cpp b/bmp/bmpfileheader.cpp
+--- a/bmp/bmpfileheader.cpp
++++ b/bmp/bmpfileheader.cpp
+@@ -3,12 +3,12 @@
+ #include "bmpfileheader.h"
+-BmpFileHeader::BmpFileHeader() {
++BmpFileHeader::BmpFileHeader(int NZwidth, int height) : bfType(newBf->bfType), bfSize(newBf->bfSize), bfReserved1(newBf->bfReserved1), bfReserved2(newBf->bfReserved2), bfOffBits(newBf->bfOffBits) {
+     biSize = newBi->biSize;
+     biWidth = newBi->biWidth;
+     biHeight = newBi->biHeight;
+     biPlanes = newBi->biPlanes;
+     biBitCount = newBi->biBitCount;
+     biCompression = newBi->biCompression;
+     biSizeImage = newBi->biSizeImage;
+     biXPelsPerMeter = newBi->biXPelsPerMeter;
+     biYPelsPerMeter = newBi->biYPelsPerMeter;
+     biClrUsed = newBi->biClrUsed;
+     biClrImportant = newBi->biClrImportant;
+ }
+diff --git a/database.cpp b/database.cpp
+--- a/database.cpp
++++ b/database.cpp
+@@ -5,5 +5,5 @@
+     m_db = QSqlDatabase::addDatabase("QSQLITE");
+diff --git a/defaultpuzzlemenuwindow.h b/defaultpuzzlemenuwindow.h
+--- a/defaultpuzzlemenuwindow.h
++++ b/defaultpuzzlemenuwindow.h
+@@ -9,9 +9,9 @@
+ private:
+     // slots must be configured
+     - private slots:
+         + private slots: // Add missing configuration for slots
+             void handleMenuAction();
+             - void handleMenuAction();

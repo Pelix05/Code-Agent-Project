@@ -1,0 +1,19 @@
+diff --git a/bmp/bmpinfoheader.cpp b/bmp/bmpinfoheader.cpp
+--- a/bmp/bmpinfoheader.cpp
++++ b/bmp/bmpinfoheader.cpp
+@@ -3,9 +3,11 @@ #include "bmpinfoheader.h"
+    biSize(0),
+    biWidth(0),
+    biHeight(0),
+    biPlanes(1),
+-    biBitCount(0),  // Uninitialized member, initialize in constructor
++    biBitCount(8),  // Fixed bit count for 8-bit images
+    biCompression(0),
+    biSizeImage(0),
+    biXPelsPerMeter(0),
+    biYPelsPerMeter(0),
+    biClrUsed(0),
+    biClrImportant(0) {
++    // Initialize uninit members in the constructor
++    this->biWidth = NZwidth;
++    this->biHeight = height;

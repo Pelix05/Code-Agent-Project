@@ -1,0 +1,15 @@
+diff --git a/bmp/bmpinfoheader.cpp b/bmp/bmpinfoheader.cpp
+--- a/bmp/bmpinfoheader.cpp
++++ b/bmp/bmpinfoheader.cpp
+@@ -1,6 +1,10 @@
++BmpInfoHeader::BmpInfoHeader() :
++    biSize(0),
++    biWidth(0),
++    biHeight(0),
++    biPlanes(1),
++    biBitCount(24),
++    biCompression(0),
++    biSizeImage(0)
+    // Error: Uninitialized member variables in the constructor
+    // Remove this line as it's not needed with the initialization list
+    // biSize = sizeof(BmpInfoHeader);

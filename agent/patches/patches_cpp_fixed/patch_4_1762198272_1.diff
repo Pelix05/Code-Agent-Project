@@ -1,0 +1,13 @@
+diff --git a/bmp/bmp.cpp b/bmp/bmp.cpp
+--- a/bmp/bmp.cpp
++++ b/bmp/bmp.cpp
+@@ -13,7 +13,7 @@ Bmp::Bmp(BmpFileHeader &newBf, BmpInfoHeader &newBi, std::vector<uint8_t> img)
+     bf = newBf; // Use initialization list for performance
+     bi = newBi; // Use initialization list for performance
+     imgData = img; // Use initialization list for performance
+-    // Remove unused parameters
++    // Initialize variables in initialization list
+     BmpFileHeader bf(NZwidth, height, newBf.bfType, newBf.bfSize, newBf.bfReserved1, newBf.bfReserved2, newBf.bfOffBits);
+     BmpInfoHeader bi(NZwidth, height, newBi.biSize, newBi.biWidth, newBi.biHeight, newBi.biPlanes, newBi.biBitCount, newBi.biCompression, newBi.biSizeImage,
+                     newBi.biXPelsPerMeter, newBi.biYPelsPerMeter, newBi.biClrUsed, newBi.biClrImportant);
+    imgData = newImgData; // Pass by const reference for better performance

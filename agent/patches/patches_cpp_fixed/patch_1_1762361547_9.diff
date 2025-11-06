@@ -1,0 +1,12 @@
+diff --git a/bmpfileheader.cpp b/bmpfileheader.cpp
+--- a/bmpfileheader.cpp
++++ b/bmpfileheader.cpp
+@@ -2,7 +2,7 @@ #include "bmpfileheader.h"
+ BmpFileHeader::BmpFileHeader() :
+     bfType(0), bfSize(0), bfReserved1(0), bfReserved2(0), bfOffBits(0) {
+-    // Assigning in constructor body (useInitializationList)
++    // Initialization in initialization list
+     bf = newBf;
+     bi = newBi;
+     imgData = img;
+ }

@@ -1,0 +1,23 @@
+diff --git a/bmp/bmpinfoheader.cpp b/bmp/bmpinfoheader.cpp
+--- a/bmp/bmpinfoheader.cpp
++++ b/bmp/bmpinfoheader.cpp
+@@ -3,12 +3,14 @@ #include "bmpinfoheader.h"
+   - // Uninitialized member variables
+   + // Initialize member variables in the initialization list
+   bfType = BF_UNKNOWN; // [uninitMemberVar]
+   bfSize = 0;
+   bfReserved1 = 0;
+   bfReserved2 = 0;
+   bfOffBits = 0;
+   - // Replaced with initialization list for each member
+   + biSize = sizeof(BmpInfoHeader); // [uninitMemberVar]
+   biWidth = NZwidth;
+   biHeight = height;
+   biPlanes = 1;
+   biBitCount = 24; // Assuming 24-bit color
+   biCompression = BI_RGB;
+   biSizeImage = biWidth * biHeight * 3; // 3 bytes per pixel
++   biXPelsPerMeter = 0;
++   biYPelsPerMeter = 0;
++   biClrUsed = 0;
++   biClrImportant = 0;

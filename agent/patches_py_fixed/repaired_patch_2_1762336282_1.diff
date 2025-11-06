@@ -1,0 +1,28 @@
+diff --git a/labels.py b/labels.py
+--- a/labels.py
++++ b/labels.py
+@@ -133,12 +133,10 @@ class Label:
+         self.disable_image,
+         rendered["disable"])
+     def render_text(self):
+         font, size = self.font, self.font_size
+-        if (font, size) not in LOADED_FONTS:
+-            LOADED_FONTS[font, size] = pg.font.Font(font, size)
++        if font not in LOADED_FONTS or size not in LOADED_FONTS[font]:
+             LOADED_FONTS[font, size] = pg.font.Font(font, size)
+         self.image = self.idle_image
+         self.clicked = False
+         self.hover = False
+diff --git a/puzzle_piece.py b/puzzle_piece.py
+--- a/puzzle_piece.py
++++ b/puzzle_piece.py
+@@ -137,50 +137,50 @@ class PuzzlePiece:
+         x_diff, y_diff = self.get_diff()
+     def get_diff(self):
+         # ... (rest of the function, unchanged)
+-        x_diff, y_diff = x_diff, y_diff  # Fixing the possible used before assignment error
++        x_diff = self.x_diff  # Assign the value from self directly
++        y_diff = self.y_diff  # Assign the value from self directly
+         return x_diff, y_diff
+     def render(self, screen):
+         # ... (rest of the render function, unchanged)

@@ -1,0 +1,94 @@
+puzzle-2\puzzle-2\bmp\bmp.cpp:15:5: performance: Variable 'bf' is assigned in constructor body. Consider performing initialization in initialization list. [useInitializationList]
+    bf = newBf;
+    ^
+puzzle-2\puzzle-2\bmp\bmp.cpp:16:5: performance: Variable 'bi' is assigned in constructor body. Consider performing initialization in initialization list. [useInitializationList]
+    bi = newBi;
+    ^
+puzzle-2\puzzle-2\bmp\bmp.cpp:17:5: performance: Variable 'imgData' is assigned in constructor body. Consider performing initialization in initialization list. [useInitializationList]
+    imgData = img;
+    ^
+puzzle-2\puzzle-2\bmp\bmp.cpp:11:75: performance: Function parameter 'img' should be passed by const reference. [passedByValue]
+Bmp::Bmp(BmpFileHeader &newBf, BmpInfoHeader &newBi, std::vector<uint8_t> img)
+                                                                          ^
+puzzle-2\puzzle-2\bmp\bmpfileheader.cpp:3:16: warning: inconclusive: Member variable 'BmpFileHeader::bfType' is not initialized in the constructor. [uninitMemberVar]
+BmpFileHeader::BmpFileHeader()
+               ^
+puzzle-2\puzzle-2\bmp\bmpfileheader.cpp:3:16: warning: inconclusive: Member variable 'BmpFileHeader::bfSize' is not initialized in the constructor. [uninitMemberVar]
+BmpFileHeader::BmpFileHeader()
+               ^
+puzzle-2\puzzle-2\bmp\bmpfileheader.cpp:3:16: warning: inconclusive: Member variable 'BmpFileHeader::bfReserved1' is not initialized in the constructor. [uninitMemberVar]
+BmpFileHeader::BmpFileHeader()
+               ^
+puzzle-2\puzzle-2\bmp\bmpfileheader.cpp:3:16: warning: inconclusive: Member variable 'BmpFileHeader::bfReserved2' is not initialized in the constructor. [uninitMemberVar]
+BmpFileHeader::BmpFileHeader()
+               ^
+puzzle-2\puzzle-2\bmp\bmpfileheader.cpp:3:16: warning: inconclusive: Member variable 'BmpFileHeader::bfOffBits' is not initialized in the constructor. [uninitMemberVar]
+BmpFileHeader::BmpFileHeader()
+               ^
+puzzle-2\puzzle-2\bmp\bmpinfoheader.cpp:3:16: warning: inconclusive: Member variable 'BmpInfoHeader::biSize' is not initialized in the constructor. [uninitMemberVar]
+BmpInfoHeader::BmpInfoHeader()
+               ^
+puzzle-2\puzzle-2\bmp\bmpinfoheader.cpp:3:16: warning: inconclusive: Member variable 'BmpInfoHeader::biWidth' is not initialized in the constructor. [uninitMemberVar]
+BmpInfoHeader::BmpInfoHeader()
+               ^
+puzzle-2\puzzle-2\bmp\bmpinfoheader.cpp:3:16: warning: inconclusive: Member variable 'BmpInfoHeader::biHeight' is not initialized in the constructor. [uninitMemberVar]
+BmpInfoHeader::BmpInfoHeader()
+               ^
+puzzle-2\puzzle-2\bmp\bmpinfoheader.cpp:3:16: warning: inconclusive: Member variable 'BmpInfoHeader::biPlanes' is not initialized in the constructor. [uninitMemberVar]
+BmpInfoHeader::BmpInfoHeader()
+               ^
+puzzle-2\puzzle-2\bmp\bmpinfoheader.cpp:3:16: warning: inconclusive: Member variable 'BmpInfoHeader::biBitCount' is not initialized in the constructor. [uninitMemberVar]
+BmpInfoHeader::BmpInfoHeader()
+               ^
+puzzle-2\puzzle-2\bmp\bmpinfoheader.cpp:3:16: warning: inconclusive: Member variable 'BmpInfoHeader::biCompression' is not initialized in the constructor. [uninitMemberVar]
+BmpInfoHeader::BmpInfoHeader()
+               ^
+puzzle-2\puzzle-2\bmp\bmpinfoheader.cpp:3:16: warning: inconclusive: Member variable 'BmpInfoHeader::biSizeImage' is not initialized in the constructor. [uninitMemberVar]
+BmpInfoHeader::BmpInfoHeader()
+               ^
+puzzle-2\puzzle-2\bmp\bmpinfoheader.cpp:3:16: warning: inconclusive: Member variable 'BmpInfoHeader::biXPelsPerMeter' is not initialized in the constructor. [uninitMemberVar]
+BmpInfoHeader::BmpInfoHeader()
+               ^
+puzzle-2\puzzle-2\bmp\bmpinfoheader.cpp:3:16: warning: inconclusive: Member variable 'BmpInfoHeader::biYPelsPerMeter' is not initialized in the constructor. [uninitMemberVar]
+BmpInfoHeader::BmpInfoHeader()
+               ^
+puzzle-2\puzzle-2\bmp\bmpinfoheader.cpp:3:16: warning: inconclusive: Member variable 'BmpInfoHeader::biClrUsed' is not initialized in the constructor. [uninitMemberVar]
+BmpInfoHeader::BmpInfoHeader()
+               ^
+puzzle-2\puzzle-2\bmp\bmpinfoheader.cpp:3:16: warning: inconclusive: Member variable 'BmpInfoHeader::biClrImportant' is not initialized in the constructor. [uninitMemberVar]
+BmpInfoHeader::BmpInfoHeader()
+               ^
+puzzle-2\puzzle-2\database.cpp:6:5: performance: Variable 'm_db' is assigned in constructor body. Consider performing initialization in initialization list. [useInitializationList]
+    m_db = QSqlDatabase::addDatabase("QSQLITE");
+    ^
+puzzle-2\puzzle-2\defaultpuzzlemenuwindow.h:14:9: error: There is an unknown macro here somewhere. Configuration is required. If slots is a macro then please configure it. [unknownMacro]
+private slots:
+        ^
+puzzle-2\puzzle-2\generatepuzzlemenuwindow.h:16:9: error: There is an unknown macro here somewhere. Configuration is required. If slots is a macro then please configure it. [unknownMacro]
+private slots:
+        ^
+puzzle-2\puzzle-2\mainwindowpuzzle.h:60:9: error: There is an unknown macro here somewhere. Configuration is required. If slots is a macro then please configure it. [unknownMacro]
+private slots:
+        ^
+puzzle-2\puzzle-2\puzzle\database.cpp:6:5: performance: Variable 'm_db' is assigned in constructor body. Consider performing initialization in initialization list. [useInitializationList]
+    m_db = QSqlDatabase::addDatabase("QSQLITE");
+    ^
+puzzle-2\puzzle-2\databasemanager.h:19:1: error: The one definition rule is violated, different classes/structs have the same name 'DatabaseManager' [ctuOneDefinitionRuleViolation]
+class DatabaseManager
+^
+puzzle-2\puzzle-2\puzzle\databasemanager.h:19:1: note: The one definition rule is violated, different classes/structs have the same name 'DatabaseManager'
+class DatabaseManager
+^
+puzzle-2\puzzle-2\databasemanager.h:19:1: note: The one definition rule is violated, different classes/structs have the same name 'DatabaseManager'
+class DatabaseManager
+^
+puzzle-2\puzzle-2\leaderboard.h:9:1: error: The one definition rule is violated, different classes/structs have the same name 'Leaderboard' [ctuOneDefinitionRuleViolation]
+class Leaderboard : public QWidget
+^
+puzzle-2\puzzle-2\puzzle\leaderboard.h:9:1: note: The one definition rule is violated, different classes/structs have the same name 'Leaderboard'
+class Leaderboard : public QWidget
+^
+puzzle-2\puzzle-2\leaderboard.h:9:1: note: The one definition rule is violated, different classes/structs have the same name 'Leaderboard'
+class Leaderboard : public QWidget
+^
+

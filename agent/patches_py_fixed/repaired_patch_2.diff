@@ -1,0 +1,18 @@
+diff --git a/puzzle_piece.py b/puzzle_piece.py
+--- a/puzzle_piece.py
++++ b/puzzle_piece.py
+@@ -136,7 +136,9 @@ class PuzzlePiece:
+         if side == "top":
+             y_diff = p2.bottom - p1.top
+             x_diff = p2.left - p1.left
+         elif side == "bottom":
+-            y_diff = p1.bottom - p2.top
+-            x_diff = p1.left - p2.left
++            x_diff = p1.left - p2.left  # Fixed x_diff assignment
++            y_diff = p1.bottom - p2.top  # Fixed y_diff assignment
+         for piece_ in other_section.pieces:
+             piece_.rect.move_ip(x_diff, y_diff)
+             self.pieces.append(piece_)
+     def get_event(self, event):
+         self.grabbed = False
+         return

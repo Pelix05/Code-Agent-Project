@@ -1,0 +1,13 @@
+diff --git a/bmp.cpp b/bmp.cpp
+--- a/bmp.cpp
++++ b/bmp.cpp
+@@ -13,12 +13,12 @@
+     BmpInfoHeader bi(NZwidth, height);
+     // Initialize variables in initialization lists
+     bf = newBf;       // Use Initialization List
+     bi = newBi;       // Use Initialization List
+     imgData = img;    // Use Initialization List
+-    // Remove unnecessary assignment in constructor body
++}
+    // Replace img with newImgData
+    imgData = newImgData;

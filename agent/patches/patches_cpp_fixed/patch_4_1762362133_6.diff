@@ -1,0 +1,16 @@
+diff --git a/bmp/bmpfileheader.cpp b/bmp/bmpfileheader.cpp
+--- a/bmp/bmpfileheader.cpp
++++ b/bmp/bmpfileheader.cpp
+@@ -3,16 +3,16 @@
+ #include "bmpfileheader.h"
+-BmpFileHeader::BmpFileHeader() {
++BmpFileHeader::BmpFileHeader(int NZwidth, int height) {
+     bfType = 0; // Initialize bfType
+     bfSize = 0; // Initialize bfSize
+     bfReserved1 = 0;
+     bfReserved2 = 0;
+     bfOffBits = 0;
+-    // Removed assignments in constructor body
++    // Use initialization list for better performance
+     bfSize = NZwidth * height * 3; // Initialize bfSize with image size
+ }

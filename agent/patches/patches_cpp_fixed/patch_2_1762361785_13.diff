@@ -1,0 +1,39 @@
+diff --git a/bmp/bmpinfoheader.cpp b/bmp/bmpinfoheader.cpp
+--- a/bmp/bmpinfoheader.cpp
++++ b/bmp/bmpinfoheader.cpp
+@@ -3,10 +3,10 @@
+-BmpInfoHeader::BmpInfoHeader() {
+-}
++BmpInfoHeader::BmpInfoHeader(int NZwidth, int height) : biWidth(NZwidth), biHeight(height) {}
+-BmpInfoHeader::BmpInfoHeader() : biWidth(0), biHeight(0) {} // Move initialization to the constructor
+diff --git a/database.cpp b/database.cpp
+--- a/database.cpp
++++ b/database.cpp
+@@ -5,5 +5,5 @@
+    m_db = QSqlDatabase::addDatabase("QSQLITE");
++// Move m_db initialization to the constructor
+-BmpInfoHeader::BmpInfoHeader() : m_db(nullptr) {}
++BmpInfoHeader::BmpInfoHeader(QSqlDatabase& db) : m_db(db) {}
+diff --git a/defaultpuzzlemenuwindow.h b/defaultpuzzlemenuwindow.h
+diff --git a/generatepuzzlemenuwindow.h b/generatepuzzlemenuwindow.h
+diff --git a/mainwindowpuzzle.h b/mainwindowpuzzle.h
+diff --git a/puzzle.cpp b/puzzle.cpp
+--- a/puzzle.cpp
++++ b/puzzle.cpp
+@@ -6,5 +6,5 @@
+    m_db = QSqlDatabase::addDatabase("QSQLITE");
++// Remove slots declarations since they are not macros
+-private slots:
+diff --git a/puzzlemanager.h b/puzzlemanager.h
+--- a/puzzlemanager.h
++++ b/puzzlemanager.h
+@@ -19,1 +19,1 @@
+ class PuzzleManager : public QObject
++    : public DatabaseManager // Move DatabaseManager to the header
+diff --git a/puzzlewindow.h b/puzzlewindow.h
+diff --git a/leaderboard.h b/leaderboard.h
+--- a/leaderboard.h
++++ b/leaderboard.h
+@@ -9,1 +9,1 @@
+ class Leaderboard : public QWidget
++    : public DatabaseManager // Move DatabaseManager to the header

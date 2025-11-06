@@ -1,0 +1,7 @@
+diff --git a/main.py b/main.py
+--- a/main.py
++++ b/main.py
+@@ -1,2 +1,2 @@
+ import sys
+-import pygame as pg
++import pygame

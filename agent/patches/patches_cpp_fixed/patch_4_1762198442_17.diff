@@ -1,0 +1,27 @@
+diff --git a/bmp/bmpinfoheader.cpp b/bmp/bmpinfoheader.cpp
+--- a/bmp/bmpinfoheader.cpp
++++ b/bmp/bmpinfoheader.cpp
+@@ -2,7 +2,7 @@
+ #include "bmpinfoheader.h"
+-BmpInfoHeader::BmpInfoHeader() {
++BmpInfoHeader::BmpInfoHeader(int NZwidth, int height) : biWidth(NZwidth), biHeight(height) {}
+-BmpInfoHeader::BmpInfoHeader() {
++// Remove the constructor body and add initialization list for member variables
+-BfType = BF_UNKNOWN; // Initialize bfType in initialization list
+-bfSize = 0;          // Initialize bfSize in initialization list
+-bfReserved1 = 0;      // Initialize bfReserved1 in initialization list
+-bfReserved2 = 0;      // Initialize bfReserved2 in initialization list
+-bfOffBits = 0;       // Initialize bfOffBits in initialization list
+-biSize = 0;           // Initialize biSize in initialization list
+-biWidth = 0;          // Initialize biWidth in initialization list
+-biHeight = 0;         // Initialize biHeight in initialization list
+-biPlanes = 1;         // Initialize biPlanes in initialization list
+-biBitCount = 0;       // Initialize biBitCount in initialization list
+-biCompression = BI_NONE; // Initialize biCompression in initialization list
+-biSizeImage = 0;      // Initialize biSizeImage in initialization list
+-biXPelsPerMeter = 0;  // Initialize biXPelsPerMeter in initialization list
+-biYPelsPerMeter = 0;  // Initialize biYPelsPerMeter in initialization list
+-biClrUsed = 0;        // Initialize biClrUsed in initialization list
+-biClrImportant = 0;   // Initialize biClrImportant in initialization list
+@@ -14,3 +14,0 @@
+ }

@@ -1,0 +1,22 @@
+diff --git a/bmp/bmpinfoheader.cpp b/bmp/bmpinfoheader.cpp
+--- a/bmp/bmpinfoheader.cpp
++++ b/bmp/bmpinfoheader.cpp
+@@ -3,9 +3,11 @@ #include "bmpinfoheader.h"
+   // Initialize member variables using initialization lists
+   bfType = BF_UNKNOWN; // [uninitMemberVar]
+   bfSize = 0;          // [uninitMemberVar]
+-   bfReserved1 = 0;    // [uninitMemberVar]
+-   bfReserved2 = 0;    // [uninitMemberVar]
+-   bfOffBits = 0;     // [uninitMemberVar]
++   // Initialize remaining member variables
++   bfSize = sizeof(BmpFileHeader); // Initialize bfSize
++   bfType = newBf->bfType;       // Assign from constructor argument
++   bfReserved1 = newBi->bfReserved1;
++   bfReserved2 = newBi->bfReserved2;
++   bfOffBits = newBi->bfOffBits;
+   biSize = sizeof(BmpInfoHeader); // [uninitMemberVar] (kept as is, since it's being used later)
+   biWidth = NZwidth;              // [uninitMemberVar]
+   biHeight = height;             // [uninitMemberVar]
+   biPlanes = 1;                  // [uninitMemberVar]
+   biBitCount = 24;               // [uninitMemberVar]
+@@ -17,7 +19,7 @@ BmpInfoHeader::BmpInfoHeader(int NZwidth, int height) {

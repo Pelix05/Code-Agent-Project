@@ -1,0 +1,55 @@
+diff --git a/bmp.cpp b/bmp.cpp
+--- a/bmp.cpp
++++ b/bmp.cpp
+@@ -13,7 +13,7 @@ Bmp::Bmp(BmpFileHeader& newBf, BmpInfoHeader& newBi, std::vector<uint8_t> img)
+     bf = newBf;
+     bi = newBi;
+     imgData = img;
+-#if !defined(USE_INITIALIZATION_LIST)
++// Use initialization list for better performance
+     imgData = img;
+ #endif
+diff --git a/bmpfileheader.cpp b/bmpfileheader.cpp
+--- a/bmpfileheader.cpp
++++ b/bmpfileheader.cpp
+@@ -3,16 +3,16 @@
+-BmpFileHeader::BmpFileHeader()
++BmpFileHeader::BmpFileHeader() : bfType(0), bfSize(0), bfReserved1(0), bfReserved2(0), bfOffBits(0) {}
+-BmpFileHeader::BmpFileHeader() : bfType(), bfSize(), bfReserved1(), bfReserved2(), bfOffBits() {} // Uninitialized member vars warning
++BmpFileHeader::BmpFileHeader(BmpFileHeader&& other) : bfType(other.bfType), bfSize(other.bfSize), bfReserved1(other.bfReserved1),
++                                         bfReserved2(other.bfReserved2), bfOffBits(other.bfOffBits) {
+   // Copy initialization for uninit member vars
+ }
+diff --git a/database.cpp b/database.cpp
+--- a/database.cpp
++++ b/database.cpp
+@@ -5,5 +5,5 @@ Bmp::DatabaseManager::DatabaseManager() : m_db(QSqlDatabase::addDatabase("QSQLITE")) {}
+-#if !defined(USE_INITIALIZATION_LIST)
++// Use initialization list for performance
+   m_db = QSqlDatabase::addDatabase("QSQLITE");
+@@ -24,5 +24,5 @@ void Puzzle::setDbManager(Bmp::DatabaseManager& dbManager) {
+   m_db = dbManager.m_db;
+-#if !defined(USE_INITIALIZATION_LIST)
++// Use initialization list for database instance
+   m_db = QSqlDatabase::addDatabase("QSQLITE");
+diff --git a/defaultpuzzlemenuwindow.h b/defaultpuzzlemenuwindow.h
+--- a/defaultpuzzlemenuwindow.h
++++ b/defaultpuzzlemenuwindow.h
+@@ -12,9 +12,9 @@ private:
+     private slots:
+         void generatePuzzle();
+         // ... (rest of the slots)
+-#if !defined(USE_CONFIGURED_SLOTS)
++// Define slots using proper macros for undefined ones
+-#error "Unknown macro 'slots'. Please configure it."
++#define SLOTS()
+diff --git a/generatepuzzlemenuwindow.h b/generatepuzzlemenuwindow.h
+@@ -13,9 +13,9 @@ private:
+         #error "Unknown macro 'slots'. Please configure it."
+         #undef SLOTS
++#define SLOTS()
+diff --git a/mainwindowpuzzle.h b/mainwindowpuzzle.h
+@@ -59,9 +59,9 @@ private:
+         #error "Unknown macro 'slots'. Please configure it."
+         #undef SLOTS
++#define SLOTS()

@@ -1,0 +1,23 @@
+diff --git a/puzzle-challenge/puzzle_piece.py b/puzzle-challenge/puzzle_piece.py
+--- a/puzzle-challenge/puzzle_piece.py
++++ b/puzzle_piece.py
+@@ -136,6 +136,8 @@ class PuzzlePiece:
+         if side == "top":
+             y_diff = p1.top - p2.bottom
+             x_diff = p1.left - p2.left
++            x_diff, y_diff = x_diff, y_diff  # Assign values before possible use
+         elif side == "bottom":
+             y_diff = p1.bottom - p2.top
+             x_diff = p1.left - p2.left
+         for piece_ in other_section.pieces:
+             piece_.rect.move_ip(x_diff, y_diff)
+             self.pieces.append(piece_)
+@@ -143,7 +145,7 @@ class PuzzlePiece:
+         self.grabbed = False
+     def grab_piece(self, piece: PuzzlePiece) -> None:
+         if not self.grabbed:
+-            x_diff = piece.left - self.rect.centerx
++            x_diff, y_diff = piece.left - self.rect.centerx, piece.top - self.rect.centery  # Use both variables
+             piece.move_ip(x_diff, y_diff)
+             self.pieces.append(piece)
+             self.grabbed = True

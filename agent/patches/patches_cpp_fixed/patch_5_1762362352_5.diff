@@ -1,0 +1,8 @@
+diff --git a/bmp/bmpfileheader.cpp b/bmp/bmpfileheader.cpp
+--- a/bmp/bmpfileheader.cpp
++++ b/bmp/bmpfileheader.cpp
+@@ -1,11 +1,11 @@
+-#include "bmpfileheader.h"
+-BmpFileHeader::BmpFileHeader() {
++// Use initialization lists to initialize member variables
++BmpFileHeader::BmpFileHeader(int NZwidth, int height) : bfType(0), bfSize(0), bfReserved1(0), bfReserved2(0), bfOffBits(0), biSize(0), biWidth(0), biHeight(0), biPlanes(0), biBitCount(0), biCompression(0), biSizeImage(0), biXPelsPerMeter(0), biYPelsPerMeter(0), biClrUsed(0), biClrImportant(0) {}

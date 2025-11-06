@@ -1,0 +1,12 @@
+diff --git a/puzzle.py b/puzzle.py
+--- a/puzzle.py
++++ b/puzzle.py
+@@ -13,7 +13,7 @@ class Puzzle:
+         self.spread_pieces()
+     def get_event(self, event):
+         self.state.get_event(event)
+-    def update(self, dt):
++    def update(self, dt, x_diff, y_diff):
+         # Update logic here, using x_diff and y_diff if provided
+     def draw(self, surface):
+         # Draw logic here

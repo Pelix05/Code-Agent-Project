@@ -1,0 +1,72 @@
+diff --git a/bmp.cpp b/bmp.cpp
+--- a/bmp.cpp
++++ b/bmp.cpp
+@@ -13,13 +13,13 @@
+   BmpFileHeader newBf(NZwidth, height);
+   BmpInfoHeader newBi(NZwidth, height);
+-    bf = newBf;
+-    bi = newBi;
+-    imgData = img;
++    bf = newBf;
++    bi = newBi;
++    imgData = std::move(img); // Initialize imgData in the initialization list
+    // Rest of the function unchanged
+diff --git a/bmpfileheader.cpp b/bmpfileheader.cpp
+--- a/bmpfileheader.cpp
++++ b/bmpfileheader.cpp
+@@ -3,16 +3,16 @@
+   BmpFileHeader::BmpFileHeader() {
+       // Uninitialized member variables
+       bfType = 0; // Initialize bfType
+       bfSize = 0; // Initialize bfSize
+       bfReserved1 = 0; // Initialize bfReserved1
+       bfReserved2 = 0; // Initialize bfReserved2
+       bfOffBits = 0; // Initialize bfOffBits
+       // Initialize remaining uninit members
+       // (one per line for clarity)
+       bfType = NZWIDTH; // Replace with appropriate value
+       bfSize = NZHEIGHT * sizeof(uint32_t); // Calculate size
+       // ... and so on for other variables
+diff --git a/database.cpp b/database.cpp
+--- a/database.cpp
++++ b/database.cpp
+@@ -5,5 +5,5 @@
+     m_db = QSqlDatabase::addDatabase("QSQLITE");
+diff --git a/defaultpuzzlemenuwindow.h b/defaultpuzzlemenuwindow.h
+--- a/defaultpuzzlemenuwindow.h
++++ b/defaultpuzzlemenuwindow.h
+@@ -13,9 +13,9 @@
+   private:
+       // Remove the slots macros and configure them if needed
+-    private slots:
+-        void slot1();
+-        void slot2();
++    // Configure slots macros if necessary (example: if slots is a macro)
+diff --git a/generatepuzzlemenuwindow.h b/generatepuzzlemenuwindow.h
+diff --git a/mainwindowpuzzle.h b/mainwindowpuzzle.h
+--- a/mainwindowpuzzle.h
+@@ -59,9 +59,9 @@
+   private:
+       // Remove the slots macros and configure them if needed
+-    private slots:
+-        void slot1();
+-        void slot2();
++    // Configure slots macros if necessary (example: if slots is a macro)
+diff --git a/puzzle/databasemanager.h b/puzzle/databasemanager.h
+--- a/puzzle/databasemanager.h
++++ b/puzzle/databasemanager.h
+@@ -1,5 +1,5 @@
+-class DatabaseManager {
+-    // One definition rule violation fixed by initializing m_db in the constructor
++    class DatabaseManager {
+         QSqlDatabase m_db; // Initialize m_db in the constructor
+diff --git a/puzzle/leaderboard.h b/puzzle/leaderboard.h
+--- a/puzzle/leaderboard.h
++++ b/puzzle/leaderboard.h
+@@ -1,9 +1,9 @@
+-class Leaderboard : public QWidget {
+-    // One definition rule violation fixed by initializing in the constructor
++    class Leaderboard : public QWidget {
+         // ... rest of the class definition
+         // Constructor with initialized members
+         Leaderboard(int width, int height);

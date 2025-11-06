@@ -1,0 +1,12 @@
+diff --git a/bmp/bmp.cpp b/bmp/bmp.cpp
+--- a/bmp/bmp.cpp
++++ b/bmp/bmp.cpp
+@@ -10,13 +10,10 @@
+     BmpFileHeader bf(NZwidth, height);
+     BmpInfoHeader bi(NZwidth, height);
+-    bf = newBf; // Use initialization list for performance
+-    bi = newBi; // Use initialization list for performance
+-    imgData = img; // Use initialization list for performance
++    BmpFileHeader::BmpFileHeader(bf.newBf); // Initialize member variables in the constructor
++    BmpInfoHeader::BmpInfoHeader(bi.newBi);
+     // Rest of the code...

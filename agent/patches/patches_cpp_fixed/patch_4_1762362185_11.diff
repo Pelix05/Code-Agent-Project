@@ -1,0 +1,24 @@
+diff --git a/bmp/bmpinfoheader.cpp b/bmp/bmpinfoheader.cpp
+--- a/bmp/bmpinfoheader.cpp
++++ b/bmp/bmpinfoheader.cpp
+@@ -1,7 +1,7 @@
+-BmpInfoHeader::BmpInfoHeader() {
++BmpInfoHeader::BmpInfoHeader(int NZwidth, int height) : biWidth(NZwidth), biHeight(height) {
+   // Rest of the constructor body (remove assignments)
+ }
+diff --git a/database.cpp b/database.cpp
+--- a/database.cpp
++++ b/database.cpp
+@@ -5,7 +5,7 @@
+   m_db = QSqlDatabase::addDatabase("QSQLITE");
+-DatabaseManager::DatabaseManager() {
++DatabaseManager::DatabaseManager(int NZwidth, int height) : m_db(QSqlDatabase::addDatabase("QSQLITE")) {
+   // Remove assignment of m_db in constructor
+diff --git a/defaultpuzzlemenuwindow.h b/defaultpuzzlemenuwindow.h
+diff --git a/generatepuzzlemenuwindow.h b/generatepuzzlemenuwindow.h
+diff --git a/mainwindowpuzzle.h b/mainwindowpuzzle.h
+diff --git a/puzzle.cpp b/puzzle.cpp
+--- a/puzzle.cpp
++++ b/puzzle.cpp
+@@ -6,5 +6,5 @@
+   m_db = QSqlDatabase::addDatabase("QSQLITE");

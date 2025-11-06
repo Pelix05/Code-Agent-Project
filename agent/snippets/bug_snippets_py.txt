@@ -1,0 +1,37 @@
+--- puzzle-challenge\labels.py:133 ---
+                                             self.disable_image,
+                                             rendered["disable"])
+        self.image = self.idle_image
+        self.clicked = False
+        self.hover = False
+
+    def render_text(self):
+        font, size = self.font, self.font_size
+        if (font, size) not in LOADED_FONTS:
+            LOADED_FONTS[font, size] = pg.font.Font(font, size)
+
+
+--- puzzle-challenge\puzzle_piece.py:137 ---
+                        elif side == "top":
+                            y_diff = p1.top - p2.bottom
+                            x_diff = p1.left - p2.left
+                        elif side == "bottom":
+                            y_diff = p1.bottom - p2.top
+                            x_diff = p1.left - p2.left
+                        for piece_ in other_section.pieces:
+                            piece_.rect.move_ip(x_diff, y_diff)
+                            self.pieces.append(piece_)
+                        self.grabbed = False
+
+
+--- puzzle-challenge\puzzle_piece.py:137 ---
+                        elif side == "top":
+                            y_diff = p1.top - p2.bottom
+                            x_diff = p1.left - p2.left
+                        elif side == "bottom":
+                            y_diff = p1.bottom - p2.top
+                            x_diff = p1.left - p2.left
+                        for piece_ in other_section.pieces:
+                            piece_.rect.move_ip(x_diff, y_diff)
+                            self.pieces.append(piece_)
+                        self.grabbed = False

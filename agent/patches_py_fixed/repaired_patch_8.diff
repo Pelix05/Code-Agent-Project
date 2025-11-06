@@ -1,0 +1,9 @@
+diff --git a/puzzle-challenge/prepare.py b/puzzle-challenge/prepare.py
+--- a/puzzle-challenge/prepare.py
++++ b/puzzle-challenge/prepare.py
+@@ -1,4 +1,5 @@
+ import os
++import pygame
+ import tools
+ SCREEN_SIZE = (1000, 600)
+ ORIGINAL_CAPTION = "Puzzler"

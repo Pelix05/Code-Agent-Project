@@ -1,0 +1,19 @@
+diff --git a/bmp/bmpfileheader.cpp b/bmp/bmpfileheader.cpp
+--- a/bmp/bmpfileheader.cpp
++++ b/bmp/bmpfileheader.cpp
+@@ -3,7 +3,7 @@
+ #include "bmpfileheader.h"
+-BmpFileHeader::BmpFileHeader() {
++BmpFileHeader::BmpFileHeader(int NZwidth, int height) : bfType(newBf->bfType), bfSize(newBf->bfSize), bfReserved1(newBf->bfReserved1), bfReserved2(newBf->bfReserved2), bfOffBits(newBf->bfOffBits) {
+     biSize = newBi->biSize;
+     biWidth = newBi->biWidth;
+     biHeight = newBi->biHeight;
+     biPlanes = newBi->biPlanes;
+     biBitCount = newBi->biBitCount;
+     biCompression = newBi->biCompression;
+@@ -17,6 +17,7 @@ biSizeImage = newBi->biSizeImage;
+     biXPelsPerMeter = newBi->biXPelsPerMeter;
+     biYPelsPerMeter = newBi->biYPelsPerMeter;
+     biClrUsed = newBi->biClrUsed;
++    biClrImportant = newBi->biClrImportant; // Initialize member variables in the constructor
+ }

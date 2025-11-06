@@ -1,0 +1,20 @@
+repaired_aggr_reconstructed_patch_1_1762190501_2.diff	FAIL	error: agent/workspaces/1dd6f71d8d5a485698bf74b5439ba265/python_repo/a/puzzle-challenge/puzzle_piece.py: No such file or directory
+repaired_cleaned_repatch_1_1762191534.diff	FAIL	no edits applied
+repaired_cleaned_repatch_2_1762191544.diff	FAIL	no edits applied
+repaired_cleaned_repatch_3_1762191554.diff	FAIL	no edits applied
+repaired_patch_1.diff	FAIL	no edits applied
+repaired_patch_10.diff	OK	already ok
+repaired_patch_11.diff	OK	already ok
+repaired_patch_12.diff	OK	already ok
+repaired_patch_13.diff	OK	already ok
+repaired_patch_14.diff	OK	already ok
+repaired_patch_15.diff	OK	already ok
+repaired_patch_1_1762189250_1.diff	FAIL	no edits applied
+repaired_patch_1_1762189262_2.diff	FAIL	no edits applied
+repaired_patch_1_1762189272_3.diff	FAIL	no edits applied
+repaired_patch_1_1762190489_1.diff	FAIL	no edits applied
+repaired_patch_1_1762190501_2.diff	OK	reconstructed and git apply check OK
+repaired_patch_1_1762190510_3.diff	FAIL	no edits applied
+repaired_patch_1_1762192277_1.diff	FAIL	no edits applied
+repaired_patch_1_1762192286_2.diff	FAIL	no edits applied
+repaired_patch_1_1762192293_3.diff	FAIL	no edits applied

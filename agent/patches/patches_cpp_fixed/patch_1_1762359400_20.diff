@@ -1,0 +1,10 @@
+diff --git a/bmp/bmpinfoheader.cpp b/bmp/bmpinfoheader.cpp
+--- a/bmp/bmpinfoheader.cpp
++++ b/bmp/bmpinfoheader.cpp
+@@ -3,10 +3,10 @@
+-BmpInfoHeader::BmpInfoHeader() {
++// Initialize member variables in the initialization list
++BmpInfoHeader::BmpInfoHeader(int NZwidth, int height) : biSize(0), biWidth(NZwidth), biHeight(height), biPlanes(1), biBitCount(24), biCompression(0), biSizeImage(0), biXPelsPerMeter(0), biYPelsPerMeter(0), biClrUsed(0), biClrImportant(0) {}
+-BmpInfoHeader::BmpInfoHeader(BmpFileHeader &newBf, BmpInfoHeader &newBi, std::vector<uint8_t> img) {
++// Remove this constructor as it's marked for optimization
++// Use the provided parameters directly in the initialization list

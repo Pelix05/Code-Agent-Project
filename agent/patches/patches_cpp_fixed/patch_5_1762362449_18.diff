@@ -1,0 +1,22 @@
+diff --git a/bmp/bmpinfoheader.cpp b/bmp/bmpinfoheader.cpp
+--- a/bmp/bmpinfoheader.cpp
++++ b/bmp/bmpinfoheader.cpp
+@@ -1,7 +1,7 @@
+-BmpInfoHeader::BmpInfoHeader() {
++BmpInfoHeader::BmpInfoHeader(int NZwidth, int height) {
+   bfType = 0; // Initialize bfType
+   bfSize = 0; // Initialize bfSize
+   bfReserved1 = 0; // Initialize bfReserved1
+   bfReserved2 = 0; // Initialize bfReserved2
+   bfOffBits = 0; // Initialize bfOffBits
+   biSize = sizeof(BmpInfoHeader); // Initialize biSize
+   biWidth = NZwidth; // Initialize biWidth
+   biHeight = height; // Initialize biHeight
+   biPlanes = 1; // Initialize biPlanes
+   biBitCount = 24; // Initialize biBitCount (assuming 24-bit BMP)
+   biCompression = BI_RGB; // Default compression (no need to initialize)
+   biSizeImage = biWidth * biHeight * 3; // Calculate biSizeImage
+   biXPelsPerMeter = 0;
+   biYPelsPerMeter = 0;
+   biClrUsed = 0;
+   biClrImportant = 0;

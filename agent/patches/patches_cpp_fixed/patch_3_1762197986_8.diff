@@ -1,0 +1,14 @@
+diff --git a/bmp/bmpfileheader.cpp b/bmp/bmpfileheader.cpp
+--- a/bmp/bmpfileheader.cpp
++++ b/bmp/bmpfileheader.cpp
+@@ -3,11 +3,11 @@
+ #include "bmpfileheader.h"
+-BmpFileHeader::BmpFileHeader() {
++BmpFileHeader::BmpFileHeader(int NZwidth, int height) : bfType(newBf->bfType), bfSize(newBf->bfSize), bfReserved1(newBf->bfReserved1), bfReserved2(newBf->bfReserved2), bfOffBits(newBf->bfOffBits) {
+     // Initialize uninit member variables
+ }
+-BmpFileHeader::BmpFileHeader(BmpFileHeader &newBf) : bfType(newBf.bfType), bfSize(newBf.bfSize), bfReserved1(newBf.bfReserved1), bfReserved2(newBf.bfReserved2), bfOffBits(newBf.bfOffBits) {
++// Use initialization list for better performance
++BmpFileHeader(BmpFileHeader& newBf) : bfType(newBf.bfType), bfSize(newBf.bfSize), bfReserved1(newBf.bfReserved1), bfReserved2(newBf.bfReserved2), bfOffBits(newBf.bfOffBits) {
+     imgData = newBi->img;
+ }

@@ -1,0 +1,11 @@
+diff --git a/bmp/bmp.cpp b/bmp/bmp.cpp
+--- a/bmp/bmp.cpp
++++ b/bmp/bmp.cpp
+@@ -11,7 +11,7 @@ Bmp::Bmp(BmpFileHeader &newBf, BmpInfoHeader &newBi, std::vector<uint8_t> img)
+     // BmpFileHeader bf(NZwidth, height);
+     // BmpInfoHeader bi(NZwidth, height);
+     bf = newBf; // Use initialization list for better performance
+     bi = newBi; // Use initialization list for better performance
+     imgData = img; // Use initialization list for better performance
+-    // img was passed by value, change to const reference
++    img = std::const_pointer_cast<uint8_t>(img); // Pass by const reference

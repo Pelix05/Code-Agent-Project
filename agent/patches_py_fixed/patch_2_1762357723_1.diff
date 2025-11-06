@@ -1,0 +1,20 @@
+diff --git a/labels.py b/labels.py
+--- a/labels.py
++++ b/labels.py
+@@ -133,7 +133,9 @@ class Label:
+         self.disable_image, rendered["disable"]):
+         self.image = self.idle_image
+         self.clicked = False
+         self.hover = False
+-    def render_text(self):
++    def render_text(self):
+         font, size = self.font, self.font_size
+         if (font, size) not in LOADED_FONTS:
+             LOADED_FONTS[font, size] = pg.font.Font(font, size)
+         # Fix E0203: Access to member 'font' before definition
+         if self.font is not None:
+             self.font = LOADED_FONTS[self.font, size]  # Move font access inside the if block
++        # Fix E0606: Possibly using variables 'x_diff' and 'y_diff' before assignment
++        x_diff, y_diff = self.position_diff()
++        self.x = self.x + x_diff
++        self.y = self.y + y_diff

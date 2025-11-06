@@ -1,0 +1,24 @@
+diff --git a/bmp/bmpinfoheader.cpp b/bmp/bmpinfoheader.cpp
+--- a/bmp/bmpinfoheader.cpp
++++ b/bmp/bmpinfoheader.cpp
+@@ -3,12 +3,12 @@
+ #include "bmpinfoheader.h"
+-BmpInfoHeader::BmpInfoHeader() {
++BmpInfoHeader::BmpInfoHeader(int NZwidth, int height) : biSize(0), biWidth(0), biHeight(0), biPlanes(0), biBitCount(0), biCompression(0), biSizeImage(0), biXPelsPerMeter(0), biYPelsPerMeter(0), biClrUsed(0), biClrImportant(0) {
+     // Initialize member variables in the constructor
+     this->biSize = sizeof(BmpInfoHeader);
+     this->biWidth = NZwidth;
+     this->biHeight = height;
+ }
+diff --git a/database.cpp b/database.cpp
+--- a/database.cpp
++++ b/database.cpp
+@@ -5,5 +5,5 @@
+     m_db = QSqlDatabase::addDatabase("QSQLITE");
+ }
+-// Constructor with initialization list
++// Constructor with initialization list for m_db
+    if (!m_db.open()) {
+        qDebug() << "Error opening database: " << m_db.lastError().text();
+        // Handle error here
+    }

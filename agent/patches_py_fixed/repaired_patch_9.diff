@@ -1,0 +1,10 @@
+diff --git a/puzzle.py b/puzzle.py
+--- a/puzzle.py
++++ b/puzzle.py
+@@ -1,5 +1,6 @@
+ from random import randint, shuffle
+ import pygame as pg
++import state_engine
+ from puzzle_piece import PuzzlePiece, PuzzleSection
+    def __init__(self):
+        self.state = None

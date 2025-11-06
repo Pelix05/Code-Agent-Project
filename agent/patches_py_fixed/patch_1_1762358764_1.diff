@@ -1,0 +1,22 @@
+diff --git a/labels.py b/labels.py
+--- a/labels.py
++++ b/labels.py
+@@ -133,7 +133,7 @@ class Label:
+         self.disable_image,
+         rendered["disable"])
+     def render_text(self):
+-        font, size = self.font, self.font_size
++        font, size = self.font, self.font_size  # Fixing the missing assignments
+         if (font, size) not in LOADED_FONTS:
+             LOADED_FONTS[font, size] = pg.font.Font(font, size)
+diff --git a/puzzle_piece.py b/puzzle_piece.py
+--- a/puzzle_piece.py
++++ b/puzzle_piece.py
+@@ -137,10 +137,10 @@ class PuzzlePiece:
+         x_diff, y_diff = self.get_diff()
+     def get_diff(self):
+-        x_diff = 0
+-        y_diff = 0
++        x_diff = self.calculate_x_diff()  # Assigning 'x_diff'
++        y_diff = self.calculate_y_diff()  # Assigning 'y_diff'
+         # ... rest of the function (omitted for brevity)

@@ -1,0 +1,8 @@
+diff --git a/bmp/bmpinfoheader.cpp b/bmp/bmpinfoheader.cpp
+--- a/bmp/bmpinfoheader.cpp
++++ b/bmp/bmpinfoheader.cpp
+@@ -1,7 +1,7 @@
+-BmpInfoHeader::BmpInfoHeader() {
++BmpInfoHeader::BmpInfoHeader(int NZwidth, int height) : biWidth(NZwidth), biHeight(height) {}
+- Changed the constructor to initialize member variables directly, following the static analysis report suggestion for better performance.
+- Removed the unnecessary constructor with only int arguments, as it's not clear what they are for based on the report.

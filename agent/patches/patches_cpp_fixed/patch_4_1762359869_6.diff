@@ -1,0 +1,15 @@
+diff --git a/bmpfileheader.cpp b/bmpfileheader.cpp
+--- a/bmpfileheader.cpp
++++ b/bmpfileheader.cpp
+@@ -2,7 +2,7 @@
+-BmpFileHeader::BmpFileHeader() {
++BmpFileHeader::BmpFileHeader(int NZwidth, int height, BmpFileHeader& newBf, BmpInfoHeader& newBi, std::vector<uint8_t> img) :
+     bfType(newBf.bfType),
+     bfSize(newBf.bfSize),
+     bfReserved1(newBf.bfReserved1),
+     bfReserved2(newBf.bfReserved2),
+@@ -14,7 +14,7 @@ BmpFileHeader::BmpFileHeader() {
+     // Rest of the constructor body...
+ }
+-int NZwidth, int height, BmpFileHeader& newBf, BmpInfoHeader& newBi, std::vector<uint8_t> img>
++int NZwidth, int height, const BmpFileHeader& newBf, const BmpInfoHeader& newBi, const std::vector<uint8_t>& img

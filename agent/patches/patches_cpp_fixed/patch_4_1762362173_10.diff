@@ -1,0 +1,35 @@
+diff --git a/bmp/bmpinfoheader.cpp b/bmp/bmpinfoheader.cpp
+--- a/bmp/bmpinfoheader.cpp
++++ b/bmp/bmpinfoheader.cpp
+@@ -1,12 +1,12 @@
+-BmpInfoHeader::BmpInfoHeader()
++BmpInfoHeader::BmpInfoHeader(int NZwidth, int height) : biWidth(NZwidth), biHeight(height) {}
+-BmpInfoHeader::BmpInfoHeader() : biWidth(0), biHeight(0) {}
++// No need for initialization list since variables are initialized now
+diff --git a/database.cpp b/database.cpp
+--- a/database.cpp
++++ b/database.cpp
+@@ -5,5 +5,6 @@
+    m_db = QSqlDatabase::addDatabase("QSQLITE");
+diff --git a/defaultpuzzlemenuwindow.h b/defaultpuzzlemenuwindow.h
+--- a/defaultpuzzlemenuwindow.h
++++ b/defaultpuzzlemenuwindow.h
+@@ -9,9 +9,0 @@
+ private:
+     // Remove the unknown macros without configuration
+     -private slots:
+diff --git a/generatepuzzlemenuwindow.h b/generatepuzzlemenuwindow.h
+--- a/generatepuzzlemenuwindow.h
++++ b/generatepuzzlemenuwindow.h
+@@ -16,9 +16,0 @@
+     -private slots:
+diff --git a/mainwindowpuzzle.h b/mainwindowpuzzle.h
+--- a/mainwindowpuzzle.h
++++ b/mainwindowpuzzle.h
+@@ -61,9 +61,0 @@
+     -private slots:
+diff --git a/puzzle.cpp b/puzzle.cpp
+--- a/puzzle.cpp
++++ b/puzzle.cpp
+@@ -6,5 +6,6 @@
+    m_db = QSqlDatabase::addDatabase("QSQLITE");

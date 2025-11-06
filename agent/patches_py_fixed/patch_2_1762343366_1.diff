@@ -1,0 +1,36 @@
+diff --git a/labels.py b/labels.py
+--- a/labels.py
++++ b/labels.py
+@@ -132,7 +132,9 @@ class Label:
+         self.disable_image, rendered["disable"]])
+     def render_text(self):
+-        font, size = self.font, self.font_size
++        font, size = self.font, self.font_size
+         if (font, size) not in LOADED_FONTS:
+             LOADED_FONTS[font, size] = pg.font.Font(font, size)
+         # Fix E0203: Access to member 'font' before definition
+         if not self.font:  # Assign font before usage
+             self.font = DEFAULT_FONT
+@@ -139,12 +141,14 @@ class Label:
+             self.clicked = False
+             self.hover = False
+     def update_position(self, x_diff, y_diff):
+-        self.x += x_diff
+-        self.y += y_diff
++        self.x = self.x + x_diff
++        self.y = self.y + y_diff  # Fix E0606: Possibly used before assignment
+         # Rest of the code remains unchanged
+--- a/puzzle_piece.py
++++ b/puzzle_piece.py
+@@ -137,12 +139,14 @@ class PuzzlePiece:
+     def move(self, dx, dy):
+         self.x += dx
+         self.y += dy
+-        # Fix E0606: Possibly used before assignment
+-        x_diff = abs(dx)
+-        y_diff = abs(dy)
++        x_diff, y_diff = abs(dx), abs(dy)  # Assign values before usage
+         if x_diff > 0:
+             self.update_position(x_diff, 0)
+         elif y_diff > 0:
+             self.update_position(0, y_diff)

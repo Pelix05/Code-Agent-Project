@@ -1,0 +1,15 @@
+diff --git a/labels.py b/labels.py
+--- a/labels.py
++++ b/labels.py
+@@ -132,7 +132,9 @@ class Label:
+         self.image = self.idle_image
+         self.clicked = False
+         self.hover = False
++    def __init__(self, font, font_size, disable_image=None):
++        self.font = font
++        self.font_size = font_size
+         if disable_image is not None:
+             self.disable_image = disable_image
+             self.rendered["disable"] = self.disable_image
+         else:
+             self.rendered["disable"] = ""
