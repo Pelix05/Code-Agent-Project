@@ -16,6 +16,7 @@ import multiprocessing
 import time
 import traceback
 import argparse
+import json
 
 try:
     from langchain_google_genai import ChatGoogleGenerativeAI
@@ -31,6 +32,15 @@ try:
     from langchain_ollama import ChatOllama
 except Exception:
     ChatOllama = None
+try:
+    import requests
+except Exception:
+    requests = None
+try:
+    # optional: local/open-source HF transformers pipeline
+    from transformers import pipeline as hf_transformers_pipeline
+except Exception:
+    hf_transformers_pipeline = None
 from prompts import BUG_FIX_PROMPT
 
 
@@ -93,9 +103,50 @@ def _invoke_child_process(name, prompt, q):
                 q.put(("err", "Ollama client not installed"))
                 return
             model = os.getenv("LOCAL_MODEL", "deepseek-coder")
-            client = Client(model=model, temperature=0.3)
+            ollama_host = os.getenv("OLLAMA_HOST", "http://localhost:11434")
+            # Pass explicit host so client connects to configured Ollama server
+            try:
+                client = Client(model=model, temperature=0.3, host=ollama_host)
+            except TypeError:
+                # Older langchain_ollama versions may expect 'base_url' instead
+                client = Client(model=model, temperature=0.3, base_url=ollama_host)
             resp = client.invoke([HM(content=prompt)])
             q.put(("ok", getattr(resp, "content", str(resp))))
+
+        elif name == "HuggingFace":
+            try:
+                from langchain_core.messages import HumanMessage as HM
+            except Exception:
+                class HM:
+                    def __init__(self, content: str):
+                        self.content = content
+            try:
+                import requests as _req
+            except Exception:
+                q.put(("err", "requests not available for HuggingFace client"))
+                return
+            key = os.getenv("HUGGINGFACE_API_TOKEN")
+            if not key:
+                q.put(("err", "HUGGINGFACE_API_TOKEN not set"))
+                return
+            model_url = os.getenv("HUGGINGFACE_MODEL_URL", "https://api-inference.huggingface.co/models/gpt2")
+            headers = {"Authorization": f"Bearer {key}", "Content-Type": "application/json"}
+            try:
+                payload = {"inputs": prompt, "options": {"wait_for_model": True}}
+                resp = _req.post(model_url, headers=headers, json=payload, timeout=30)
+                resp.raise_for_status()
+                data = resp.json()
+                # try to extract generated_text
+                if isinstance(data, dict) and "generated_text" in data:
+                    content = data["generated_text"]
+                elif isinstance(data, list) and data and isinstance(data[0], dict) and "generated_text" in data[0]:
+                    content = data[0]["generated_text"]
+                else:
+                    content = str(data)
+                q.put(("ok", content))
+            except Exception as e:
+                q.put(("err", str(e)))
+                return
 
         else:
             q.put(("err", f"Unknown LLM name: {name}"))
@@ -124,12 +175,22 @@ load_dotenv()
 GEMINI_KEY = os.getenv("GEMINI_API_KEY")
 QWEN_KEY = os.getenv("QWEN_API_KEY")
 LOCAL_MODEL = os.getenv("LOCAL_MODEL", "deepseek-coder")
+HUGGINGFACE_TOKEN = os.getenv("HUGGINGFACE_API_TOKEN")
+HF_TOKEN = os.getenv("HF_TOKEN") or HUGGINGFACE_TOKEN
+DISABLE_QWEN = os.getenv("DISABLE_QWEN", "0") in ("1", "true", "True")
+# Optional local transformers model (text-generation)
+TRANSFORMERS_MODEL = os.getenv("TRANSFORMERS_MODEL")
+TRANSFORMERS_TRUST_REMOTE = os.getenv("TRANSFORMERS_TRUST_REMOTE", "1") in ("1", "true", "True")
+TRANSFORMERS_DEVICE = os.getenv("TRANSFORMERS_DEVICE", "-1")  # -1 = CPU, 0 = first GPU
+HF_TOKEN_2 = os.getenv("HF_TOKEN_2")
+HUGGINGFACE_ROUTER_MODEL_2 = os.getenv("HUGGINGFACE_ROUTER_MODEL_2")
+HUGGINGFACE_ALTERNATE_URLS = os.getenv("HUGGINGFACE_ALTERNATE_URLS", "").split(',') if os.getenv("HUGGINGFACE_ALTERNATE_URLS") else []
 
 # If True, skip calling remote LLMs (useful for debugging/offline runs)
 SKIP_LLM = False
 
 # LLM timeouts (seconds) — configurable via environment to tune behavior per-deployment
-LLM_TIMEOUT_GEMINI = int(os.getenv("LLM_TIMEOUT_GEMINI", "60"))
+LLM_TIMEOUT_GEMINI = int(os.getenv("LLM_TIMEOUT_GEMINI", "90"))
 LLM_TIMEOUT_QWEN = int(os.getenv("LLM_TIMEOUT_QWEN", "90"))
 LLM_TIMEOUT_OLLAMA = int(os.getenv("LLM_TIMEOUT_OLLAMA", "30"))
 # Control whether pipeline may stop early when all dynamic tests pass even if
@@ -140,6 +201,11 @@ STOP_ON_DYNAMIC_ONLY = os.getenv("STOP_ON_DYNAMIC", "0") == "1"
 gemini_llm = None
 qwen_llm = None
 ollama_llm = None
+hf_llm = None
+hf_router_llm = None
+transformers_llm = None
+hf_router_llm_2 = None
+hf_router_llm_2 = None
 
 # Instantiate LLM clients only if their classes are available and keys/config present
 if ChatGoogleGenerativeAI and GEMINI_KEY:
@@ -152,7 +218,7 @@ if ChatGoogleGenerativeAI and GEMINI_KEY:
     except Exception as e:
         print(f"[!] Failed to init Gemini client: {e}")
 
-if ChatOpenAI and QWEN_KEY:
+if (not DISABLE_QWEN) and ChatOpenAI and QWEN_KEY:
     try:
         qwen_llm = ChatOpenAI(
             api_key=QWEN_KEY,
@@ -161,13 +227,137 @@ if ChatOpenAI and QWEN_KEY:
         )
     except Exception as e:
         print(f"[!] Failed to init Qwen client: {e}")
+else:
+    if DISABLE_QWEN:
+        print("[Debug] Qwen disabled via DISABLE_QWEN env var; skipping initialization.")
 
 if ChatOllama:
     try:
-        ollama_llm = ChatOllama(model=LOCAL_MODEL, temperature=0.3)
+        ollama_host = os.getenv("OLLAMA_HOST", "http://localhost:11434")
+        try:
+            ollama_llm = ChatOllama(model=LOCAL_MODEL, temperature=0.3, host=ollama_host)
+        except TypeError:
+            ollama_llm = ChatOllama(model=LOCAL_MODEL, temperature=0.3, base_url=ollama_host)
     except Exception as e:
         print(f"[!] Failed to init Ollama client: {e}")
     # Ollama client initialized (local fallback)
+
+# Transformers local / HF open-source pipeline client
+if hf_transformers_pipeline and TRANSFORMERS_MODEL:
+    try:
+        class _TransformersClient:
+            def __init__(self, model, trust_remote=False, device="-1"):
+                # device: '-1' for CPU, '0' for first GPU
+                device_arg = -1 if str(device) == "-1" else int(device)
+                self.pipe = hf_transformers_pipeline("text-generation", model=model, trust_remote_code=trust_remote, device=device_arg)
+
+            def invoke(self, messages):
+                prompt = "\n".join(getattr(m, 'content', str(m)) for m in messages)
+                # Respect an env var for max tokens
+                max_new_tokens = int(os.getenv("TRANSFORMERS_MAX_TOKENS", "256"))
+                resp = self.pipe(prompt, max_new_tokens=max_new_tokens)
+                # return an object with .content to match other clients
+                try:
+                    text = resp[0].get('generated_text') if isinstance(resp, list) and isinstance(resp[0], dict) else str(resp)
+                except Exception:
+                    text = str(resp)
+                return type("R", (), {"content": text})()
+
+        transformers_llm = _TransformersClient(TRANSFORMERS_MODEL, trust_remote=TRANSFORMERS_TRUST_REMOTE, device=TRANSFORMERS_DEVICE)
+    except Exception as e:
+        print(f"[!] Failed to init Transformers pipeline client: {e}")
+
+# Minimal HuggingFace Inference API client (opt-in)
+if HUGGINGFACE_TOKEN and requests:
+    try:
+        # Represent hf_llm as a small callable object with an invoke method
+        class _HFClient:
+            def __init__(self, token):
+                self.token = token
+                # primary HF inference URL (model-specific)
+                self.url = os.getenv("HUGGINGFACE_MODEL_URL", "https://api-inference.huggingface.co/models/gpt2")
+                # alternate model URLs to try when the primary endpoint returns 410
+                self.alternates = [u.strip() for u in HUGGINGFACE_ALTERNATE_URLS if u.strip()]
+
+            def _call_url(self, url, prompt):
+                headers = {"Authorization": f"Bearer {self.token}", "Content-Type": "application/json"}
+                payload = {"inputs": prompt, "options": {"wait_for_model": True}}
+                resp = requests.post(url, headers=headers, json=payload, timeout=30)
+                resp.raise_for_status()
+                return resp.json()
+
+            def invoke(self, messages):
+                # messages is list-like of HumanMessage; we concat content
+                prompt = "\n".join(getattr(m, 'content', str(m)) for m in messages)
+                urls_to_try = [self.url] + self.alternates
+                last_exc = None
+                for url in urls_to_try:
+                    try:
+                        data = self._call_url(url, prompt)
+                        # HF Inference API may return text or array with generated_text
+                        if isinstance(data, dict) and "generated_text" in data:
+                            return type("R", (), {"content": data["generated_text"]})()
+                        if isinstance(data, list) and data and isinstance(data[0], dict) and "generated_text" in data[0]:
+                            return type("R", (), {"content": data[0]["generated_text"]})()
+                        # fallback: stringify response
+                        return type("R", (), {"content": str(data)})()
+                    except Exception as e:
+                        last_exc = e
+                        # If 410 Gone, try next alternate URL
+                        try:
+                            code = None
+                            if hasattr(e, 'response') and e.response is not None:
+                                code = getattr(e.response, 'status_code', None)
+                        except Exception:
+                            code = None
+                        if code == 410:
+                            continue
+                        # otherwise, break and surface the error
+                        break
+                # All attempts failed
+                raise last_exc if last_exc is not None else RuntimeError("HF inference failed")
+
+        hf_llm = _HFClient(HUGGINGFACE_TOKEN)
+    except Exception as e:
+        print(f"[!] Failed to init HuggingFace client: {e}")
+
+# Hugging Face Router (OpenAI-compatible) via OpenAI-style client
+if ChatOpenAI and HF_TOKEN:
+    try:
+        hf_router_llm = ChatOpenAI(
+            api_key=HF_TOKEN,
+            base_url="https://router.huggingface.co/v1",
+            model=os.getenv("HUGGINGFACE_ROUTER_MODEL", "gpt2"),
+            temperature=0.2,
+        )
+    except Exception as e:
+        print(f"[!] Failed to init HuggingFace Router client: {e}")
+
+# Secondary HF Router (fallback router) using HF_TOKEN_2 / HUGGINGFACE_ROUTER_MODEL_2
+HF_TOKEN_2 = os.getenv("HF_TOKEN_2")
+HUGGINGFACE_ROUTER_MODEL_2 = os.getenv("HUGGINGFACE_ROUTER_MODEL_2")
+if ChatOpenAI and HF_TOKEN_2:
+    try:
+        hf_router_llm_2 = ChatOpenAI(
+            api_key=HF_TOKEN_2,
+            base_url="https://router.huggingface.co/v1",
+            model=HUGGINGFACE_ROUTER_MODEL_2 or os.getenv("HUGGINGFACE_ROUTER_MODEL", "gpt2"),
+            temperature=0.2,
+        )
+    except Exception as e:
+        print(f"[!] Failed to init secondary HuggingFace Router client: {e}")
+
+# Secondary HF Router (fallback router) using HF_TOKEN_2 / HUGGINGFACE_ROUTER_MODEL_2
+if ChatOpenAI and HF_TOKEN_2:
+    try:
+        hf_router_llm_2 = ChatOpenAI(
+            api_key=HF_TOKEN_2,
+            base_url="https://router.huggingface.co/v1",
+            model=HUGGINGFACE_ROUTER_MODEL_2 or os.getenv("HUGGINGFACE_ROUTER_MODEL", "gpt2"),
+            temperature=0.2,
+        )
+    except Exception as e:
+        print(f"[!] Failed to init Secondary HuggingFace Router client: {e}")
 
 # === Folder setup ===
 BASE_DIR = Path(__file__).resolve().parent
@@ -203,7 +393,226 @@ def ask_llm(prompt: str, original_code_file: str, patched_code_file: str) -> str
         print(f"[Debug] Invoking {name} (timeout={timeout}s) via thread")
         try:
             with concurrent.futures.ThreadPoolExecutor(max_workers=1) as ex:
-                fut = ex.submit(lambda: llm.invoke([HumanMessage(content=prompt)]))
+                # Gemini: skip the short YES/NO capability-check because Gemini has
+                # sometimes answered NO for longer instruction prompts; instead send
+                # the strict unified-diff instruction directly and accept its response.
+                if name == "Gemini":
+                    try:
+                        # Lightweight capability check first: ask a very short question
+                        # so Gemini doesn't reject long instruction prompts in stage1.
+                        try:
+                            cap_prompt = "Can you produce a unified-diff patch (git apply-compatible) for a small Python snippet? Reply YES or NO."
+                            fut_cap = ex.submit(lambda: llm.invoke([HumanMessage(content=cap_prompt)]))
+                            resp_cap = fut_cap.result(timeout=min(15, timeout))
+                            cap = getattr(resp_cap, 'content', '') or ''
+                            if not cap.strip().upper().startswith('YES'):
+                                print(f"[Debug] Gemini capability check negative/ambiguous: '{cap[:80]}'")
+                                return None
+
+                            # Now send the strict unified-diff request and try a couple of variants
+                            strict_suffix = (
+                                "\n\nIMPORTANT: Return ONLY a valid unified diff patch compatible with 'git apply'. "
+                                "Do NOT include any explanations, markdown fences, or extra text. If you cannot produce a valid patch, return exactly the string: NO_PATCH"
+                            )
+                            base_prompt = prompt + strict_suffix
+                            variants = [
+                                base_prompt,
+                                # Preface a fake header to bias toward unified-diff
+                                "diff --git a/unknown.py b/unknown.py\n" + base_prompt,
+                                # Use explicit markers to make extraction easier
+                                base_prompt + "\n\nReturn the patch ONLY between the markers <<<PATCH>>> and <<<END>>>. Do NOT include anything else."
+                            ]
+
+                            for idx, ap in enumerate(variants, start=1):
+                                try:
+                                    fut = ex.submit(lambda: llm.invoke([HumanMessage(content=ap)]))
+                                    res = fut.result(timeout=timeout)
+                                    content = getattr(res, 'content', '') or ''
+                                    # Log full Gemini pipeline response for debugging
+                                    try:
+                                        out_dir = BASE_DIR / 'patches_py_fixed'
+                                        out_dir.mkdir(parents=True, exist_ok=True)
+                                        ts = int(time.time())
+                                        fname = out_dir / f'raw_gemini_pipeline_{ts}_{idx}.json'
+                                        saved = {
+                                            'repr': repr(res),
+                                            'content': content,
+                                            '__dict__': getattr(res, '__dict__', None)
+                                        }
+                                        with open(fname, 'w', encoding='utf-8') as fh:
+                                            json.dump(saved, fh, ensure_ascii=False, indent=2)
+                                        print(f"[Debug] Saved Gemini pipeline raw response to {fname}")
+                                    except Exception as _e:
+                                        print(f"[Debug] Failed to save Gemini response: {_e}")
+                                    if content.strip() == 'NO_PATCH':
+                                        print(f"[Debug] Gemini returned NO_PATCH on variant {idx}")
+                                        return None
+                                    if 'diff --git' in content:
+                                        return res
+                                    if '<<<PATCH>>>' in content and '<<<END>>>' in content:
+                                        m = re.search(r"<<<PATCH>>>([\s\S]*?)<<<END>>>", content)
+                                        if m:
+                                            patched_text = m.group(1).strip()
+                                            return type('R', (), {'content': patched_text})()
+                                except concurrent.futures.TimeoutError:
+                                    print(f"[!] Gemini variant {idx} timed out")
+                                    continue
+                                except Exception as e:
+                                    print(f"[!] Gemini variant {idx} failed: {e}")
+                                    continue
+
+                            # If none of the strict variants produced a patch, try a trimmed prompt
+                            # consisting of the strict instruction plus the tail of the original prompt.
+                            # This helps when very long analysis blocks cause the model to return
+                            # an empty output or to hit internal limits.
+                            try:
+                                print("[Debug] Gemini: attempting trimmed-prompt retry (shorter input)")
+                                tail_len = int(os.getenv("GEMINI_TRIM_TAIL", "3000"))
+                                trimmed_body = (prompt[-tail_len:]) if len(prompt) > tail_len else prompt
+                                trimmed_prompt = (
+                                    "\n\nIMPORTANT: Return ONLY a valid unified diff patch compatible with 'git apply'. "
+                                    "Do NOT include any explanations, markdown fences, or extra text. If you cannot produce a valid patch, return exactly the string: NO_PATCH\n\n"
+                                    + trimmed_body
+                                )
+                                fut_t = ex.submit(lambda: llm.invoke([HumanMessage(content=trimmed_prompt)]))
+                                res_t = fut_t.result(timeout=timeout)
+                                content_t = getattr(res_t, 'content', '') or ''
+                                # Save trimmed attempt for debugging
+                                try:
+                                    out_dir = BASE_DIR / 'patches_py_fixed'
+                                    out_dir.mkdir(parents=True, exist_ok=True)
+                                    ts = int(time.time())
+                                    fname = out_dir / f'raw_gemini_pipeline_trimmed_{ts}.json'
+                                    saved = {
+                                        'repr': repr(res_t),
+                                        'content': content_t,
+                                        '__dict__': getattr(res_t, '__dict__', None)
+                                    }
+                                    with open(fname, 'w', encoding='utf-8') as fh:
+                                        json.dump(saved, fh, ensure_ascii=False, indent=2)
+                                    print(f"[Debug] Saved Gemini trimmed response to {fname}")
+                                except Exception as _e:
+                                    print(f"[Debug] Failed to save Gemini trimmed response: {_e}")
+
+                                if content_t.strip() == 'NO_PATCH':
+                                    print("[Debug] Gemini returned NO_PATCH on trimmed retry")
+                                    return None
+                                if 'diff --git' in content_t:
+                                    return res_t
+                                if '<<<PATCH>>>' in content_t and '<<<END>>>' in content_t:
+                                    m = re.search(r"<<<PATCH>>>([\s\S]*?)<<<END>>>", content_t)
+                                    if m:
+                                        patched_text = m.group(1).strip()
+                                        return type('R', (), {'content': patched_text})()
+                            except concurrent.futures.TimeoutError:
+                                print("[!] Gemini trimmed-prompt attempt timed out")
+                            except Exception as e:
+                                print(f"[!] Gemini trimmed-prompt attempt failed: {e}")
+
+                            # As a final attempt, try a minimal prompt containing ONLY the
+                            # buggy code snippet (extracted from the BUG_FIX_PROMPT) plus the
+                            # strict unified-diff instruction. This reduces token usage and
+                            # focuses the model on producing the patch.
+                            try:
+                                print("[Debug] Gemini: attempting minimal-snippet retry (code-only)")
+                                # Try to extract the code snippet from the long prompt.
+                                snippet_match = re.search(r"# Buggy Code Snippet\n([\s\S]*?)\n-+", prompt)
+                                if snippet_match:
+                                    code_only = snippet_match.group(1).strip()
+                                else:
+                                    # Fallback: take the last 2000 chars as a heuristic
+                                    code_only = prompt[-2000:]
+
+                                minimal_prompt = (
+                                    "You are an expert software engineer.\n\n"
+                                    "Generate a valid unified diff patch (git apply-compatible) that fixes the following buggy code.\n\n"
+                                    f"{code_only}\n\n"
+                                    "IMPORTANT: Return ONLY a valid unified diff patch compatible with 'git apply'. "
+                                    "Do NOT include any explanations, markdown fences, or extra text. If you cannot produce a valid patch, return exactly the string: NO_PATCH"
+                                )
+
+                                fut_min = ex.submit(lambda: llm.invoke([HumanMessage(content=minimal_prompt)]))
+                                res_min = fut_min.result(timeout=timeout)
+                                content_min = getattr(res_min, 'content', '') or ''
+
+                                # Save minimal attempt for debugging
+                                try:
+                                    out_dir = BASE_DIR / 'patches_py_fixed'
+                                    out_dir.mkdir(parents=True, exist_ok=True)
+                                    ts = int(time.time())
+                                    fname = out_dir / f'raw_gemini_pipeline_minimal_{ts}.json'
+                                    saved = {
+                                        'repr': repr(res_min),
+                                        'content': content_min,
+                                        '__dict__': getattr(res_min, '__dict__', None)
+                                    }
+                                    with open(fname, 'w', encoding='utf-8') as fh:
+                                        json.dump(saved, fh, ensure_ascii=False, indent=2)
+                                    print(f"[Debug] Saved Gemini minimal response to {fname}")
+                                except Exception as _e:
+                                    print(f"[Debug] Failed to save Gemini minimal response: {_e}")
+
+                                if content_min.strip() == 'NO_PATCH':
+                                    print("[Debug] Gemini returned NO_PATCH on minimal retry")
+                                    return None
+                                if 'diff --git' in content_min:
+                                    return res_min
+                                if '<<<PATCH>>>' in content_min and '<<<END>>>' in content_min:
+                                    m = re.search(r"<<<PATCH>>>([\s\S]*?)<<<END>>>", content_min)
+                                    if m:
+                                        patched_text = m.group(1).strip()
+                                        return type('R', (), {'content': patched_text})()
+                            except concurrent.futures.TimeoutError:
+                                print("[!] Gemini minimal-snippet attempt timed out")
+                            except Exception as e:
+                                print(f"[!] Gemini minimal-snippet attempt failed: {e}")
+
+                            return None
+                        except concurrent.futures.TimeoutError:
+                            print(f"[!] Gemini capability check timed out after {timeout}s")
+                            return None
+                        except Exception as e:
+                            print(f"[!] Gemini failed during capability check: {e}")
+                            return None
+                    except concurrent.futures.TimeoutError:
+                        print(f"[!] Gemini invoke timed out after {timeout}s")
+                        return None
+                    except Exception as e:
+                        print(f"[!] Gemini failed during invoke: {e}")
+                        return None
+
+                # For HuggingFace Routers we keep the two-stage capability check
+                if name in ("HuggingFace_Router", "HuggingFace_Router_2"):
+                    stage1_prompt = (
+                        prompt
+                        + "\n\nBefore producing a patch, answer ONLY one word: YES if you can produce a valid unified-diff patch (git apply-compatible) for this snippet, or NO if you cannot. Reply exactly 'YES' or 'NO' with no extra text."
+                    )
+                    try:
+                        fut1 = ex.submit(lambda: llm.invoke([HumanMessage(content=stage1_prompt)]))
+                        # Shorter timeout for capability check
+                        resp1 = fut1.result(timeout=min(20, timeout))
+                        c1 = getattr(resp1, "content", "").strip().upper()
+                        if not c1.startswith("YES"):
+                            print(f"[Debug] {name} capability check answered NO/ambiguous: '{c1[:80]}'")
+                            return None
+                        strict_suffix = (
+                            "\n\nIMPORTANT: Return ONLY a valid unified diff patch compatible with 'git apply'. "
+                            "Do NOT include any explanations, markdown fences, or extra text. If you cannot produce a valid patch, return exactly the string: NO_PATCH"
+                        )
+                        local_prompt = prompt + strict_suffix
+                        fut2 = ex.submit(lambda: llm.invoke([HumanMessage(content=local_prompt)]))
+                        resp2 = fut2.result(timeout=timeout)
+                        return resp2
+                    except concurrent.futures.TimeoutError:
+                        print(f"[!] {name} two-stage invoke timed out (stage1 or stage2)")
+                        return None
+                    except Exception as e:
+                        print(f"[!] {name} failed during two-stage invoke: {e}")
+                        return None
+
+                # Default single-call flow for other LLMs
+                local_prompt = prompt
+                fut = ex.submit(lambda: llm.invoke([HumanMessage(content=local_prompt)]))
                 try:
                     resp = fut.result(timeout=timeout)
                     return resp
@@ -214,16 +623,15 @@ def ask_llm(prompt: str, original_code_file: str, patched_code_file: str) -> str
             print(f"[!] {name} failed during invoke: {e}")
             return None
 
-    # Print which LLMs are available
-    print(f"[Debug] LLM availability: Gemini={'yes' if gemini_llm else 'no'}, "
-          f"Qwen={'yes' if qwen_llm else 'no'}, Ollama={'yes' if ollama_llm else 'no'}")
+    # Print which LLMs are available — we only use the Hugging Face Router(s) now
+    print(f"[Debug] LLM availability: HuggingFace_Router={'yes' if hf_router_llm else 'no'}, HuggingFace_Router_2={'yes' if hf_router_llm_2 else 'no'}")
 
-    # Prefer Qwen first (more reliable in our env), then Gemini, then Ollama —
-    # use configurable timeouts to avoid spurious timeouts that stall the worker.
+    # Use only the hosted Hugging Face Router(s) for patch generation. This forces
+    # the pipeline to rely exclusively on the HF hosted router models and avoids
+    # using Gemini/Ollama/Qwen/local transformers in this deployment.
     for llm, name, t in [
-        (qwen_llm, "Qwen", LLM_TIMEOUT_QWEN),
-        (gemini_llm, "Gemini", LLM_TIMEOUT_GEMINI),
-        (ollama_llm, "Ollama", LLM_TIMEOUT_OLLAMA),
+        (hf_router_llm, "HuggingFace_Router", int(os.getenv("LLM_TIMEOUT_HF", "45"))),
+        (hf_router_llm_2, "HuggingFace_Router_2", int(os.getenv("LLM_TIMEOUT_HF", "45"))),
     ]:
         resp = invoke_with_timeout(llm, name, timeout=t)
         if resp is None:

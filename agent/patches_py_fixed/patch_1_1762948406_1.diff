@@ -1,0 +1,42 @@
+diff --git a/puzzle-challenge/labels.py b/puzzle-challenge/labels.py
+--- a/puzzle-challenge/labels.py
++++ b/puzzle-challenge/labels.py
+@@ -132,7 +132,7 @@
+         self.disable_image,
+         rendered["disable"])
+-        self.image = self.idle_image
+-        self.clicked = False
+-        self.hover = True
++        self.image = self.idle_image
++        self.clicked = False
++        self.hover = True
+     def render_text(self):
+-        # Normalize font key and ensure a Font object is available in LOADED_FONTS. Fixing potential undefined variable error.
+-        font_path, size = self.font, self.font_size
+-        key = (font_path, size)
++        font_path, size = self.font, self.font_size
++        key = (font_path, size)
+         # Rest of the function remains the same
+diff --git a/puzzle-challenge/labels.py b/puzzle-challenge/labels.py
+--- a/puzzle-challenge/labels.py
++++ b/puzzle-challenge/labels.py
+@@ -132,7 +132,7 @@
+         self.disable_image,
+         rendered["disable"])
+-        self.image = self.idle_image
+-        self.clicked = False
+-        self.hover = True
++        self.image = self.idle_image
++        self.clicked = False
++        self.hover = True
+     def __init__(self, *args, **kwargs):
+-        # Normalize font key and ensure a Font object is available in LOADED_FONTS. Fixing potential undefined variable error.
+-        font_path, size = self.font, self.font_size
+-        key = (font_path, size)
++        self.font = kwargs.get('font')
++        self.font_size = kwargs.get('font_size')
++        font_path, size = self.font, self.font_size
++        key = (font_path, size)
+         # Rest of the function remains the same
+     def render_text(self):
+         # Rest of the function remains the same

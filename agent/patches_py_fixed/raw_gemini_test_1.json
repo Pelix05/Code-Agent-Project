@@ -1,0 +1,30 @@
+{
+  "repr": "AIMessage(content='YES', additional_kwargs={}, response_metadata={'prompt_feedback': {'block_reason': 0, 'safety_ratings': []}, 'finish_reason': 'STOP', 'safety_ratings': []}, id='run--b6cc2d19-8c3e-4ae0-9877-7752926a50bf-0', usage_metadata={'input_tokens': 3, 'output_tokens': 1, 'total_tokens': 27, 'input_token_details': {'cache_read': 0}})",
+  "content": "YES",
+  "dict": {
+    "content": "YES",
+    "additional_kwargs": {},
+    "response_metadata": {
+      "prompt_feedback": {
+        "block_reason": 0,
+        "safety_ratings": []
+      },
+      "finish_reason": "STOP",
+      "safety_ratings": []
+    },
+    "type": "ai",
+    "name": null,
+    "id": "run--b6cc2d19-8c3e-4ae0-9877-7752926a50bf-0",
+    "example": false,
+    "tool_calls": [],
+    "invalid_tool_calls": [],
+    "usage_metadata": {
+      "input_tokens": 3,
+      "output_tokens": 1,
+      "total_tokens": 27,
+      "input_token_details": {
+        "cache_read": 0
+      }
+    }
+  }
+}

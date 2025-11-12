@@ -1,0 +1,30 @@
+{
+  "repr": "AIMessage(content='', additional_kwargs={}, response_metadata={'prompt_feedback': {'block_reason': 0, 'safety_ratings': []}, 'finish_reason': 'STOP', 'safety_ratings': []}, id='run--1a185186-883a-4d3a-ac57-f5fd4992d6c1-0', usage_metadata={'input_tokens': 632, 'output_tokens': 0, 'total_tokens': 706, 'input_token_details': {'cache_read': 0}})",
+  "content": "",
+  "__dict__": {
+    "content": "",
+    "additional_kwargs": {},
+    "response_metadata": {
+      "prompt_feedback": {
+        "block_reason": 0,
+        "safety_ratings": []
+      },
+      "finish_reason": "STOP",
+      "safety_ratings": []
+    },
+    "type": "ai",
+    "name": null,
+    "id": "run--1a185186-883a-4d3a-ac57-f5fd4992d6c1-0",
+    "example": false,
+    "tool_calls": [],
+    "invalid_tool_calls": [],
+    "usage_metadata": {
+      "input_tokens": 632,
+      "output_tokens": 0,
+      "total_tokens": 706,
+      "input_token_details": {
+        "cache_read": 0
+      }
+    }
+  }
+}

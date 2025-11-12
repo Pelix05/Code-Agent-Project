@@ -1,0 +1,30 @@
+{
+  "repr": "AIMessage(content='NO_PATCH', additional_kwargs={}, response_metadata={'prompt_feedback': {'block_reason': 0, 'safety_ratings': []}, 'finish_reason': 'STOP', 'safety_ratings': []}, id='run--aba1a355-5771-4ce5-a6c3-15826cd72f21-0', usage_metadata={'input_tokens': 15, 'output_tokens': 3, 'total_tokens': 100, 'input_token_details': {'cache_read': 0}})",
+  "content": "NO_PATCH",
+  "dict": {
+    "content": "NO_PATCH",
+    "additional_kwargs": {},
+    "response_metadata": {
+      "prompt_feedback": {
+        "block_reason": 0,
+        "safety_ratings": []
+      },
+      "finish_reason": "STOP",
+      "safety_ratings": []
+    },
+    "type": "ai",
+    "name": null,
+    "id": "run--aba1a355-5771-4ce5-a6c3-15826cd72f21-0",
+    "example": false,
+    "tool_calls": [],
+    "invalid_tool_calls": [],
+    "usage_metadata": {
+      "input_tokens": 15,
+      "output_tokens": 3,
+      "total_tokens": 100,
+      "input_token_details": {
+        "cache_read": 0
+      }
+    }
+  }
+}

@@ -3,12 +3,12 @@
                                              rendered["disable"])
         self.image = self.idle_image
         self.clicked = False
-        self.hover = False
+        self.hover = True
 
     def render_text(self):
-        font, size = self.font, self.font_size
-        if (font, size) not in LOADED_FONTS:
-            LOADED_FONTS[font, size] = pg.font.Font(font, size)
+        # Normalize font key and ensure a Font object is available in LOADED_FONTS. Fixing potential undefined variable error.
+        font_path, size = self.font, self.font_size
+        key = (font_path, size)
 
 
 --- puzzle-challenge\puzzle_piece.py:137 ---

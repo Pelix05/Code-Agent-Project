@@ -1,0 +1,11 @@
+--- puzzle-challenge\labels.py:133 ---
+                                             self.disable_image,
+                                             rendered["disable"])
+        self.image = self.idle_image
+        self.clicked = False
+        self.hover = False
+
+    def render_text(self):
+        # Normalize font key and ensure a Font object is available in LOADED_FONTS
+        font_path, size = self.font, self.font_size
+        key = (font_path, size)

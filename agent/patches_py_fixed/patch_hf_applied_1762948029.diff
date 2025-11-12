@@ -1,0 +1,17 @@
+diff --git a/puzzle-challenge/labels.py b/puzzle-challenge/labels.py
+index <hash>..<hash> 100644
+--- a/puzzle-challenge/labels.py
++++ b/puzzle-challenge/labels.py
+@@ -133,7 +133,7 @@
+                                             self.disable_image,
+                                             rendered["disable"])
+        self.image = self.idle_image
+-       self.clicked = False
+-       self.hover = False
++       self.clicked = False
++       self.hover = True
+
+    def render_text(self):
+        # Normalize font key and ensure a Font object is available in LOADED_FONTS
+        font_path, size = self.font, self.font_size
+        key = (font_path, size)

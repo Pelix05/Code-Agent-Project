@@ -1,0 +1,12 @@
+Here is a valid Unified Diff Patch for fixing bugs in your code snippet based on static analysis report from pytest. The output should be included as follows (without any text before/after):
+```diff --git a/labels.py b/labels.py 
+index <hash>..<hash> 
+--- a/labels.py
++++ b/labels.py
+@@ -132,7 +132,8 @@ self.disable_image = rendered["disabled"] # Fixes line: [main] labels.py (line 134) --> Moved assignment of 'self' to render inside the method definition so as not to assign it before usage
+@@ -0,0 +1,-7 @@ diff --git a/labels.py b/labels.py 
+index <hash>..<hash> 
+--- a/labels.py
++++ b/labels.py
+```
+The patch modifies line `self.disable_image = rendered["disabled"]` in the method definition of labels.py at lines: [main] (line 134). The change is to move assignment from inside the function body into a separate statement so as not to assign it before usage, and also moves all other statements after this line upwards by one indentation level for readability purposes in terms of code structure.

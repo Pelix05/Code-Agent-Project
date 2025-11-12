@@ -1,0 +1,262 @@
+ ' Detailed PlantUML for the Agent system
+ ' File: docs/uml_detailed.puml
+ ' Render with PlantUML extension in VS Code or using plantuml.jar
+
+@startuml Agent_Detailed
+title Agent — Detailed System Overview
+
+skinparam {
+    BackgroundColor White
+    ArrowColor #000000
+    BorderColor #000000
+    ActorBorderColor #000000
+    ParticipantBackgroundColor #F0F0F0
+    ParticipantBorderColor #000000
+}
+
+' -----------------
+' Class diagram
+' -----------------
+
+package "Core Modules" {
+  class FlaskApp {
+    + start_server()
+    + upload_handler(file) : UploadResult
+    + enqueue_job(job)
+    + save_results(result)
+  }
+
+  class LCPipeline {
+    + run_job(job) : PipelineResult
+    + run_iteration(state) : IterationResult
+    + generate_prompt(state) : String
+    + apply_patch(patch) : ApplyResult
+    + apply_additional_rule_based_fixes(patch) : Patch
+  }
+
+  class AnalyzerPy {
+    + analyze(path) : AnalysisReport
+    + extract_bug_snippets() : List<Snippet>
+  }
+
+  class AnalyzerCpp {
+    + analyze(path) : AnalysisReport
+  }
+
+  class GeneratePatches {
+    + generate(initial_report, prompt) : List<Patch>
+    + score_patches(patches) : List<Patch>
+  }
+
+  class RepairPatches {
+    + repair(patch) : Patch
+  }
+
+  class FixPythonPatches {
+    + apply_patch_to_repo(patch) : boolean
+  }
+
+  class FixCppPatches {
+    + apply_patch_to_repo(patch) : boolean
+  }
+
+  class DynamicTester {
+    + run_tests(target_path) : TestReport
+    + parse_output(raw_output) : TestReport
+    + clean_report(report) : TestReport
+  }
+
+  class Prompts {
+    + get_template(name) : String
+  }
+
+  class ReasoningModule {
+    + decide_next_action(state) : Action
+  }
+}
+
+' Relationships
+FlaskApp --> LCPipeline : "submits jobs to"
+LCPipeline --> AnalyzerPy : "calls (Python)"
+LCPipeline --> AnalyzerCpp : "calls (C++)"
+LCPipeline --> GeneratePatches : "requests patches"
+GeneratePatches --> RepairPatches : "may request repair"
+LCPipeline --> FixPythonPatches : "apply python patch"
+LCPipeline --> FixCppPatches : "apply cpp patch"
+LCPipeline --> DynamicTester : "run dynamic tests"
+LCPipeline --> Prompts : "loads templates"
+LCPipeline --> ReasoningModule : "asks for next action"
+
+@enduml
+
+@startuml Agent_Detailed_Seq
+title Upload → Final Output Sequence
+
+actor User as "User"
+participant FlaskApp as "FlaskApp"
+participant LCPipeline as "LCPipeline"
+participant Analyzer as "Analyzer"
+participant GeneratePatches as "GeneratePatches"
+participant Fixer as "Fixer"
+participant DynamicTester as "DynamicTester"
+participant ReasoningModule as "ReasoningModule"
+participant Storage as "Storage"
+
+User -> FlaskApp : upload archive / repo
+activate FlaskApp
+FlaskApp -> FlaskApp : validate + unpack
+FlaskApp -> LCPipeline : create & enqueue job
+deactivate FlaskApp
+
+activate LCPipeline
+LCPipeline -> Analyzer : run static analysis
+activate Analyzer
+Analyzer --> LCPipeline : AnalysisReport (snippets, errors)
+deactivate Analyzer
+
+LCPipeline -> GeneratePatches : generate candidate patches (LLM + rules)
+activate GeneratePatches
+GeneratePatches --> LCPipeline : list<Patch>
+deactivate GeneratePatches
+
+LCPipeline -> Fixer : apply top patch (git apply / edits)
+activate Fixer
+Fixer --> LCPipeline : apply result (success/fail, conflicts)
+deactivate Fixer
+
+LCPipeline -> DynamicTester : run tests on patched repo
+activate DynamicTester
+DynamicTester --> LCPipeline : TestReport (pass/fail, logs)
+deactivate DynamicTester
+
+alt tests pass
+    LCPipeline -> Storage : save final patches + result.json
+    LCPipeline --> FlaskApp : final result
+    FlaskApp --> User : show success + download patch
+else tests fail
+    LCPipeline -> ReasoningModule : decide next step (retry/generate more patches)
+    activate ReasoningModule
+    ReasoningModule --> LCPipeline : instruction (loop / abort)
+    deactivate ReasoningModule
+end
+deactivate LCPipeline
+
+@enduml
+
+  class LCPipeline {
+    + run_job(job) : PipelineResult
+    + run_iteration(state) : IterationResult
+    + generate_prompt(state) : String
+    + apply_patch(patch) : ApplyResult
+    + apply_additional_rule_based_fixes(patch) : Patch
+  }
+
+  class AnalyzerPy {
+    + analyze(path) : AnalysisReport
+    + extract_bug_snippets() : List<Snippet>
+  }
+
+  class AnalyzerCpp {
+    + analyze(path) : AnalysisReport
+  }
+
+  class GeneratePatches {
+    + generate(initial_report, prompt) : List<Patch>
+    + score_patches(patches) : List<Patch>
+  }
+
+  class RepairPatches {
+    + repair(patch) : Patch
+  }
+
+  class FixPythonPatches {
+    + apply_patch_to_repo(patch) : boolean
+  }
+
+  class FixCppPatches {
+    + apply_patch_to_repo(patch) : boolean
+  }
+
+  class DynamicTester {
+    + run_tests(target_path) : TestReport
+    + parse_output(raw_output) : TestReport
+    + clean_report(report) : TestReport
+  }
+
+  class Prompts {
+    + get_template(name) : String
+  }
+
+  class ReasoningModule {
+    + decide_next_action(state) : Action
+  }
+}
+
+' Relationships
+FlaskApp --> LCPipeline : "submits jobs to"
+LCPipeline --> AnalyzerPy : "calls (Python)"
+LCPipeline --> AnalyzerCpp : "calls (C++)"
+LCPipeline --> GeneratePatches : "requests patches"
+GeneratePatches --> RepairPatches : "may request repair"
+LCPipeline --> FixPythonPatches : "apply python patch"
+LCPipeline --> FixCppPatches : "apply cpp patch"
+LCPipeline --> DynamicTester : "run dynamic tests"
+LCPipeline --> Prompts : "loads templates"
+LCPipeline --> ReasoningModule : "asks for next action"
+
+' -----------------
+' Sequence diagram: upload -> analysis -> patch -> test -> store
+' -----------------
+
+== Upload to Final Output Sequence ==
+
+actor User as "User"
+participant FlaskApp as "FlaskApp"
+participant LCPipeline as "LCPipeline"
+participant Analyzer as "Analyzer"
+participant GeneratePatches as "GeneratePatches"
+participant Fixer as "Fixer"
+participant DynamicTester as "DynamicTester"
+participant ReasoningModule as "ReasoningModule"
+participant Storage as "Storage"
+
+User -> FlaskApp : upload archive / repo
+activate FlaskApp
+FlaskApp -> FlaskApp : validate + unpack
+FlaskApp -> LCPipeline : create & enqueue job
+deactivate FlaskApp
+
+activate LCPipeline
+LCPipeline -> Analyzer : run static analysis
+activate Analyzer
+Analyzer --> LCPipeline : AnalysisReport (snippets, errors)
+deactivate Analyzer
+
+LCPipeline -> GeneratePatches : generate candidate patches (LLM + rules)
+activate GeneratePatches
+GeneratePatches --> LCPipeline : list<Patch>
+deactivate GeneratePatches
+
+LCPipeline -> Fixer : apply top patch (git apply / edits)
+activate Fixer
+Fixer --> LCPipeline : apply result (success/fail, conflicts)
+deactivate Fixer
+
+LCPipeline -> DynamicTester : run tests on patched repo
+activate DynamicTester
+DynamicTester --> LCPipeline : TestReport (pass/fail, logs)
+deactivate DynamicTester
+
+alt tests pass
+    LCPipeline -> Storage : save final patches + result.json
+    LCPipeline --> FlaskApp : final result
+    FlaskApp --> User : show success + download patch
+else tests fail
+    LCPipeline -> ReasoningModule : decide next step (retry/generate more patches)
+    activate ReasoningModule
+    ReasoningModule --> LCPipeline : instruction (loop / abort)
+    deactivate ReasoningModule
+end
+deactivate LCPipeline
+
+@enduml
