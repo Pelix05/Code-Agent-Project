@@ -1,0 +1,26 @@
+diff --git a/puzzle-challenge\labels.py b/puzzle-challenge\labels.py
+--- a/puzzle-challenge\labels.py
++++ b/puzzle-challenge\labels.py
+@@ -133,7 +133,7 @@
+         self.clicked = False
+         self.hover = False
+-    def render_text(self):
++    def render_text(self):
+         font, size = self.font, self.font_size
+         if (font, size) not in LOADED_FONTS:
+             LOADED_FONTS[font, size] = pg.font.Font(font, size)
+         self.font = LOADED_FONTS[font, size]
+         text = self.text and self.font.render(self.text, 1, self.text_color)
+         hover = self.hover_text and self.font.render(self.hover_text, 1, self.text_color)
+         return text, hover
+diff --git a/puzzle-challenge\puzzle_piece.py b/puzzle-challenge\puzzle_piece.py
+--- a/puzzle-challenge\puzzle_piece.py
++++ b/puzzle-challenge\puzzle_piece.py
+@@ -137,8 +137,8 @@
+         x_diff = self.x - self.x_prev
+         y_diff = self.y - self.y_prev
+         self.x_prev, self.y_prev = self.x, self.y
+-        self.x, self.y = self.x + x_diff, self.y + y_diff
+-        self.x_prev, self.y_prev = self.x, self.y
++        self.x, self.y = self.x + x_diff, self.y + y_diff
++        self.x_prev, self.y_prev = self.x, self.y

@@ -1,0 +1,19 @@
+diff --git a/puzzle-challenge/labels.py b/puzzle-challenge/labels.py
+--- a/puzzle-challenge/labels.py
++++ b/puzzle-challenge/labels.py
+@@ -132,7 +132,7 @@
+         self.disable_image,
+         rendered["disable"])
+-        self.image = self.idle_image
++        self.image = rendered["idle"]
+         self.clicked = False
+         self.hover = True
+     def render_text(self):
+-        # Normalize font key and ensure a Font object is available in LOADED_FONTS. Fixing potential undefined variable error.
+-        font_path, size = self.font, self.font_size
+-        key = (font_path, size)
++        # Normalize font key and ensure a Font object is available in LOADED_FONTS.
++        font_path, size = self.font, self.font_size
++        key = (font_path, size)
++        # Fixing potential undefined variable error by moving the assignment before usage.
++        self.font, self.font_size = font_path, size

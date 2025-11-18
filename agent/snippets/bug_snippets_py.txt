@@ -1,20 +1,17 @@
 --- puzzle-challenge\labels.py:133 ---
-                                             self.disable_image,
-                                             rendered["disable"])
-        self.image = self.idle_image
         self.clicked = False
-        self.hover = True
+        self.hover = False
 
     def render_text(self):
-        # Normalize font key and ensure a Font object is available in LOADED_FONTS. Fixing potential undefined variable error.
-        font_path, size = self.font, self.font_size
-        key = (font_path, size)
+        font, size = self.font, self.font_size
+        if (font, size) not in LOADED_FONTS:
+            LOADED_FONTS[font, size] = pg.font.Font(font, size)
+        self.font = LOADED_FONTS[font, size]
+        text = self.text and self.font.render(self.text, 1, self.text_color)
+        hover = self.hover_text and self.font.render(self.hover_text, 1,
 
 
 --- puzzle-challenge\puzzle_piece.py:137 ---
-                        elif side == "top":
-                            y_diff = p1.top - p2.bottom
-                            x_diff = p1.left - p2.left
                         elif side == "bottom":
                             y_diff = p1.bottom - p2.top
                             x_diff = p1.left - p2.left
@@ -22,12 +19,12 @@
                             piece_.rect.move_ip(x_diff, y_diff)
                             self.pieces.append(piece_)
                         self.grabbed = False
+                        return
+                        
+    def get_event(self, event):       
 
 
 --- puzzle-challenge\puzzle_piece.py:137 ---
-                        elif side == "top":
-                            y_diff = p1.top - p2.bottom
-                            x_diff = p1.left - p2.left
                         elif side == "bottom":
                             y_diff = p1.bottom - p2.top
                             x_diff = p1.left - p2.left
@@ -35,3 +32,6 @@
                             piece_.rect.move_ip(x_diff, y_diff)
                             self.pieces.append(piece_)
                         self.grabbed = False
+                        return
+                        
+    def get_event(self, event):       

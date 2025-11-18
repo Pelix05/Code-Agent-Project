@@ -1,7 +1,9 @@
-import subprocess
-import re
-from pathlib import Path
+from __future__ import annotations
+
 import argparse
+import re
+import subprocess
+from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 REPORT_FILE = Path(__file__).resolve().parent / "analysis_report_py.txt"
@@ -55,7 +57,33 @@ def analyze_python(repo_dir: str = None):
     return output1 + "\n" + output2 + "\n" + output3
 
 
-def extract_snippets(report_content):
+def resolve_source_file(file_path: str, repo_root: Path | None) -> Path | None:
+    """Try to locate the file referenced by the analyzer output."""
+    candidate_paths = []
+    path_obj = Path(file_path)
+    if path_obj.is_absolute():
+        candidate_paths.append(path_obj)
+    if repo_root:
+        candidate_paths.append((repo_root / path_obj).resolve())
+        # Some linters output paths like repo_name/foo.py; also try stripping the leading folder name
+        try:
+            parts = path_obj.parts
+            if parts and (repo_root / Path(*parts[1:])).exists():
+                candidate_paths.append((repo_root / Path(*parts[1:])).resolve())
+        except Exception:
+            pass
+    candidate_paths.append((BASE_DIR / file_path).resolve())
+    candidate_paths.append((BASE_DIR / "python_repo" / file_path).resolve())
+    for candidate in candidate_paths:
+        try:
+            if candidate.exists():
+                return candidate
+        except Exception:
+            continue
+    return None
+
+
+def extract_snippets(report_content, repo_root: Path | None = None):
     pattern = r"([^\s:]+\.py):(\d+):"
     matches = re.findall(pattern, report_content)
     print(f"[*] Found {len(matches)} Python issues")
@@ -64,11 +92,9 @@ def extract_snippets(report_content):
     for file_path, line_str in matches[:20]:
         try:
             line_num = int(line_str)
-            source_file = (BASE_DIR / file_path).resolve()
-            if not source_file.exists():
-                source_file = BASE_DIR / "python_repo" / file_path
+            source_file = resolve_source_file(file_path, repo_root)
 
-            if source_file.exists():
+            if source_file and source_file.exists():
                 lines = source_file.read_text(encoding="utf-8", errors="ignore").splitlines()
                 start = max(0, line_num - 5)
                 end = min(len(lines), line_num + 5)
@@ -88,4 +114,5 @@ if __name__ == "__main__":
     report = analyze_python(repo_dir=args.repo_dir)
     REPORT_FILE.write_text(report, encoding="utf-8")
     print(f"[+] Python analysis saved to {REPORT_FILE}")
-    extract_snippets(report)
+    repo_root = Path(args.repo_dir).resolve() if args.repo_dir else None
+    extract_snippets(report, repo_root=repo_root)

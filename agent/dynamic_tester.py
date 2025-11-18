@@ -156,10 +156,47 @@ def run_cpp_tests():
     return results
 
 # === MOCK RESOURCES ===
-def ensure_mock_resources():
-    for folder in ["graphics", "sounds", "music"]:
-        path = PUZZLE_CHALLENGE / "resources" / folder
-        path.mkdir(parents=True, exist_ok=True)
+def ensure_mock_resources(base_path: Path) -> bool:
+    """Create stub resource folders for the puzzle challenge repo if present."""
+    try:
+        for folder in ["graphics", "sounds", "music"]:
+            path = base_path / "resources" / folder
+            path.mkdir(parents=True, exist_ok=True)
+        return True
+    except Exception:
+        return False
+
+
+def is_puzzle_challenge_repo(repo_root: Path) -> bool:
+    """Detect whether the target repo looks like the puzzle-challenge layout."""
+    required_files = ["puzzle_piece.py", "labels.py", "puzzle.py"]
+    return all((repo_root / name).exists() for name in required_files)
+
+
+def run_generic_import_smoke_tests(max_modules: int = 5):
+    """Lightweight smoke test for arbitrary Python repos: import a few modules."""
+    results = []
+    py_files = sorted([p for p in PY_REPO.glob("*.py") if p.is_file()])
+    if not py_files:
+        results.append({"test": "python_smoke_imports", "status": "SKIPPED", "detail": "No top-level Python modules found"})
+        return results
+
+    for file_path in py_files[:max_modules]:
+        mod_name = file_path.stem
+        test_name = f"import_{mod_name}"
+        try:
+            spec = importlib.util.spec_from_file_location(mod_name, file_path)
+            if spec is None or spec.loader is None:
+                raise ImportError(f"Could not load spec for {file_path}")
+            module = importlib.util.module_from_spec(spec)
+            sys.modules[mod_name] = module
+            spec.loader.exec_module(module)
+            results.append({"test": test_name, "status": "PASS", "detail": f"Imported {file_path.name}"})
+        except Exception:
+            results.append({"test": test_name, "status": "FAIL", "detail": traceback.format_exc()})
+    if len(py_files) > max_modules:
+        results.append({"test": "python_smoke_imports", "status": "SKIPPED", "detail": f"Skipped {len(py_files) - max_modules} additional modules"})
+    return results
 
 # === PYTHON BUG TESTS ===
 def run_py_bug_tests():
@@ -170,37 +207,43 @@ def run_py_bug_tests():
         ("puzzle", "get_event"),
     ]
     results = []
-    ensure_mock_resources()
-    for module_name, func_name in bug_snippets:
-        test_name = f"test_{module_name}_{func_name}"
-        try:
-            module_path = PUZZLE_CHALLENGE / f"{module_name}.py"
-            spec = importlib.util.spec_from_file_location(module_name, module_path)
-            mod = importlib.util.module_from_spec(spec)
-            sys.modules[module_name] = mod
-            spec.loader.exec_module(mod)
-            func = getattr(mod, func_name, None)
-            if callable(func):
-                if func_name == "close_enough":
-                    try:
-                        result = func(10, 15)
-                        ok = bool(result)
-                        results.append({"test": test_name, "status": "PASS" if ok else "FAIL", "detail": f"returned {result}"})
-                    except Exception:
-                        results.append({"test": test_name, "status": "FAIL", "detail": traceback.format_exc()})
+    puzzle_root = PUZZLE_CHALLENGE
+    if is_puzzle_challenge_repo(puzzle_root):
+        ensure_mock_resources(puzzle_root)
+        for module_name, func_name in bug_snippets:
+            test_name = f"test_{module_name}_{func_name}"
+            try:
+                module_path = puzzle_root / f"{module_name}.py"
+                spec = importlib.util.spec_from_file_location(module_name, module_path)
+                mod = importlib.util.module_from_spec(spec)
+                sys.modules[module_name] = mod
+                spec.loader.exec_module(mod)
+                func = getattr(mod, func_name, None)
+                if callable(func):
+                    if func_name == "close_enough":
+                        try:
+                            result = func(10, 15)
+                            ok = bool(result)
+                            results.append({"test": test_name, "status": "PASS" if ok else "FAIL", "detail": f"returned {result}"})
+                        except Exception:
+                            results.append({"test": test_name, "status": "FAIL", "detail": traceback.format_exc()})
+                    else:
+                        results.append({"test": test_name, "status": "PASS", "detail": "function callable"})
                 else:
-                    results.append({"test": test_name, "status": "PASS", "detail": "function callable"})
-            else:
-                found = False
-                for name, obj in list(vars(mod).items()):
-                    if isinstance(obj, type) and hasattr(obj, func_name):
-                        found = True
-                        results.append({"test": test_name, "status": "PASS", "detail": f"method on class {name}"})
-                        break
-                if not found:
-                    results.append({"test": test_name, "status": "FAIL", "detail": f"{func_name} not found"})
-        except Exception:
-            results.append({"test": test_name, "status": "FAIL", "detail": traceback.format_exc()})
+                    found = False
+                    for name, obj in list(vars(mod).items()):
+                        if isinstance(obj, type) and hasattr(obj, func_name):
+                            found = True
+                            results.append({"test": test_name, "status": "PASS", "detail": f"method on class {name}"})
+                            break
+                    if not found:
+                        results.append({"test": test_name, "status": "FAIL", "detail": f"{func_name} not found"})
+            except Exception:
+                results.append({"test": test_name, "status": "FAIL", "detail": traceback.format_exc()})
+    else:
+        # When testing arbitrary Python repos, fall back to a lightweight import smoke test.
+        results.append({"test": "puzzle_challenge_checks", "status": "SKIPPED", "detail": "Puzzle-challenge modules not found; skipping puzzle-specific tests"})
+        results.extend(run_generic_import_smoke_tests())
     return results
 
 # === FULL REGRESSION TESTS ===
