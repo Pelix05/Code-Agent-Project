@@ -249,14 +249,38 @@ def run_py_bug_tests():
 # === FULL REGRESSION TESTS ===
 def run_full_regression_tests():
     """Run pytest across the repo to detect new regressions."""
-    if not (PY_REPO / "tests").exists():
-        return []
-    success, output = run_command("pytest -q --tb=short", cwd=PY_REPO)
     results = []
-    if success:
-        results.append({"test": "pytest_suite", "status": "PASS", "detail": "All tests passed"})
-    else:
-        results.append({"test": "pytest_suite", "status": "FAIL", "detail": output})
+
+    # Allow callers (e.g., SWE-bench harness) to provide an explicit test command.
+    custom_cmd = os.environ.get("PY_DYNAMIC_TEST_CMD", "").strip()
+    if custom_cmd:
+        success, output = run_command(custom_cmd, cwd=PY_REPO)
+        results.append({
+            "test": "custom_py_tests",
+            "status": "PASS" if success else "FAIL",
+            "detail": output,
+        })
+        return results
+
+    # Heuristic: look for common test roots and run pytest even if the folder
+    # name isn't exactly "tests" (SWE-bench projects often use "test/").
+    candidate_dirs = [d for d in ["tests", "test", "testing"] if (PY_REPO / d).exists()]
+    pytest_cmd = None
+    if candidate_dirs:
+        pytest_cmd = f"pytest -q --maxfail=1 --tb=short {' '.join(candidate_dirs)}"
+    elif any((PY_REPO / name).exists() for name in ["pytest.ini", "conftest.py", "pyproject.toml", "setup.cfg"]):
+        # If the repo is configured for pytest, run from root.
+        pytest_cmd = "pytest -q --maxfail=1 --tb=short"
+
+    if pytest_cmd is None:
+        return results
+
+    success, output = run_command(pytest_cmd, cwd=PY_REPO)
+    results.append({
+        "test": "pytest_suite",
+        "status": "PASS" if success else "FAIL",
+        "detail": output if not success else "All tests passed",
+    })
     return results
 
 # === RESOURCE MANAGEMENT TESTS ===
